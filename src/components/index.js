@@ -7,7 +7,11 @@ import SearchBar from './SearchBar';
 import Banner from './Banner';
 import BottomUtamaHome from './BottomUtamaHome';
 import BannerMaterialHome from './BannerMaterialHome';
+import BannerMaterialHome2 from './BannerMaterialHome2';
 import CartMaterial from './CartMaterial';
+import ImagePiecker from './ImagePiecker';
+import Card from './Card';
+import Category from './Category';
 
 export {
   BottomNavigation,
@@ -20,4 +24,8 @@ export {
   BottomUtamaHome,
   CartMaterial,
   BannerMaterialHome,
+  BannerMaterialHome2,
+  ImagePiecker,
+  Card,
+  Category,
 };

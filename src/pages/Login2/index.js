@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
 import styles from './Styles';
-import {logoLOGIN} from '../../assets';
 
 const Login2 = ({navigation}) => {
   const navigateTo = async page => {
@@ -10,7 +9,10 @@ const Login2 = ({navigation}) => {
   return (
     <View style={styles.viewContainer}>
       <View style={styles.viewWrapper}>
-        <Image source={logoLOGIN} style={styles.imageLogin} />
+        <Image
+          source={require('../../assets/Images/logoLOGIN.png')}
+          style={styles.imageLogin}
+        />
         <Text style={styles.textTitle}>LOGIN</Text>
       </View>
       <View style={styles.viewBox}>
@@ -28,7 +30,7 @@ const Login2 = ({navigation}) => {
         <TouchableOpacity>
           <Text style={styles.textFP}>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigateTo('#')}>
+        <TouchableOpacity onPress={() => navigateTo('MainApp')}>
           <View style={styles.viewButton}>
             <Text style={styles.textLogin}>LOGIN</Text>
           </View>

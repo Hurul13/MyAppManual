@@ -9,7 +9,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import styles from './Styles';
-import {logoREGISTER} from '../../assets';
 import {CheckBox, Navigation} from '../../components';
 
 const Register2 = ({navigation}) => {
@@ -20,7 +19,10 @@ const Register2 = ({navigation}) => {
     <ScrollView>
       <SafeAreaView style={styles.viewContainer}>
         <View style={styles.viewWrapper}>
-          <Image source={logoREGISTER} style={styles.imageRegister} />
+          <Image
+            source={require('../../assets/Images/logoREGISTER.png')}
+            style={styles.imageRegister}
+          />
           <Text style={styles.textTitle}>REGISTER</Text>
         </View>
         <View style={styles.viewBox}>
@@ -64,8 +66,8 @@ const Register2 = ({navigation}) => {
             <View style={styles.viewButton}>
               <Text style={styles.textRegister}>REGISTER</Text>
             </View>
-            <Text style={styles.textAHA}>Aready have an account?</Text>
           </TouchableOpacity>
+          <Text style={styles.textAHA}>Aready have an account?</Text>
           <TouchableOpacity onPress={() => navigateTo('Login2')}>
             <Text style={styles.textLogin}>Login</Text>
           </TouchableOpacity>

@@ -11,6 +11,18 @@ import {
   Login2,
   Register,
   Register2,
+  EditProfile,
+  RiwayatTransaksi,
+  Tentang,
+  KebijakanPrivasi,
+  SyaratKetentuan,
+  Keranjang,
+  Notifikasi,
+  DetailProduct,
+  Checkout,
+  CheckoutAddress,
+  CheckoutPayment,
+  CheckoutShipping,
 } from '../pages';
 import {BottomNavigation} from '../components';
 
@@ -70,6 +82,66 @@ const Router = () => {
       <Stack.Screen
         name="Register2"
         component={Register2}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="RiwayatTransaksi"
+        component={RiwayatTransaksi}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Tentang"
+        component={Tentang}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="KebijakanPrivasi"
+        component={KebijakanPrivasi}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SyaratKetentuan"
+        component={SyaratKetentuan}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Keranjang"
+        component={Keranjang}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Notifikasi"
+        component={Notifikasi}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DetailProduct"
+        component={DetailProduct}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Checkout"
+        component={Checkout}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CheckoutAddress"
+        component={CheckoutAddress}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CheckoutPayment"
+        component={CheckoutPayment}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CheckoutShipping"
+        component={CheckoutShipping}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -1,7 +1,6 @@
 import {ImageBackground, Image, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import styles from './Styles';
-import {logoHOMEI, splashBG} from '../../assets';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
@@ -11,8 +10,13 @@ const Splash = ({navigation}) => {
   }, [navigation]);
 
   return (
-    <ImageBackground source={splashBG} style={styles.splashbg}>
-      <Image source={logoHOMEI} style={styles.logobg} />
+    <ImageBackground
+      source={require('../../assets/Images/splashBG.png')}
+      style={styles.splashbg}>
+      <Image
+        source={require('../../assets/Images/logoHOMEI.png')}
+        style={styles.logobg}
+      />
     </ImageBackground>
   );
 };
