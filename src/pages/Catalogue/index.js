@@ -27,6 +27,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import categories from '../../utils/categories';
 import material from '../../utils/material';
+// import {ScrollView} from 'react-native-virtualized-view';
 
 const Catalogue = ({navigation}, {materials}) => {
   const navigateTo = async page => {
@@ -48,18 +49,18 @@ const Catalogue = ({navigation}, {materials}) => {
             <View
               style={{
                 backgroundColor:
-                  selectedCategoryIndex == index ? WARNA_UTAMA : WARNA_SEKUNDER,
+                  selectedCategoryIndex == index ? WARNA_SEKUNDER : WARNA_UTAMA,
                 ...styles.categoryBtn,
               }}>
+              <View style={styles.categoryBtnImgCon}>
+                <Image source={category.image} style={styles.imgCategory} />
+              </View>
               <Text
                 style={{
-                  fontSize: responsiveFontSize(2),
+                  fontSize: responsiveFontSize(1.8),
                   fontWeight: 'bold',
-                  textAlign: 'center',
                   color:
-                    selectedCategoryIndex == index
-                      ? WARNA_SEKUNDER
-                      : WARNA_UTAMA,
+                    selectedCategoryIndex == index ? WARNA_UTAMA : WARNA_WHITE,
                 }}>
                 {category.name}
               </Text>
@@ -70,6 +71,38 @@ const Catalogue = ({navigation}, {materials}) => {
     );
   };
 
+  {
+    /* <TouchableOpacity
+            key={index}
+            activeOpacity={0.8}
+            onPress={() => setSelectedCategoryIndex(index)}>
+            <View
+              style={{
+                backgroundColor:
+                  selectedCategoryIndex == index ? WARNA_SEKUNDER : WARNA_WHITE,
+                ...styles.categoryBtn,
+              }}>
+              <Text
+                style={{
+                  // borderColor:
+                  //   selectedCategoryIndex == index ? WARNA_UTAMA : WARNA_WHITE,
+                  fontSize: responsiveFontSize(2.5),
+                  borderBottomWidth: 1,
+                  paddingVertical: responsiveWidth(1),
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  borderWidth: 1,
+                  paddingHorizontal: responsiveHeight(2),
+                  color:
+                    selectedCategoryIndex == index
+                      ? WARNA_UTAMA
+                      : WARNA_SEKUNDER,
+                }}>
+                {category.name}
+              </Text>
+            </View>
+          </TouchableOpacity> */
+  }
   const Card = ({materials}) => {
     return (
       <TouchableHighlight
@@ -87,9 +120,8 @@ const Catalogue = ({navigation}, {materials}) => {
           <View style={styles.boxPrice}>
             <Text style={styles.text2}>${materials.price}</Text>
             <View style={styles.rating}>
-              <IconMaterial name="star" size={19} style={styles.iconStar} />
-
               <Text style={styles.text3}>{materials.rating}</Text>
+              <IconMaterial name="star" size={19} style={styles.iconStar} />
             </View>
           </View>
         </View>
@@ -104,15 +136,17 @@ const Catalogue = ({navigation}, {materials}) => {
           <View style={styles.boxHeader1}>
             <View style={styles.header}>
               <View style={styles.box1}>
+                <View style={styles.boxSearch}>
+                  <IconMaterial
+                    name="magnify"
+                    size={26}
+                    style={styles.iconSearch}
+                  />
+                </View>
                 <TextInput
                   placeholder="Search Material..."
                   placeholderTextColor={WARNA_DISABLE}
                   style={styles.textInput}></TextInput>
-                <IconMaterial
-                  name="magnify"
-                  size={26}
-                  style={styles.iconSearch}
-                />
               </View>
               <TouchableOpacity>
                 <View style={styles.boxFilter}>
@@ -127,6 +161,13 @@ const Catalogue = ({navigation}, {materials}) => {
           </View>
         </View>
         <View style={styles.box}>
+          {/* <FlatList
+            // style={styles.boxCard}
+            // showsVerticalScrollIndicator={false}
+            // numColumns={2}
+            data={categories}
+            renderItem={({item}) => <Category category={item} />}
+          /> */}
           <View>
             <Category></Category>
           </View>

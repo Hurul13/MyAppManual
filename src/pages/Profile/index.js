@@ -15,21 +15,24 @@ const Profile = ({navigation}) => {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
-          <Icon
-            name="bell"
-            size={23}
-            style={styles.iconBell}
-            onPress={() => navigateTo('Notifikasi')}
-          />
-
-          <IconMaterial
-            name="cart-outline"
-            size={26}
-            style={styles.iconTroll}
-            onPress={() => navigateTo('Keranjang')}
-          />
-          <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
-          <Text style={styles.judulBar}>Profile</Text>
+          <View style={styles.space1}>
+            <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
+            <Text style={styles.judulBar}>Profile</Text>
+          </View>
+          <View style={styles.space}>
+            <Icon
+              name="bell"
+              size={23}
+              style={styles.iconBell}
+              onPress={() => navigateTo('Notifikasi')}
+            />
+            <IconMaterial
+              name="cart-outline"
+              size={26}
+              style={styles.iconTroll}
+              onPress={() => navigateTo('Keranjang')}
+            />
+          </View>
         </View>
         <LinearGradient
           colors={['#FDD329', '#F2F2F2']}
@@ -45,109 +48,129 @@ const Profile = ({navigation}) => {
         <View>
           <Text style={styles.text3}>Profile</Text>
           <TouchableOpacity
-            style={styles.profilEdit}
-            onPress={() => navigateTo('EditProfile')}>
-            <View style={styles.box3}>
-              <View style={styles.box4}>
-                <IconMaterial name="pencil" size={26} style={styles.iconPen} />
-              </View>
-              <Text style={styles.text4}>Edit Profile</Text>
-              <IconMaterial
-                name="chevron-right"
-                size={26}
-                style={styles.iconNext}
-              />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.profilHistory}
-            onPress={() => navigateTo('RiwayatTransaksi')}>
-            <View style={styles.box3}>
-              <View style={styles.box4}>
+            onPress={() => navigateTo('EditProfile')}
+            style={styles.space2}>
+            <View style={styles.space3}>
+              <View style={styles.box3}>
+                <View style={styles.box4}>
+                  <IconMaterial
+                    name="pencil"
+                    size={26}
+                    style={styles.iconPen}
+                  />
+                </View>
                 <IconMaterial
-                  name="handshake"
+                  name="chevron-right"
                   size={26}
-                  style={styles.iconPen}
+                  style={styles.iconNext}
                 />
               </View>
-              <Text style={styles.text4}>Riwayat Transaksi</Text>
-              <IconMaterial
-                name="chevron-right"
-                size={26}
-                style={styles.iconNext}
-              />
             </View>
+            <Text style={styles.text4}>Edit Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.space2}
+            onPress={() => navigateTo('RiwayatTransaksi')}>
+            <View style={styles.space3}>
+              <View style={styles.box3}>
+                <View style={styles.box4}>
+                  <IconMaterial
+                    name="handshake"
+                    size={26}
+                    style={styles.iconPen}
+                  />
+                </View>
+                <IconMaterial
+                  name="chevron-right"
+                  size={26}
+                  style={styles.iconNext}
+                />
+              </View>
+            </View>
+            <Text style={styles.text4}>Riwayat Transaksi</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.setting}>
           <Text style={styles.text3}>Setting</Text>
           <TouchableOpacity
-            style={styles.profilEdit}
+            style={styles.space2}
             onPress={() => navigateTo('Tentang')}>
-            <View style={styles.box3}>
-              <View style={styles.box4}>
-                <IconMaterial name="help" size={26} style={styles.iconPen} />
+            <View style={styles.space3}>
+              <View style={styles.box3}>
+                <View style={styles.box4}>
+                  <IconMaterial name="help" size={26} style={styles.iconPen} />
+                </View>
+                <IconMaterial
+                  name="chevron-right"
+                  size={26}
+                  style={styles.iconNext}
+                />
               </View>
-              <Text style={styles.text4}>Tentang</Text>
-              <IconMaterial
-                name="chevron-right"
-                size={26}
-                style={styles.iconNext}
-              />
             </View>
+            <Text style={styles.text4}>Tentang</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.profilHistory}
+            style={styles.space2}
             onPress={() => navigateTo('KebijakanPrivasi')}>
-            <View style={styles.box3}>
-              <View style={styles.box4}>
+            <View style={styles.space3}>
+              <View style={styles.box3}>
+                <View style={styles.box4}>
+                  <IconMaterial
+                    name="shield-half-full"
+                    size={26}
+                    style={styles.iconPen}
+                  />
+                </View>
                 <IconMaterial
-                  name="shield-half-full"
+                  name="chevron-right"
                   size={26}
-                  style={styles.iconPen}
+                  style={styles.iconNext}
                 />
               </View>
-              <Text style={styles.text4}>Kebijakan Privasi</Text>
-              <IconMaterial
-                name="chevron-right"
-                size={26}
-                style={styles.iconNext}
-              />
             </View>
+            <Text style={styles.text4}>Kebijakan Privasi</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.profilHistory}
+            style={styles.space2}
             onPress={() => navigateTo('SyaratKetentuan')}>
-            <View style={styles.box3}>
-              <View style={styles.box4}>
+            <View style={styles.space3}>
+              <View style={styles.box3}>
+                <View style={styles.box4}>
+                  <IconMaterial
+                    name="note-edit"
+                    size={26}
+                    style={styles.iconPen}
+                  />
+                </View>
                 <IconMaterial
-                  name="note-edit"
+                  name="chevron-right"
                   size={26}
-                  style={styles.iconPen}
+                  style={styles.iconNext}
                 />
               </View>
-              <Text style={styles.text4}>Syarat & Ketentuan</Text>
-              <IconMaterial
-                name="chevron-right"
-                size={26}
-                style={styles.iconNext}
-              />
             </View>
+            <Text style={styles.text4}>Syarat & Ketentuan</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.profilLogout}
+            style={styles.space2}
             onPress={() => navigateTo('Login2')}>
-            <View style={styles.box3}>
-              <View style={styles.box4}>
-                <IconMaterial name="logout" size={26} style={styles.iconPen} />
+            <View style={styles.space3}>
+              <View style={styles.box3}>
+                <View style={styles.box4}>
+                  <IconMaterial
+                    name="logout"
+                    size={26}
+                    style={styles.iconPen}
+                  />
+                </View>
+                <IconMaterial
+                  name="chevron-right"
+                  size={26}
+                  style={styles.iconNext}
+                />
               </View>
-              <Text style={styles.text4}>Logout</Text>
-              <IconMaterial
-                name="chevron-right"
-                size={26}
-                style={styles.iconNext}
-              />
             </View>
+            <Text style={styles.text4}>Logout</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

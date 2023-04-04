@@ -23,6 +23,8 @@ import {
   CheckoutAddress,
   CheckoutPayment,
   CheckoutShipping,
+  ReviewRating,
+  RincianPesanan,
 } from '../pages';
 import {BottomNavigation} from '../components';
 
@@ -142,6 +144,16 @@ const Router = () => {
       <Stack.Screen
         name="CheckoutShipping"
         component={CheckoutShipping}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ReviewRating"
+        component={ReviewRating}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="RincianPesanan"
+        component={RincianPesanan}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

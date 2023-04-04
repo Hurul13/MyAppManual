@@ -12,48 +12,33 @@ import {
 } from '../../utils/constant';
 
 const styles = StyleSheet.create({
-  boxBanner: {
+  container: {
+    flex: 1,
+    paddingBottom: responsiveHeight(20),
     backgroundColor: WARNA_WHITE,
-    marginBottom: responsiveHeight(6),
+    borderRadius: 20,
+    marginHorizontal: responsiveHeight(3),
+    marginVertical: responsiveWidth(2),
+  },
+  wrap: {
+    width: responsiveWidth(110),
     height: responsiveHeight(20),
-    width: responsiveWidth(91),
-    borderRadius: 8,
-    borderColor: WARNA_DISABLE,
+    borderRadius: 20,
+  },
+  wrapDot: {
+    position: 'absolute',
+    flexDirection: 'row',
     alignSelf: 'center',
-    shadowColor: WARNA_DISABLE,
-    resizeMode: 'cover',
+    fontSize: responsiveFontSize(4),
+    marginTop: responsiveHeight(35),
   },
-  scroll: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    autoplay: true,
+  dotActive: {
+    margin: 3,
+    color: WARNA_UTAMA,
   },
-  imgBanner1: {
-    height: responsiveHeight(20),
-    width: responsiveWidth(91),
-    borderRadius: 8,
-  },
-  boxBannerName: {
-    // backgroundColor: WARNA_DISABLE,
-    marginTop: responsiveHeight(-8),
-    height: responsiveHeight(8),
-    width: responsiveWidth(91),
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    alignSelf: 'center',
-    backgroundColor: WARNA_UTAMA,
-    opacity: 0.8,
-  },
-  text1: {
+  dot: {
+    margin: 3,
     color: WARNA_WHITE,
-    fontWeight: 'bold',
-    fontSize: responsiveFontSize(2),
-    marginLeft: responsiveHeight(2),
-    marginTop: responsiveHeight(1),
-  },
-  text2: {
-    color: WARNA_WHITE,
-    marginLeft: responsiveHeight(2),
   },
 });
 

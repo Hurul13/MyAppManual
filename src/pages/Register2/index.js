@@ -9,11 +9,31 @@ import {
   SafeAreaView,
 } from 'react-native';
 import styles from './Styles';
-import {CheckBox, Navigation} from '../../components';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+} from '../../utils/constant';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Checkbox} from 'react-native-paper';
 
 const Register2 = ({navigation}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
+  };
+  const [checked, setChecked] = React.useState(false);
+  const CheckBox = () => {
+    return (
+      <View style={styles.check}>
+        <Checkbox
+          status={checked ? 'checked' : 'unchecked'}
+          onPress={() => {
+            setChecked(!checked);
+          }}
+        />
+      </View>
+    );
   };
   return (
     <ScrollView>
@@ -26,51 +46,108 @@ const Register2 = ({navigation}) => {
           <Text style={styles.textTitle}>REGISTER</Text>
         </View>
         <View style={styles.viewBox}>
-          <Text style={styles.textUser}>Nama *</Text>
-          <TextInput placeholder="Masukan nama ... " style={styles.textInput} />
-          <Text style={styles.textPass}>Email *</Text>
-          <TextInput
-            placeholder="Masukan email ... "
-            style={styles.textInput}
-          />
-          <Text style={styles.textPass}>No. Telpon *</Text>
-          <TextInput
-            placeholder="Masukan no telpon ... "
-            style={styles.textInput}
-            keyboardType="numeric"
-          />
-          <Text style={styles.textPass}>Username *</Text>
-          <TextInput
-            placeholder="Masukan username ... "
-            style={styles.textInput}
-          />
-          <Text style={styles.textPass}>Password *</Text>
-          <TextInput
-            placeholder="Masukan password ..."
-            style={styles.textInput}
-            secureTextEntry
-          />
-          <Text style={styles.textPass}>Konfirmasi Password *</Text>
-          <TextInput
-            placeholder="Masukan konfirmasi password ..."
-            style={styles.textInput}
-            secureTextEntry
-          />
-          <CheckBox />
-          <Text style={styles.textFP}>
-            Dengan mendaftar, saya menyetujui Syarat dan Ketentuan serta
-            Kebijakan privasi
-          </Text>
-          <Navigation />
+          <View>
+            <Text style={styles.textUser}>Nama *</Text>
+            <View style={styles.boxInput}>
+              <View style={styles.boxIcon}>
+                <IconMaterial name="account" size={35} style={styles.icon} />
+              </View>
+              <TextInput
+                placeholder="Masukan nama ... "
+                placeholderTextColor={WARNA_DISABLE}
+                style={styles.textInput}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.textPass}>Email *</Text>
+            <View style={styles.boxInput}>
+              <View style={styles.boxIcon}>
+                <IconMaterial name="email" size={35} style={styles.icon} />
+              </View>
+              <TextInput
+                placeholder="Masukan email ... "
+                placeholderTextColor={WARNA_DISABLE}
+                style={styles.textInput}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.textPass}>No. Telpon *</Text>
+            <View style={styles.boxInput}>
+              <View style={styles.boxIcon}>
+                <IconMaterial name="phone" size={35} style={styles.icon} />
+              </View>
+              <TextInput
+                placeholder="Masukan no telpon ...  "
+                placeholderTextColor={WARNA_DISABLE}
+                style={styles.textInput}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.textPass}>Username *</Text>
+            <View style={styles.boxInput}>
+              <View style={styles.boxIcon}>
+                <IconMaterial
+                  name="account-box"
+                  size={35}
+                  style={styles.icon}
+                />
+              </View>
+              <TextInput
+                placeholder="Masukan username ... "
+                placeholderTextColor={WARNA_DISABLE}
+                style={styles.textInput}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.textPass}>Password *</Text>
+            <View style={styles.boxInput}>
+              <View style={styles.boxIcon}>
+                <IconMaterial name="lock" size={35} style={styles.icon} />
+              </View>
+              <TextInput
+                placeholder="Masukan password ..."
+                placeholderTextColor={WARNA_DISABLE}
+                secureTextEntry
+                style={styles.textInput}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.textPass}>Konfirmasi Password *</Text>
+            <View style={styles.boxInput}>
+              <View style={styles.boxIcon}>
+                <IconMaterial name="lock" size={35} style={styles.icon} />
+              </View>
+              <TextInput
+                placeholder="Masukan konfirmasi password ..."
+                placeholderTextColor={WARNA_DISABLE}
+                secureTextEntry
+                style={styles.textInput}
+              />
+            </View>
+          </View>
+          <View style={styles.space1}>
+            <CheckBox />
+            <Text style={styles.textFP}>
+              Dengan mendaftar, saya menyetujui Syarat dan Ketentuan serta
+              Kebijakan privasi
+            </Text>
+          </View>
           <TouchableOpacity onPress={() => navigateTo('Login2')}>
             <View style={styles.viewButton}>
               <Text style={styles.textRegister}>REGISTER</Text>
             </View>
           </TouchableOpacity>
-          <Text style={styles.textAHA}>Aready have an account?</Text>
-          <TouchableOpacity onPress={() => navigateTo('Login2')}>
-            <Text style={styles.textLogin}>Login</Text>
-          </TouchableOpacity>
+          <View style={styles.space}>
+            <Text style={styles.textAHA}>Aready have an account?</Text>
+            <TouchableOpacity onPress={() => navigateTo('Login2')}>
+              <Text style={styles.textLogin}>Login</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     </ScrollView>

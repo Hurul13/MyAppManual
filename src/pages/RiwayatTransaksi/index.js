@@ -1,12 +1,61 @@
-import {Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+  FlatList,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import material from '../../utils/material';
+import {ScrollView} from 'react-native-virtualized-view';
 
 const RiwayatTransaksi = ({navigation}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
+  };
+  const CartCard = ({item}) => {
+    return (
+      <View style={styles.cartCard}>
+        <View style={styles.box5}>
+          <IconMaterial
+            name="home-analytics"
+            size={30}
+            style={styles.iconShop}
+          />
+          <Text style={styles.text7}>{item.shop}</Text>
+        </View>
+        <Image source={item.image} style={styles.img} />
+        <View style={styles.box4}>
+          <Text style={styles.text}>{item.name}</Text>
+          <View style={styles.boxTime}>
+            <IconMaterial
+              name="clock-time-three-outline"
+              size={16}
+              style={styles.iconTime}
+            />
+            <Text style={styles.text1}>{item.time}</Text>
+          </View>
+        </View>
+        <View style={styles.box1}>
+          <View style={styles.actionBtn}>
+            <Text style={styles.text3}>{item.status}</Text>
+          </View>
+        </View>
+        <View style={styles.box2}>
+          <Text style={styles.text2}>x10</Text>
+          <Text style={styles.text4}>${item.price}</Text>
+        </View>
+        <View style={styles.box3}>
+          <View style={styles.box6}>
+            <Text style={styles.text6}>Total Pesanan</Text>
+            <Text style={styles.text5}>$50</Text>
+          </View>
+        </View>
+      </View>
+    );
   };
 
   return (
@@ -19,69 +68,12 @@ const RiwayatTransaksi = ({navigation}) => {
           <Text style={styles.judulBar}>Riwayat Transaksi</Text>
         </View>
         <View style={styles.box}>
-          <View style={styles.box2}>
-            <View style={styles.box3}>
-              <IconMaterial
-                name="home-analytics"
-                size={35}
-                style={styles.iconToko}
-              />
-              <Text style={styles.text1}>Hanil Jaya Stell</Text>
-            </View>
-            <View>
-              <Image
-                source={require('../../assets/Images/genteng.jpg')}
-                style={styles.genteng}></Image>
-              <Text style={styles.text2}>Genteng A Bagus</Text>
-              <View style={styles.box4}>
-                <Text style={styles.text6}>Barang sudah diterima customer</Text>
-              </View>
-              <IconMaterial
-                name="clock-time-three-outline"
-                size={20}
-                style={styles.iconJam}
-              />
-              <Text style={styles.text3}>11-11-2022 10:40</Text>
-              <Text style={styles.text4}>Rp 200.000</Text>
-              <Text style={styles.text5}>x10</Text>
-              <View style={styles.box5}>
-                <Text style={styles.text7}>Total Pesanan</Text>
-                <Text style={styles.text8}>Rp 2.000.000</Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.box2}>
-            <View style={styles.box3}>
-              <IconMaterial
-                name="home-analytics"
-                size={35}
-                style={styles.iconToko}
-              />
-              <Text style={styles.text1}>Hanil Jaya Stell</Text>
-            </View>
-            <View>
-              <Image
-                source={require('../../assets/Images/pasir.jpg')}
-                style={styles.genteng}
-              />
-              <Text style={styles.text2}>Pasir Pasang</Text>
-              <View style={styles.box4}>
-                <Text style={styles.text6}>Barang sudah diterima customer</Text>
-              </View>
-              <IconMaterial
-                name="clock-time-three-outline"
-                size={20}
-                style={styles.iconJam}
-              />
-              <Text style={styles.text3}>11-11-2022 10:40</Text>
-              <Text style={styles.text4}>Rp 200.000</Text>
-              <Text style={styles.text5}>x10</Text>
-              <View style={styles.box5}>
-                <Text style={styles.text7}>Total Pesanan</Text>
-                <Text style={styles.text8}>Rp 2.000.000</Text>
-              </View>
-            </View>
-          </View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{paddingBottom: 80}}
+            data={material.slice(0, material.length > 2 ? 2 : material.length)}
+            renderItem={({item}) => <CartCard item={item} />}
+          />
         </View>
       </View>
     </ScrollView>

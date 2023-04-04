@@ -12,20 +12,32 @@ import CartMaterial from './CartMaterial';
 import ImagePiecker from './ImagePiecker';
 import Card from './Card';
 import Category from './Category';
+import DecsDetailProduct from './DecsDetailProduct';
+import AccordionRating from './AccordionRating';
+import BannerHome from './BannerHome';
+import MinPlus from './MinPlus';
+import Accordion from './Accordion';
+import {Animations} from './Animations';
 
 export {
-  BottomNavigation,
-  TabItem,
-  CheckBox,
-  Navigation,
-  FontAwesome,
-  SearchBar,
+  Animations,
+  Accordion,
   Banner,
-  BottomUtamaHome,
-  CartMaterial,
+  BannerHome,
   BannerMaterialHome,
   BannerMaterialHome2,
-  ImagePiecker,
+  BottomNavigation,
+  BottomUtamaHome,
   Card,
+  CartMaterial,
   Category,
+  CheckBox,
+  DecsDetailProduct,
+  FontAwesome,
+  ImagePiecker,
+  MinPlus,
+  Navigation,
+  AccordionRating,
+  SearchBar,
+  TabItem,
 };

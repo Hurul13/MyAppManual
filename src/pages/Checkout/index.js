@@ -2,6 +2,7 @@ import {Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {DecsDetailProduct} from '../../components';
 
 const Checkout = ({navigation}) => {
   const navigateTo = async page => {
@@ -18,7 +19,9 @@ const Checkout = ({navigation}) => {
           <Text style={styles.judulBar}>Checkout</Text>
         </View>
         <View style={styles.box}>
-          <Text style={styles.text1}>#</Text>
+          <Text style={styles.text1}>
+            <DecsDetailProduct></DecsDetailProduct>
+          </Text>
         </View>
       </View>
     </ScrollView>

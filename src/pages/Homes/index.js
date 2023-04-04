@@ -2,7 +2,6 @@ import {
   Text,
   View,
   Image,
-  ScrollView,
   TouchableOpacity,
   TouchableHighlight,
   TextInput,
@@ -26,10 +25,33 @@ import {
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 import material from '../../utils/material';
+import banner from '../../utils/banner';
+import {ScrollView} from 'react-native-virtualized-view';
+import {Banner, BannerHome} from '../../components';
 
 const Homes = ({navigation}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
+  };
+
+  const Banner = ({banners}) => {
+    return (
+      <TouchableHighlight
+        underlayColor={WARNA_WHITE}
+        activeOpacity={0.9}
+        // onPress={() => navigation.navigate('DetailProduct', banners)}
+      >
+        <View style={styles.boxBanner}>
+          <View style={styles.bgTrans}>
+            <Text style={styles.text4}>{banners.title}</Text>
+            <Text style={styles.text5}>{banners.decs}</Text>
+          </View>
+          <View style={styles.bannerImg}>
+            <Image source={banners.image} style={styles.imgs} />
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
   };
 
   const Card = ({materials}) => {
@@ -63,22 +85,24 @@ const Homes = ({navigation}) => {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Icon
-            name="bell"
-            size={23}
-            style={styles.iconBell}
-            onPress={() => navigateTo('Notifikasi')}
-          />
-          <IconMaterial
-            name="cart-outline"
-            size={26}
-            style={styles.iconTroll}
-            onPress={() => navigateTo('Keranjang')}
-          />
           <Image
             source={require('../../assets/Images/logoHOMEI.png')}
             style={styles.logo}
             size={25}></Image>
+          <View style={styles.space}>
+            <Icon
+              name="bell"
+              size={23}
+              style={styles.iconBell}
+              onPress={() => navigateTo('Notifikasi')}
+            />
+            <IconMaterial
+              name="cart-outline"
+              size={26}
+              style={styles.iconTroll}
+              onPress={() => navigateTo('Keranjang')}
+            />
+          </View>
         </View>
         <LinearGradient
           colors={['#FDD329', '#FDD329', '#FDD329', '#F2F2F2']}
@@ -86,41 +110,57 @@ const Homes = ({navigation}) => {
           <View style={styles.box1}>
             <TextInput
               placeholder="Search Material ... "
+              placeholderTextColor={WARNA_DISABLE}
               style={styles.textInput}></TextInput>
             <IconMaterial name="magnify" size={26} style={styles.iconSearch} />
           </View>
-          <View>
+          {/* <View></View> */}
+          <FlatList
+            // style={styles.boxCard}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            data={banner}
+            renderItem={({item}) => <Banner banners={item} />}
+          />
+        </LinearGradient>
+        <View style={styles.material}>
+          <View style={styles.space2}>
             <Text style={styles.textJudul}>Material sering dibeli</Text>
-            <TouchableOpacity onPress={() => navigateTo('Catalogue')}>
-              <Text style={styles.textSubJudul}>Selengkapnya</Text>
+            <TouchableOpacity
+              onPress={() => navigateTo('Catalogue')}
+              style={styles.space1}>
               <IconMaterial
                 name="chevron-right"
                 size={21}
                 style={styles.iconNext}
               />
+              <Text style={styles.textSubJudul}>Selengkapnya</Text>
             </TouchableOpacity>
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.boxCard}
-              data={material.slice(
-                0,
-                material.length > 3 ? 3 : material.length,
-              )}
-              renderItem={({item}) => <Card materials={item} />}
-            />
           </View>
-        </LinearGradient>
-        <View style={styles.material1}>
-          <Text style={styles.textJudul}>Rekomendasi material untuk anda</Text>
-          <TouchableOpacity onPress={() => navigateTo('Catalogue')}>
-            <Text style={styles.textSubJudul}>Selengkapnya</Text>
-            <IconMaterial
-              name="chevron-right"
-              size={21}
-              style={styles.iconNext}
-            />
-          </TouchableOpacity>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.boxCard}
+            data={material.slice(0, material.length > 3 ? 3 : material.length)}
+            renderItem={({item}) => <Card materials={item} />}
+          />
+        </View>
+        <View>
+          <View style={styles.space2}>
+            <Text style={styles.textJudul}>
+              Rekomendasi material untuk anda
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigateTo('Catalogue')}
+              style={styles.space1}>
+              <IconMaterial
+                name="chevron-right"
+                size={21}
+                style={styles.iconNext}
+              />
+              <Text style={styles.textSubJudul}>Selengkapnya</Text>
+            </TouchableOpacity>
+          </View>
           <FlatList
             style={styles.boxCard}
             showsVerticalScrollIndicator={false}
