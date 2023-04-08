@@ -27,7 +27,6 @@ import {
 import material from '../../utils/material';
 import banner from '../../utils/banner';
 import {ScrollView} from 'react-native-virtualized-view';
-import {Banner, BannerHome} from '../../components';
 
 const Homes = ({navigation}) => {
   const navigateTo = async page => {
@@ -42,12 +41,10 @@ const Homes = ({navigation}) => {
         // onPress={() => navigation.navigate('DetailProduct', banners)}
       >
         <View style={styles.boxBanner}>
+          <Image source={banners.image} style={styles.imgs} />
           <View style={styles.bgTrans}>
             <Text style={styles.text4}>{banners.title}</Text>
             <Text style={styles.text5}>{banners.decs}</Text>
-          </View>
-          <View style={styles.bannerImg}>
-            <Image source={banners.image} style={styles.imgs} />
           </View>
         </View>
       </TouchableHighlight>
@@ -131,7 +128,7 @@ const Homes = ({navigation}) => {
               style={styles.space1}>
               <IconMaterial
                 name="chevron-right"
-                size={21}
+                size={19}
                 style={styles.iconNext}
               />
               <Text style={styles.textSubJudul}>Selengkapnya</Text>

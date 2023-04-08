@@ -18,43 +18,46 @@ const RiwayatTransaksi = ({navigation}) => {
   };
   const CartCard = ({item}) => {
     return (
-      <View style={styles.cartCard}>
-        <View style={styles.box5}>
-          <IconMaterial
-            name="home-analytics"
-            size={30}
-            style={styles.iconShop}
-          />
-          <Text style={styles.text7}>{item.shop}</Text>
-        </View>
-        <Image source={item.image} style={styles.img} />
-        <View style={styles.box4}>
-          <Text style={styles.text}>{item.name}</Text>
-          <View style={styles.boxTime}>
-            <IconMaterial
-              name="clock-time-three-outline"
-              size={16}
-              style={styles.iconTime}
-            />
-            <Text style={styles.text1}>{item.time}</Text>
+      <TouchableOpacity onPress={() => navigateTo('RincianPesanan')}>
+        <View style={styles.cartCard}>
+          <View style={styles.box1}>
+            <IconMaterial name="home-analytics" size={30} style={styles.icon} />
+            <Text style={styles.text}>{item.shop}</Text>
+          </View>
+          <View style={styles.space}>
+            <Image source={item.image} style={styles.img} />
+            <View style={styles.space1}>
+              <Text style={styles.text1}>{item.name}</Text>
+              <View style={styles.space2}>
+                <View style={styles.space4}>
+                  <IconMaterial
+                    name="clock-time-three-outline"
+                    size={16}
+                    style={styles.iconTime}
+                  />
+                  <Text style={styles.text2}>{item.time}</Text>
+                </View>
+                <View style={styles.space3}>
+                  <Text style={styles.text3}>x2</Text>
+                  <Text style={styles.text4}>${item.price}</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.space5}>
+            <View style={styles.space6}>
+              <Text style={styles.text5}>Total Pesanan</Text>
+              <Text style={styles.text5}>${item.totalPrince}</Text>
+            </View>
+            <View style={styles.space6}>
+              <Text style={styles.text5}>Status</Text>
+              <View style={styles.space7}>
+                <Text style={styles.text6}>{item.status}</Text>
+              </View>
+            </View>
           </View>
         </View>
-        <View style={styles.box1}>
-          <View style={styles.actionBtn}>
-            <Text style={styles.text3}>{item.status}</Text>
-          </View>
-        </View>
-        <View style={styles.box2}>
-          <Text style={styles.text2}>x10</Text>
-          <Text style={styles.text4}>${item.price}</Text>
-        </View>
-        <View style={styles.box3}>
-          <View style={styles.box6}>
-            <Text style={styles.text6}>Total Pesanan</Text>
-            <Text style={styles.text5}>$50</Text>
-          </View>
-        </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -70,8 +73,8 @@ const RiwayatTransaksi = ({navigation}) => {
         <View style={styles.box}>
           <FlatList
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{paddingBottom: 80}}
-            data={material.slice(0, material.length > 2 ? 2 : material.length)}
+            // contentContainerStyle={{paddingBottom: 80}}
+            data={material.slice(0, 2)}
             renderItem={({item}) => <CartCard item={item} />}
           />
         </View>

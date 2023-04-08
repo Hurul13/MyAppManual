@@ -14,18 +14,19 @@ import Card from './Card';
 import Category from './Category';
 import DecsDetailProduct from './DecsDetailProduct';
 import AccordionRating from './AccordionRating';
-import BannerHome from './BannerHome';
+
 import MinPlus from './MinPlus';
 import Accordion from './Accordion';
 import {Animations} from './Animations';
+import BiometrikPopup from './BiometrikPopup';
 
 export {
   Animations,
   Accordion,
   Banner,
-  BannerHome,
   BannerMaterialHome,
   BannerMaterialHome2,
+  BiometrikPopup,
   BottomNavigation,
   BottomUtamaHome,
   Card,

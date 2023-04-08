@@ -13,7 +13,7 @@ import material from '../../utils/material';
 import {MinPlus} from '../../components';
 import {ScrollView} from 'react-native-virtualized-view';
 
-const Keranjang = ({navigation}) => {
+const Keranjang = ({navigation, onValueChange}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };

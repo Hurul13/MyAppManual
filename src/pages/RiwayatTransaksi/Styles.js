@@ -10,6 +10,7 @@ import {
   WARNA_SEKUNDER,
   WARNA_WHITE,
   WARNA_GRAYTUA,
+  WARNA_BORDER,
 } from '../../utils/constant';
 
 const styles = StyleSheet.create({
@@ -19,12 +20,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     resizeMode: 'cover',
-  },
-  header2: {
-    paddingVertical: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 20,
   },
   header: {
     flexDirection: 'row',
@@ -42,129 +37,107 @@ const styles = StyleSheet.create({
   },
   box: {
     backgroundColor: WARNA_WHITE,
-    // marginTop: responsiveHeight(2),
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     height: responsiveHeight(91.6),
+    paddingVertical: responsiveWidth(8),
   },
 
   cartCard: {
-    height: responsiveHeight(25),
-    elevation: 15,
     borderRadius: 10,
-    borderColor: WARNA_UTAMA,
-    backgroundColor: WARNA_WHITE,
-    marginTop: responsiveHeight(4),
-    marginVertical: responsiveHeight(-1),
+    borderColor: WARNA_DISABLE,
+    borderWidth: 1,
+    // elevation: 1,
     marginHorizontal: responsiveHeight(3),
+    marginVertical: responsiveWidth(1),
     paddingHorizontal: responsiveHeight(2),
   },
-  text7: {
-    marginLeft: responsiveHeight(6.3),
-    marginTop: responsiveHeight(-2.8),
+  box1: {
+    paddingVertical: responsiveWidth(2),
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: WARNA_BORDER,
+  },
+  icon: {
+    color: WARNA_SEKUNDER,
+    paddingRight: responsiveHeight(1),
+  },
+  text: {
     color: WARNA_SEKUNDER,
   },
-  iconShop: {
-    marginTop: responsiveHeight(0.8),
-    marginLeft: responsiveHeight(1.8),
-    color: WARNA_SEKUNDER,
+  space: {
+    paddingVertical: responsiveWidth(2),
+    flexDirection: 'row',
   },
   img: {
     height: responsiveHeight(10),
     width: responsiveWidth(23),
-    marginTop: responsiveHeight(1.5),
     borderRadius: 5,
   },
-  box4: {
-    marginTop: responsiveHeight(-10),
-    marginLeft: responsiveHeight(13),
-  },
-  text: {
-    fontWeight: 'bold',
-    fontSize: responsiveFontSize(2.2),
-    color: WARNA_SEKUNDER,
-  },
-  boxTime: {
-    flexDirection: 'row',
-  },
-  iconTime: {
-    marginTop: responsiveHeight(5),
-    color: WARNA_DISABLE,
+  space1: {
+    paddingHorizontal: responsiveWidth(2),
   },
   text1: {
-    marginLeft: responsiveHeight(0.5),
-    fontSize: responsiveFontSize(1.6),
-    marginTop: responsiveHeight(5),
-    color: WARNA_DISABLE,
+    color: WARNA_SEKUNDER,
+    fontSize: responsiveFontSize(2.2),
+    fontWeight: 'bold',
   },
-  box2: {
-    // flexDirection: 'row',
-    marginTop: responsiveHeight(1.5),
-    marginLeft: responsiveHeight(35),
+  space2: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginTop: responsiveHeight(2.8),
+    justifyContent: 'flex-end',
+  },
+  space4: {
+    flexDirection: 'row',
+    paddingRight: responsiveHeight(4.5),
+  },
+  iconTime: {
+    color: WARNA_DISABLE,
+    paddingRight: responsiveHeight(0.5),
   },
   text2: {
-    marginLeft: responsiveHeight(1.3),
-    fontSize: responsiveFontSize(1.7),
+    color: WARNA_DISABLE,
+  },
+  space3: {
+    alignItems: 'flex-end',
+  },
+  text3: {
     color: WARNA_GRAYTUA,
   },
   text4: {
-    fontSize: responsiveFontSize(1.7),
     color: WARNA_GRAYTUA,
+    fontSize: responsiveHeight(1.8),
   },
-  box3: {
-    height: responsiveHeight(5),
-    width: responsiveWidth(88),
-    marginTop: responsiveHeight(1.8),
-    marginLeft: responsiveHeight(-2),
+  space5: {
     borderTopWidth: 1,
-    borderColor: WARNA_DISABLE,
-    // backgroundColor: WARNA_GRAYTUA,
+    borderColor: WARNA_BORDER,
+    paddingVertical: responsiveWidth(2),
   },
-  box6: {
+  space6: {
     flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: responsiveHeight(0.5),
     justifyContent: 'space-between',
-    marginTop: responsiveHeight(1.2),
-    // marginBottom: responsiveHeight(1),
-    marginHorizontal: responsiveHeight(2),
-    // backgroundColor: WARNA_DISABLE,
-  },
-  text6: {
-    fontWeight: 'bold',
-    fontSize: responsiveFontSize(2),
-    color: WARNA_SEKUNDER,
   },
   text5: {
-    fontWeight: 'bold',
-    fontSize: responsiveFontSize(2),
     color: WARNA_SEKUNDER,
+    fontSize: responsiveFontSize(1.8),
+    fontWeight: '500',
   },
-  box5: {
-    height: responsiveHeight(5),
-    width: responsiveWidth(88),
-    marginLeft: responsiveHeight(-2),
-    borderBottomWidth: 1,
-    borderColor: WARNA_DISABLE,
-  },
-
-  box1: {
-    marginTop: responsiveHeight(-7.4),
-    marginRight: responsiveHeight(-28),
-    alignItems: 'center',
-  },
-  text3: {
-    paddingHorizontal: responsiveHeight(0.5),
-    fontSize: responsiveFontSize(1),
+  text6: {
+    fontSize: responsiveFontSize(1.3),
     color: WARNA_WHITE,
   },
-  actionBtn: {
-    width: responsiveWidth(21),
-    height: responsiveHeight(4),
+  space7: {
     backgroundColor: WARNA_SEKUNDER,
-    borderRadius: 30,
-    marginTop: responsiveHeight(-2),
+    borderRadius: 5,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: responsiveHeight(1),
+    paddingVertical: responsiveWidth(1),
   },
 });
 

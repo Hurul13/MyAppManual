@@ -23,6 +23,7 @@ import {
   CheckoutAddress,
   CheckoutPayment,
   CheckoutShipping,
+  CheckoutBerhasil,
   ReviewRating,
   RincianPesanan,
 } from '../pages';
@@ -144,6 +145,11 @@ const Router = () => {
       <Stack.Screen
         name="CheckoutShipping"
         component={CheckoutShipping}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CheckoutBerhasil"
+        component={CheckoutBerhasil}
         options={{headerShown: false}}
       />
       <Stack.Screen

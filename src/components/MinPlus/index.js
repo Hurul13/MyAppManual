@@ -4,9 +4,6 @@ import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MinPlus = ({onValueChange}) => {
-  // const navigateTo = async page => {
-  //   navigation.navigate(page);
-  // };
   const [skor, setSkor] = useState(0);
   const [value, setValue] = useState(1);
   useEffect(() => {

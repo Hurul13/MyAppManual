@@ -12,14 +12,15 @@ const CheckoutShipping = ({navigation}) => {
     <ScrollView style={styles.all}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={navigation.goBack}>
-            <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
-          </TouchableOpacity>
+          <IconMaterial
+            name="arrow-left"
+            size={26}
+            style={styles.iconBack}
+            onPress={navigation.goBack}
+          />
           <Text style={styles.judulBar}>Checkout Shipping</Text>
         </View>
-        <View style={styles.box}>
-          <Text style={styles.text1}>#</Text>
-        </View>
+        <View style={styles.box}></View>
       </View>
     </ScrollView>
   );

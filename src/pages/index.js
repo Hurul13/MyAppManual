@@ -18,6 +18,7 @@ import Checkout from './Checkout';
 import CheckoutAddress from './CheckoutAddress';
 import CheckoutPayment from './CheckoutPayment';
 import CheckoutShipping from './CheckoutShipping';
+import CheckoutBerhasil from './CheckoutBerhasil';
 import ReviewRating from './ReviewRating';
 import RincianPesanan from './RincianPesanan';
 
@@ -42,6 +43,7 @@ export {
   CheckoutAddress,
   CheckoutPayment,
   CheckoutShipping,
+  CheckoutBerhasil,
   ReviewRating,
   RincianPesanan,
 };

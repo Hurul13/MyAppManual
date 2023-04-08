@@ -35,9 +35,31 @@ const styles = StyleSheet.create({
   },
   box: {
     backgroundColor: WARNA_WHITE,
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
     height: responsiveHeight(91.6),
+  },
+  space: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: responsiveWidth(10),
+    // borderWidth: 1,
+  },
+  icon: {
+    color: WARNA_SEKUNDER,
+  },
+  space1: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: WARNA_SEKUNDER,
+    fontSize: responsiveFontSize(3),
+    fontWeight: 'bold',
+  },
+  text1: {
+    color: WARNA_SEKUNDER,
+    paddingHorizontal: responsiveHeight(3),
+    paddingVertical: responsiveWidth(3),
+    textAlign: 'center',
   },
 });
 

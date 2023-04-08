@@ -11,7 +11,7 @@ const accordionRating = [
   {
     id: '1',
     title: 'Review',
-    nameUser: 'Hurul Aini',
+    nameUser: 'Blaa Blaa',
     imageUser: require('../assets/Images/user1.jpg'),
     review: 'Mantappp',
     imageReview: require('../assets/Images/pasir.jpg'),

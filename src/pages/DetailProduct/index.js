@@ -159,7 +159,7 @@ const DetailProduct = ({navigation, onValueChange}) => {
       <TouchableOpacity onPress={() => navigateTo('Keranjang')}>
         <View style={styles.boxBtn}>
           <IconMaterial name="cart-outline" size={24} style={styles.iconCard} />
-          <Text style={styles.text5}>Tambah Keranjang</Text>
+          <Text style={styles.text5}> TAMBAH KERANJANG</Text>
         </View>
       </TouchableOpacity>
     </ScrollView>

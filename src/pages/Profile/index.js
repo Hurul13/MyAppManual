@@ -40,7 +40,7 @@ const Profile = ({navigation}) => {
           <View style={styles.box1}>
             <View style={styles.profil}>
               <ImagePiecker></ImagePiecker>
-              <Text style={styles.text1}>Hurul Aini</Text>
+              <Text style={styles.text1}>Lorem Ipsum</Text>
               <Text style={styles.text2}>0851234567</Text>
             </View>
           </View>

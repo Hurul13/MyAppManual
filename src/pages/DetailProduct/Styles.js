@@ -225,17 +225,13 @@ const styles = StyleSheet.create({
   boxBtn: {
     flexDirection: 'row',
     paddingVertical: responsiveWidth(4),
-    // marginVertical: responsiveWidth(2),
     marginHorizontal: responsiveHeight(3),
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: WARNA_SEKUNDER,
-    // elevation: 7,
-    // shadowColor: 4,
-    borderRadius: 100 / 2,
+    borderRadius: 10,
     marginVertical: responsiveHeight(1),
     marginBottom: responsiveHeight(3.5),
-    // borderWidth: 1,
   },
   text5: {
     fontSize: responsiveFontSize(2.2),
@@ -244,7 +240,6 @@ const styles = StyleSheet.create({
   },
   iconCard: {
     color: WARNA_WHITE,
-    // marginLeft: responsiveHeight(1),
     paddingHorizontal: responsiveHeight(0.8),
   },
 });

@@ -89,6 +89,11 @@ def reactNativeArchitectures() {
 }
 
 android {
+    // compileSdkVersion 30
+    // buildToolsVersion "30.0.3"
+    // defaultConfig {
+    //   targetSdkVersion 30}
+
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -153,6 +158,8 @@ dependencies {
     
     // implementation project(':react-native-linear-gradient')
 
+    // implementation project(':react-native-fingerprint-scanner')
+
     implementation("com.facebook.react:react-android")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
@@ -170,5 +177,5 @@ dependencies {
     }
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project);
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle";

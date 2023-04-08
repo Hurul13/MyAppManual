@@ -11,47 +11,6 @@ import {
   WARNA_WHITE,
 } from '../../utils/constant';
 
-const styles = StyleSheet.create({
-  all: {
-    backgroundColor: WARNA_UTAMA,
-  },
-  container: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
-  header: {
-    flexDirection: 'row',
-    marginHorizontal: responsiveHeight(3),
-    marginVertical: responsiveWidth(5.4),
-  },
-  iconBack: {
-    color: WARNA_SEKUNDER,
-  },
-  judulBar: {
-    marginHorizontal: responsiveHeight(2.5),
-    color: WARNA_SEKUNDER,
-    fontSize: responsiveFontSize(2.4),
-    fontWeight: 'bold',
-  },
-  box: {
-    backgroundColor: WARNA_WHITE,
-    // marginTop: responsiveHeight(2),
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
-    height: responsiveHeight(91.6),
-  },
-  cartCard: {
-    height: responsiveHeight(18.2),
-    elevation: 15,
-    borderRadius: 10,
-    borderColor: WARNA_UTAMA,
-    backgroundColor: WARNA_WHITE,
-    marginTop: responsiveHeight(4),
-    marginVertical: responsiveHeight(-1),
-    marginHorizontal: responsiveHeight(3),
-    paddingHorizontal: responsiveHeight(2),
-    borderWidth: 1,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default styles;

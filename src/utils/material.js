@@ -10,8 +10,9 @@ const material = [
     rating: '4.8',
     numReviews: '8',
     address: 'Kota Surabaya',
-    status: 'Barang sudah diterima customer',
+    status: 'Lunas',
     time: '30-03-2023 10.40',
+    totalPrince: '16.60',
   },
   {
     id: '2',
@@ -24,8 +25,9 @@ const material = [
     rating: '4.8',
     numReviews: '5',
     address: 'Kota Surabaya',
-    status: 'Barang sudah diterima customer',
+    status: 'Lunas',
     time: '30-03-2023 10.40',
+    totalPrince: '14.20',
   },
   {
     id: '3',
