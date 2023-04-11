@@ -183,11 +183,11 @@ const DetailProduct2 = ({navigation, onValueChange, route}) => {
         bg={WARNA_UTAMA}
         onPress={() => navigation.navigate('Keranjang2')}
         color={WARNA_SEKUNDER}
-        mt={10}
+        mt={5}
         mx={responsiveHeight(3)}>
         ADD TO CART
       </Buttone>
-      <Review />
+      {/* <Review /> */}
     </ScrollView>
   );
 };

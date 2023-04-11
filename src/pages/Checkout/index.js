@@ -10,7 +10,22 @@ import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import material from '../../utils/material';
-import {responsiveHeight} from 'react-native-responsive-dimensions';
+import {Buttone} from '../../components';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+  WARNA_BORDER,
+  WARNA_DEEPYELLOW,
+  WARNA_RED,
+} from '../../utils/constant';
 // import {ScrollView} from 'react-native-virtualized-view';
 
 const Checkout = ({navigation}) => {
@@ -109,16 +124,15 @@ const Checkout = ({navigation}) => {
                       <Text style={styles.text11}>$577</Text>
                     </View>
                   </View>
-                  <TouchableOpacity
-                    onPress={() => navigateTo('CheckoutBerhasil')}>
-                    <View style={styles.boxBtn}>
-                      <IconMaterial
-                        name="cart-outline"
-                        size={24}
-                        style={styles.iconCard}
-                      />
-                      <Text style={styles.text12}>BAYAR</Text>
-                    </View>
+                  <TouchableOpacity>
+                    <Buttone
+                      bg={WARNA_UTAMA}
+                      color={WARNA_SEKUNDER}
+                      onPress={() => navigateTo('CheckoutBerhasil')}
+                      mt={5}
+                      mx={responsiveHeight(3)}>
+                      BAYAR
+                    </Buttone>
                   </TouchableOpacity>
                 </View>
               </View>
