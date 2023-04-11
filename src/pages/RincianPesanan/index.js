@@ -57,11 +57,11 @@ const RincianPesanan = ({navigation}) => {
             <View style={styles.space3}>
               <View style={styles.space4}>
                 <Text style={styles.text5}>Lorem Ipsum</Text>
-                <Text style={styles.text6}>08765432234</Text>
+                <Text style={styles.text6}>0851234567</Text>
               </View>
+              <Text style={styles.text7}>Jln. Mawar Melati Anggrek No 1</Text>
               <Text style={styles.text7}>
-                Jln. Park Regency Blok. B No. 8, Keputih, Kec. Sukolilo, Kota
-                Surabaya, Jawa Timur 60111, Indonesia
+                LILY, KOTA BUNGA, INDONESIA, 45678
               </Text>
             </View>
           </View>
@@ -74,15 +74,16 @@ const RincianPesanan = ({navigation}) => {
               <View>
                 <View style={{marginTop: responsiveHeight(2)}}>
                   <View style={styles.space2}>
-                    <Text style={styles.text3}>Pilih Ekspedisi</Text>
+                    <Text style={styles.text3}>Pengiriman</Text>
                   </View>
                   <View style={styles.space5}>
-                    <Text style={styles.text9}>--Pilih--</Text>
-                    <IconMaterial
+                    <Text style={styles.text9}>Pihak HOMEI</Text>
+                    <Text style={styles.text9}>$10</Text>
+                    {/* <IconMaterial
                       name="menu-down"
                       size={26}
                       style={styles.icon}
-                    />
+                    /> */}
                   </View>
                 </View>
 
@@ -93,24 +94,24 @@ const RincianPesanan = ({navigation}) => {
                   <View style={styles.space7}>
                     <View style={styles.space6}>
                       <Text style={styles.text10}>Sub-Total Untuk Produk</Text>
-                      <Text style={styles.text10}>$40</Text>
+                      <Text style={styles.text10}>$567</Text>
                     </View>
                     <View style={styles.space6}>
                       <Text style={styles.text10}>
                         Sub-Total Untuk Pengiriman
                       </Text>
-                      <Text style={styles.text10}>-</Text>
+                      <Text style={styles.text10}>$10</Text>
                     </View>
                     <View style={styles.space6}>
                       <Text style={styles.text11}>TOTAL PEMBAYARAN</Text>
-                      <Text style={styles.text11}>$40</Text>
+                      <Text style={styles.text11}>$577</Text>
                     </View>
                   </View>
-                  <TouchableOpacity onPress={() => navigateTo('#')}>
-                    <View style={styles.boxBtn}>
-                      <Text style={styles.text12}>SELESAI</Text>
-                    </View>
-                  </TouchableOpacity>
+                  {/* <TouchableOpacity onPress={() => navigateTo('#')}>
+                  </TouchableOpacity> */}
+                  <View style={styles.boxBtn}>
+                    <Text style={styles.text12}>SELESAI</Text>
+                  </View>
                 </View>
               </View>
             )}

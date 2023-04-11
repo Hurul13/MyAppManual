@@ -11,6 +11,8 @@ import {
   WARNA_WHITE,
   WARNA_GRAYTUA,
   WARNA_BORDER,
+  WARNA_DEEPYELLOW,
+  WARNA_GREEN,
 } from '../../utils/constant';
 
 const styles = StyleSheet.create({
@@ -37,8 +39,8 @@ const styles = StyleSheet.create({
   },
   box: {
     backgroundColor: WARNA_WHITE,
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
+    // borderTopLeftRadius: 35,
+    // borderTopRightRadius: 35,
     height: responsiveHeight(91.6),
     paddingVertical: responsiveWidth(8),
   },
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveHeight(3),
     marginVertical: responsiveWidth(1),
     paddingHorizontal: responsiveHeight(2),
+    // backgroundColor: WARNA_DEEPYELLOW,
   },
   box1: {
     paddingVertical: responsiveWidth(2),
@@ -91,7 +94,7 @@ const styles = StyleSheet.create({
   },
   space4: {
     flexDirection: 'row',
-    paddingRight: responsiveHeight(4.5),
+    paddingVertical: responsiveWidth(2),
   },
   iconTime: {
     color: WARNA_DISABLE,
@@ -124,15 +127,20 @@ const styles = StyleSheet.create({
   text5: {
     color: WARNA_SEKUNDER,
     fontSize: responsiveFontSize(1.8),
-    fontWeight: '500',
+    // fontWeight: '500',
+  },
+  text7: {
+    color: WARNA_SEKUNDER,
+    fontSize: responsiveFontSize(1.8),
+    fontWeight: '600',
   },
   text6: {
     fontSize: responsiveFontSize(1.3),
     color: WARNA_WHITE,
   },
   space7: {
-    backgroundColor: WARNA_SEKUNDER,
-    borderRadius: 5,
+    backgroundColor: WARNA_GREEN,
+    borderRadius: 50,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

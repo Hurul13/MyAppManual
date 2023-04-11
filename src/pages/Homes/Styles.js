@@ -23,16 +23,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: responsiveHeight(3),
     marginVertical: responsiveWidth(3),
+    alignItems: 'center',
   },
   space: {
-    flexDirection: 'row-reverse',
-    marginVertical: responsiveHeight(1),
+    // flexDirection: 'row-reverse',
+    // marginVertical: responsiveHeight(1),
   },
   iconBell: {
     color: WARNA_UTAMA,
   },
   iconTroll: {
-    marginHorizontal: responsiveHeight(3),
+    // marginHorizontal: responsiveHeight(2),
     color: WARNA_UTAMA,
   },
   logo: {
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     height: responsiveHeight(38),
+
     // borderWidth: 1
   },
   box1: {
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
     color: WARNA_GRAYTUA,
   },
   card: {
-    height: responsiveHeight(29),
+    height: responsiveHeight(25),
     width: responsiveWidth(41),
     marginLeft: responsiveHeight(3),
     marginTop: responsiveHeight(0.5),
@@ -150,13 +152,6 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(2.2),
     color: WARNA_SEKUNDER,
     fontWeight: 'bold',
-  },
-  rating: {
-    flexDirection: 'row-reverse',
-  },
-  iconStar: {
-    color: WARNA_UTAMA,
-    paddingHorizontal: responsiveHeight(0.3),
   },
   text3: {
     fontSize: responsiveFontSize(1.9),

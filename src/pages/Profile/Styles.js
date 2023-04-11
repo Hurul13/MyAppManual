@@ -21,19 +21,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: responsiveHeight(3),
     marginVertical: responsiveWidth(3),
+    alignItems: 'center',
   },
   space: {
-    flexDirection: 'row-reverse',
-    marginVertical: responsiveHeight(1),
-  },
-  iconBell: {
-    color: WARNA_UTAMA,
+    // flexDirection: 'row-reverse',
+    // marginVertical: responsiveHeight(1),
   },
   iconTroll: {
-    marginHorizontal: responsiveHeight(3),
+    // marginHorizontal: responsiveHeight(3),
     color: WARNA_UTAMA,
   },
   space1: {
+    iconBell: {
+      color: WARNA_UTAMA,
+    },
     flexDirection: 'row',
     marginVertical: responsiveHeight(1),
   },

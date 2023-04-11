@@ -1,0 +1,60 @@
+41:53    => jumlah barang di cart
+43:25    => varian search
+49:14    => agar nama product bisa (...) kalo panjang
+52:36    => buat rating
+1:01:00  => add minplus(numericinput)
+1:07:35  =? buat review
+1:31:06  =>cart screen
+1:37:44  => swipe cart delete
+2:14:24  => data untuk profile
+2:18:05  => history order
+2:25:12  => shipping screen
+3: 45:03 => membuat detail product sesuai data material
+
+<Box flex={1} safeAreaTop bg={WARNA_BORDER}>
+      <Center w="full" py={5}>
+        <Text color={WARNA_SEKUNDER} fontSize={20} bold>
+          Cart
+        </Text>
+      </Center>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <CartItem />
+        <Center mt={5}>
+          <HStack
+            rounded={50}
+            justifyContent="space-between"
+            bg={WARNA_WHITE}
+            shadow={2}
+            w="90%"
+            pl={5}
+            h={45}
+            alignItems="center">
+            <Text fontSize={responsiveFontSize(2)} bold>
+              Total
+            </Text>
+            <Button
+              px={10}
+              h={45}
+              rounded={50}
+              bg={WARNA_UTAMA}
+              _text={{
+                color: WARNA_SEKUNDER,
+                fontWeight: '800',
+                fontSize: responsiveFontSize(2),
+              }}
+              _pressed={{bg: WARNA_UTAMA}}>
+              $356
+            </Button>
+          </HStack>
+        </Center>
+        <Center px={5}>
+          <Buttone
+            bg={WARNA_UTAMA}
+            color={WARNA_SEKUNDER}
+            mt={10}
+            onPress={() => navigation.navigate('Checkout')}>
+            CHECKOUT
+          </Buttone>
+        </Center>
+      </ScrollView>
+    </Box>

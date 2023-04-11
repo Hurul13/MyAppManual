@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: WARNA_WHITE,
     // marginTop: responsiveHeight(2),
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
+    // borderTopLeftRadius: 35,
+    // borderTopRightRadius: 35,
     height: responsiveHeight(91.6),
   },
   box6: {

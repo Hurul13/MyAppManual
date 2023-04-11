@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const EditProfile = ({navigation}) => {
@@ -29,7 +28,7 @@ const EditProfile = ({navigation}) => {
           {/* <ImagePiecker></ImagePiecker> */}
           <Text style={styles.textUser}>Nama</Text>
           <TextInput placeholder="Masukan nama ... " style={styles.textInput}>
-            Hurul Aini
+            Lorem Ipsum
           </TextInput>
           <Text style={styles.textPass}>No. Telpon</Text>
           <TextInput

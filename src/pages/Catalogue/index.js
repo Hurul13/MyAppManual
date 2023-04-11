@@ -1,5 +1,5 @@
 import {
-  Text,
+  // Text,
   View,
   Image,
   ScrollView,
@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   FlatList,
 } from 'react-native';
+import {Text} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -108,14 +109,18 @@ const Catalogue = ({navigation}, {materials}) => {
       <TouchableHighlight
         underlayColor={WARNA_WHITE}
         activeOpacity={0.9}
-        onPress={() => navigation.navigate('DetailProduct', materials)}>
+        onPress={() => navigation.navigate('DetailProduct2', materials)}>
         <View style={styles.card}>
           <View style={styles.cardImg}>
             <Image source={materials.image} style={styles.img} />
           </View>
           <View style={styles.boxText}>
-            <Text style={styles.text}>{materials.name}</Text>
-            <Text style={styles.text1}>{materials.ingredients}</Text>
+            <Text style={styles.text} isTruncated>
+              {materials.name}
+            </Text>
+            <Text style={styles.text1} isTruncated>
+              {materials.ingredients}
+            </Text>
           </View>
           <View style={styles.boxPrice}>
             <Text style={styles.text2}>${materials.price}</Text>
@@ -148,7 +153,7 @@ const Catalogue = ({navigation}, {materials}) => {
                   placeholderTextColor={WARNA_DISABLE}
                   style={styles.textInput}></TextInput>
               </View>
-              <TouchableOpacity>
+              {/* <TouchableOpacity>
                 <View style={styles.boxFilter}>
                   <IconMaterial
                     name="filter-variant"
@@ -156,7 +161,7 @@ const Catalogue = ({navigation}, {materials}) => {
                     style={styles.iconFilter}
                   />
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </View>

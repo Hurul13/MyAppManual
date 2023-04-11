@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   box1: {
     backgroundColor: WARNA_WHITE,
-    width: responsiveWidth(73),
+    width: responsiveWidth(88),
     height: responsiveHeight(6),
     borderRadius: 8,
     borderColor: WARNA_WHITE,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
 
   textInput: {
-    width: responsiveWidth(58),
+    width: responsiveWidth(73),
     height: responsiveHeight(6),
     color: WARNA_SEKUNDER,
     borderWidth: 1,
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(1.8),
   },
   boxSearch: {
+    // borderWidth: 1,
     width: responsiveWidth(14.9),
     height: responsiveHeight(6),
     borderTopLeftRadius: 8,
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor: WARNA_WHITE,
     justifyContent: 'center',
     alignItems: 'center',
+    // borderWidth: 1,
   },
   iconSearch: {
     color: WARNA_DISABLE,
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
     color: WARNA_WHITE,
   },
   box: {
-    height: responsiveHeight(202),
+    height: responsiveHeight(180),
   },
   categoriesListContainer: {
     alignItems: 'center',
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    height: responsiveHeight(29),
+    height: responsiveHeight(25),
     width: responsiveWidth(41),
     marginLeft: responsiveHeight(3),
     marginTop: responsiveHeight(0.5),

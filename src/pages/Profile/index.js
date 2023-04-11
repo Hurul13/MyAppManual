@@ -5,6 +5,12 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import {ImagePiecker} from '../../components';
+import {Box, Pressable} from 'native-base';
+import {WARNA_GRAYTUA, WARNA_WHITE, WARNA_RED} from '../../utils/constant';
+import {
+  responsiveHeight,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
 
 const Profile = ({navigation}) => {
   const navigateTo = async page => {
@@ -20,18 +26,36 @@ const Profile = ({navigation}) => {
             <Text style={styles.judulBar}>Profile</Text>
           </View>
           <View style={styles.space}>
-            <Icon
+            {/* <Icon
               name="bell"
               size={23}
               style={styles.iconBell}
-              onPress={() => navigateTo('Notifikasi')}
-            />
-            <IconMaterial
-              name="cart-outline"
-              size={26}
-              style={styles.iconTroll}
-              onPress={() => navigateTo('Keranjang')}
-            />
+              onPress={() => navigateTo('#')}
+            /> */}
+            <Pressable
+              // ml={responsiveHeight(2)}
+              // top={-3}
+              onPress={() => navigateTo('Keranjang2')}>
+              <IconMaterial
+                name="shopping"
+                size={30}
+                style={styles.iconTroll}
+              />
+              <Box
+                px={responsiveHeight(0.5)}
+                rounded="full"
+                position="absolute"
+                bg={WARNA_RED}
+                left={responsiveHeight(2)}
+                top={responsiveHeight(-0.3)}
+                _text={{
+                  color: WARNA_WHITE,
+                  fontSize: responsiveFontSize(1.3),
+                  textAlign: 'center',
+                }}>
+                5
+              </Box>
+            </Pressable>
           </View>
         </View>
         <LinearGradient
@@ -48,7 +72,7 @@ const Profile = ({navigation}) => {
         <View>
           <Text style={styles.text3}>Profile</Text>
           <TouchableOpacity
-            onPress={() => navigateTo('EditProfile')}
+            onPress={() => navigateTo('EditProfile2')}
             style={styles.space2}>
             <View style={styles.space3}>
               <View style={styles.box3}>

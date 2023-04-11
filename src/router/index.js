@@ -12,13 +12,16 @@ import {
   Register,
   Register2,
   EditProfile,
+  EditProfile2,
   RiwayatTransaksi,
   Tentang,
   KebijakanPrivasi,
   SyaratKetentuan,
   Keranjang,
+  Keranjang2,
   Notifikasi,
   DetailProduct,
+  DetailProduct2,
   Checkout,
   CheckoutAddress,
   CheckoutPayment,
@@ -26,8 +29,14 @@ import {
   CheckoutBerhasil,
   ReviewRating,
   RincianPesanan,
+  EditAddress,
+  NewAddress,
 } from '../pages';
-import {BottomNavigation} from '../components';
+import {
+  BottomNavigation,
+  EditProfileTab,
+  AddressProfileTab,
+} from '../components';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -93,6 +102,11 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="EditProfile2"
+        component={EditProfile2}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="RiwayatTransaksi"
         component={RiwayatTransaksi}
         options={{headerShown: false}}
@@ -118,6 +132,11 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="Keranjang2"
+        component={Keranjang2}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="Notifikasi"
         component={Notifikasi}
         options={{headerShown: false}}
@@ -125,6 +144,11 @@ const Router = () => {
       <Stack.Screen
         name="DetailProduct"
         component={DetailProduct}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DetailProduct2"
+        component={DetailProduct2}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -160,6 +184,26 @@ const Router = () => {
       <Stack.Screen
         name="RincianPesanan"
         component={RincianPesanan}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditAddress"
+        component={EditAddress}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="NewAddress"
+        component={NewAddress}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AddressProfileTab"
+        component={AddressProfileTab}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditProfileTab"
+        component={EditProfileTab}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
