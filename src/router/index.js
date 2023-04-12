@@ -36,6 +36,7 @@ import {
   BottomNavigation,
   EditProfileTab,
   AddressProfileTab,
+  CartItem,
 } from '../components';
 
 const Stack = createNativeStackNavigator();
@@ -204,6 +205,11 @@ const Router = () => {
       <Stack.Screen
         name="EditProfileTab"
         component={EditProfileTab}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CartItem"
+        component={CartItem}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

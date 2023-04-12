@@ -7,10 +7,11 @@ import {
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 
-const Buttone = ({mx, my, mt, bg, color, children, onPress}) => {
+const Buttone = ({mx, my, mt, bg, color, children, onPress, mb}) => {
   return (
     <Button
       w={responsiveHeight(43)}
+      mb={mb}
       mx={mx}
       my={my}
       h={55}

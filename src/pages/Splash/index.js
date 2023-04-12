@@ -11,12 +11,12 @@ const Splash = ({navigation}) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/Images/splashBG.png')}
+      source={require('../../assets/Images/splash.png')}
       style={styles.splashbg}>
-      <Image
+      {/* <Image
         source={require('../../assets/Images/logoHOMEI.png')}
         style={styles.logobg}
-      />
+      /> */}
     </ImageBackground>
   );
 };

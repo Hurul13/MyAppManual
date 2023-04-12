@@ -60,8 +60,11 @@ const Keranjang2 = ({navigation}) => {
           </Center> */}
           <ScrollView
             showsVerticalScrollIndicator={false}
-            pt={responsiveHeight(5)}>
-            <CartItem />
+            pt={responsiveHeight(3)}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('DetailProduct2')}>
+              <CartItem />
+            </TouchableOpacity>
             <Center mt={5}>
               <HStack
                 rounded={50}
@@ -99,6 +102,7 @@ const Keranjang2 = ({navigation}) => {
                 borderWidth={1}
                 borderColor={WARNA_BORDER}
                 mt={10}
+                mb={12}
                 onPress={() => navigation.navigate('Checkout')}>
                 CHECKOUT
               </Buttone>

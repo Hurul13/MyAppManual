@@ -28,6 +28,8 @@ import {
 } from 'react-native-responsive-dimensions';
 import categories from '../../utils/categories';
 import material from '../../utils/material';
+import {Rating} from '../../components';
+
 // import {ScrollView} from 'react-native-virtualized-view';
 
 const Catalogue = ({navigation}, {materials}) => {
@@ -124,10 +126,12 @@ const Catalogue = ({navigation}, {materials}) => {
           </View>
           <View style={styles.boxPrice}>
             <Text style={styles.text2}>${materials.price}</Text>
-            <View style={styles.rating}>
+            <Rating value={materials.rating} />
+
+            {/* <View style={styles.rating}>
               <Text style={styles.text3}>{materials.rating}</Text>
               <IconMaterial name="star" size={19} style={styles.iconStar} />
-            </View>
+            </View> */}
           </View>
         </View>
       </TouchableHighlight>

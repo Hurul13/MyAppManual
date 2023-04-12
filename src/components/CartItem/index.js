@@ -27,6 +27,7 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import material from '../../utils/material';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import Buttone from '../Buttone';
+import {useNavigation} from '@react-navigation/native';
 
 const Swiper = () => (
   <SwipeListView
@@ -104,10 +105,12 @@ const hiddenItem = () => (
 );
 
 const CartItem = () => {
+  const navigation = useNavigation();
+
   return (
-    <Box mr={6}>
+    <Pressable mr={6} onPress={() => navigation.navigate('Keranjang2')}>
       <Swiper />
-    </Box>
+    </Pressable>
   );
 };
 

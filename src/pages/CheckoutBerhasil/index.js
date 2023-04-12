@@ -16,7 +16,7 @@ const CheckoutBerhasil = ({navigation}) => {
             name="arrow-left"
             size={26}
             style={styles.iconBack}
-            onPress={navigation.goBack}
+            onPress={() => navigation.navigate('Homes')}
           />
           <Text style={styles.judulBar}>Pembayaran Selesai</Text>
         </View>

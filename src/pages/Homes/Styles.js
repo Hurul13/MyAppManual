@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     color: WARNA_GRAYTUA,
   },
   card: {
-    height: responsiveHeight(25),
+    height: responsiveHeight(25.7),
     width: responsiveWidth(41),
     marginLeft: responsiveHeight(3),
     marginTop: responsiveHeight(0.5),
