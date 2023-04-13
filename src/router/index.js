@@ -5,6 +5,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   Splash,
   Homes,
+  Homes2,
   Catalogue,
   Profile,
   Login,
@@ -210,6 +211,11 @@ const Router = () => {
       <Stack.Screen
         name="CartItem"
         component={CartItem}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Homes2"
+        component={Homes2}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

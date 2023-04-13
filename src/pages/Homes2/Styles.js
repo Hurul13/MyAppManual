@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(-1),
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
-    height: responsiveHeight(36),
+    height: responsiveHeight(38),
 
     // borderWidth: 1
   },
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveHeight(3),
     alignItems: 'center',
     marginVertical: responsiveWidth(3),
-    // marginTop: responsiveHeight(3),
+    marginTop: responsiveHeight(3),
   },
   textJudul: {
     color: WARNA_SEKUNDER,
@@ -102,11 +102,11 @@ const styles = StyleSheet.create({
     color: WARNA_GRAYTUA,
   },
   card: {
-    // height: responsiveHeight(24.7),
-    // width: responsiveWidth(41),
-    // marginHorizontal: responsiveHeight(3),
-    marginVertical: responsiveWidth(2),
+    height: responsiveHeight(25.7),
+    width: responsiveWidth(41),
     marginLeft: responsiveHeight(3),
+    marginTop: responsiveHeight(0.5),
+    marginBottom: responsiveHeight(2),
     borderRadius: 15,
     borderColor: WARNA_UTAMA,
     borderWidth: 1,
@@ -130,28 +130,26 @@ const styles = StyleSheet.create({
   },
   boxText: {
     marginHorizontal: responsiveHeight(2),
-    marginBottom: responsiveHeight(2),
+    marginVertical: responsiveWidth(3),
   },
   text: {
     fontSize: responsiveFontSize(2.1),
-    fontWeight: '400',
+    fontWeight: 'bold',
     color: WARNA_SEKUNDER,
   },
   text1: {
     fontSize: responsiveFontSize(1.4),
     color: WARNA_GRAYTUA,
-    // marginTop: responsiveHeight(0.3),
+    marginTop: responsiveHeight(0.3),
   },
   boxPrice: {
     marginHorizontal: responsiveHeight(2),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: responsiveWidth(2),
-    marginTop: responsiveHeight(2),
   },
   text2: {
-    fontSize: responsiveFontSize(2.5),
+    fontSize: responsiveFontSize(2.2),
     color: WARNA_SEKUNDER,
     fontWeight: 'bold',
   },

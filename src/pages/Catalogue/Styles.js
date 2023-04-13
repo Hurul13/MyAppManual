@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    height: responsiveHeight(25.7),
+    // height: responsiveHeight(25.7),
     width: responsiveWidth(41),
     marginLeft: responsiveHeight(3),
     marginTop: responsiveHeight(0.5),
@@ -140,26 +140,28 @@ const styles = StyleSheet.create({
   },
   boxText: {
     marginHorizontal: responsiveHeight(2),
-    marginVertical: responsiveWidth(3),
+    marginBottom: responsiveHeight(2),
   },
   text: {
     fontSize: responsiveFontSize(2.1),
-    fontWeight: 'bold',
+    fontWeight: '400',
     color: WARNA_SEKUNDER,
   },
   text1: {
     fontSize: responsiveFontSize(1.4),
     color: WARNA_GRAYTUA,
-    marginTop: responsiveHeight(0.3),
+    // marginTop: responsiveHeight(0.3),
   },
   boxPrice: {
     marginHorizontal: responsiveHeight(2),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginVertical: responsiveWidth(2),
+    marginTop: responsiveHeight(2),
   },
   text2: {
-    fontSize: responsiveFontSize(2.2),
+    fontSize: responsiveFontSize(2.5),
     color: WARNA_SEKUNDER,
     fontWeight: 'bold',
   },

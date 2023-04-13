@@ -9,7 +9,7 @@ import {
   Box,
   Pressable,
   Input,
-  ScrollView,
+  // ScrollView,
   Center,
   HStack,
   Button,
@@ -20,6 +20,8 @@ import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import material from '../../utils/material';
 import {CartItem, Buttone} from '../../components';
+import {ScrollView} from 'react-native-virtualized-view';
+
 import {
   responsiveHeight,
   responsiveWidth,
@@ -60,7 +62,8 @@ const Keranjang2 = ({navigation}) => {
           </Center> */}
           <ScrollView
             showsVerticalScrollIndicator={false}
-            pt={responsiveHeight(3)}>
+            // pt={responsiveHeight(6)}
+          >
             <TouchableOpacity
               onPress={() => navigation.navigate('DetailProduct2')}>
               <CartItem />

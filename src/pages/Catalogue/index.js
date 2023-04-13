@@ -116,22 +116,22 @@ const Catalogue = ({navigation}, {materials}) => {
           <View style={styles.cardImg}>
             <Image source={materials.image} style={styles.img} />
           </View>
-          <View style={styles.boxText}>
-            <Text style={styles.text} isTruncated>
-              {materials.name}
-            </Text>
-            <Text style={styles.text1} isTruncated>
-              {materials.ingredients}
-            </Text>
-          </View>
           <View style={styles.boxPrice}>
             <Text style={styles.text2}>${materials.price}</Text>
-            <Rating value={materials.rating} />
+            {/* <Rating value={materials.rating} /> */}
 
             {/* <View style={styles.rating}>
               <Text style={styles.text3}>{materials.rating}</Text>
               <IconMaterial name="star" size={19} style={styles.iconStar} />
             </View> */}
+          </View>
+          <View style={styles.boxText}>
+            <Text style={styles.text} isTruncated>
+              {materials.name}
+            </Text>
+            <Text style={styles.text1} isTruncated>
+              Sisa stok {materials.countInStock}
+            </Text>
           </View>
         </View>
       </TouchableHighlight>

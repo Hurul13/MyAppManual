@@ -1,5 +1,6 @@
 import Splash from './Splash';
 import Homes from './Homes';
+import Homes2 from './Homes2';
 import Catalogue from './Catalogue';
 import Profile from './Profile';
 import Login from './Login';
@@ -30,6 +31,7 @@ import NewAddress from './NewAddress';
 export {
   Splash,
   Homes,
+  Homes2,
   Catalogue,
   Profile,
   Login,

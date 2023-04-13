@@ -49,27 +49,48 @@ const Homes = ({navigation}) => {
     );
   };
 
+  const [dataMaterial, setDataMaterial] = useState({
+    gambar: '',
+    nama_barang: '',
+    stok: '',
+    harga_proyek: '',
+  });
+  const getData = () => {
+    fetch('http://localhost/homei/web/api/v1/supplier-barang/index')
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+        setDataMaterial(json.data);
+      });
+  };
+
   const Card = ({materials}) => {
     return (
       <TouchableHighlight
         underlayColor={WARNA_WHITE}
         activeOpacity={0.9}
-        onPress={() => navigation.navigate('DetailProduct2', materials)}>
-        <View style={styles.card}>
-          <View style={styles.cardImg}>
-            <Image source={materials.image} style={styles.img} />
+        // onPress={getData}
+      >
+        <TouchableOpacity
+          onPress={() => navigation.navigate('DetailProduct2', materials)}>
+          <View style={styles.card}>
+            <View style={styles.cardImg}>
+              <Image source={materials.image} style={styles.img} />
+            </View>
+            <View style={styles.boxPrice}>
+              <Text style={styles.text2}>${materials.price}</Text>
+              {/* <Rating value={materials.rating} /> */}
+            </View>
+            <View style={styles.boxText}>
+              <Text style={styles.text} isTruncated>
+                {materials.name}
+              </Text>
+              <Text style={styles.text1}>
+                Sisa stok {materials.countInStock}
+              </Text>
+            </View>
           </View>
-          <View style={styles.boxText}>
-            <Text style={styles.text} isTruncated>
-              {materials.name}
-            </Text>
-            <Text style={styles.text1}>{materials.ingredients}</Text>
-          </View>
-          <View style={styles.boxPrice}>
-            <Text style={styles.text2}>${materials.price}</Text>
-            <Rating value={materials.rating} />
-          </View>
-        </View>
+        </TouchableOpacity>
       </TouchableHighlight>
     );
   };
@@ -137,11 +158,11 @@ const Homes = ({navigation}) => {
             renderItem={({item}) => <Banner banners={item} />}
           />
         </LinearGradient>
-        <View style={styles.material}>
+        {/* <View style={styles.material}>
           <View style={styles.space2}>
             <Text style={styles.textJudul}>Material sering dibeli</Text>
             <TouchableOpacity
-              onPress={() => navigateTo('Catalogue')}
+              onPress={() => navigateTo('Homes2')}
               style={styles.space1}>
               <IconMaterial
                 name="chevron-right"
@@ -158,11 +179,11 @@ const Homes = ({navigation}) => {
             data={material.slice(0, material.length > 3 ? 3 : material.length)}
             renderItem={({item}) => <Card materials={item} />}
           />
-        </View>
+        </View> */}
         <View>
           <View style={styles.space2}>
             <Text style={styles.textJudul} isTruncated>
-              Rekomendasi material untuk anda
+              Bahan material untuk anda
             </Text>
             <TouchableOpacity
               onPress={() => navigateTo('Catalogue')}

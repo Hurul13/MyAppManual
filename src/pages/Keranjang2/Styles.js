@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: responsiveHeight(3),
     marginVertical: responsiveWidth(5.4),
+    // marginBottom: responsiveWidth(),
     // justifyContent: 'center'
   },
   iconBack: {
@@ -42,6 +43,7 @@ const styles = StyleSheet.create({
     // borderTopLeftRadius: 35,
     // borderTopRightRadius: 35,
     height: responsiveHeight(91.6),
+    paddingTop: responsiveWidth(5),
   },
 });
 

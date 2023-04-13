@@ -2,7 +2,7 @@ import {
   Text,
   View,
   Image,
-  ScrollView,
+  // ScrollView,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
@@ -26,7 +26,7 @@ import {
   WARNA_DEEPYELLOW,
   WARNA_RED,
 } from '../../utils/constant';
-// import {ScrollView} from 'react-native-virtualized-view';
+import {ScrollView} from 'react-native-virtualized-view';
 
 const Checkout = ({navigation}) => {
   const navigateTo = async page => {
@@ -64,7 +64,7 @@ const Checkout = ({navigation}) => {
           <Text style={styles.judulBar}>Checkout</Text>
         </View>
         <View style={styles.box}>
-          <View style={{paddingTop: responsiveHeight(4)}}>
+          <View style={{paddingTop: responsiveHeight(2)}}>
             <View style={styles.space2}>
               <Text style={styles.text3}>Alamat Pengiriman</Text>
               <TouchableOpacity>

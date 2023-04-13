@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: WARNA_WHITE,
     // borderTopLeftRadius: 35,
     // borderTopRightRadius: 35,
-    height: responsiveHeight(111),
+    height: responsiveHeight(100),
   },
   space2: {
     elevation: 2,

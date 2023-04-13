@@ -77,8 +77,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: WARNA_SEKUNDER,
-    fontSize: responsiveFontSize(2.4),
-    fontWeight: 'bold',
+    fontSize: responsiveFontSize(2.6),
+    fontWeight: '600',
+    // textAlign: 'center',
   },
   iconLike: {
     color: WARNA_SEKUNDER,
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
   text3: {
     color: WARNA_SEKUNDER,
     fontSize: responsiveFontSize(3),
-    paddingTop: responsiveHeight(3),
+    paddingTop: responsiveHeight(1),
     fontWeight: 'bold',
   },
 });

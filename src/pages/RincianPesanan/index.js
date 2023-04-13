@@ -2,7 +2,7 @@ import {
   Text,
   View,
   Image,
-  ScrollView,
+  // ScrollView,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
@@ -11,7 +11,7 @@ import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import material from '../../utils/material';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
-// import {ScrollView} from 'react-native-virtualized-view';
+import {ScrollView} from 'react-native-virtualized-view';
 
 const RincianPesanan = ({navigation}) => {
   const navigateTo = async page => {
@@ -49,7 +49,7 @@ const RincianPesanan = ({navigation}) => {
           <Text style={styles.judulBar}>Rincian Pesanan</Text>
         </View>
         <View style={styles.box}>
-          <View style={{paddingTop: responsiveHeight(4)}}>
+          <View style={{paddingTop: responsiveHeight(2)}}>
             <View style={styles.space2}>
               <Text style={styles.text3}>Alamat Pengiriman</Text>
               {/* <Text style={styles.text4}>Ubah</Text> */}

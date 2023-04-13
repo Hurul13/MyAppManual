@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Box,
   HStack,
@@ -22,12 +22,14 @@ import {
   WARNA_GRAYTUA,
   WARNA_BORDER,
   WARNA_RED,
+  WARNA_DEEPYELLOW,
 } from '../../utils/constant';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import material from '../../utils/material';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import Buttone from '../Buttone';
 import {useNavigation} from '@react-navigation/native';
+import NumericInput from 'react-native-numeric-input';
 
 const Swiper = () => (
   <SwipeListView
@@ -41,6 +43,7 @@ const Swiper = () => (
     showsVerticalScrollIndicator={false}
   />
 );
+// const [value, setValue] = useState(0);
 
 const renderitem = data => (
   <Pressable>
@@ -62,7 +65,7 @@ const renderitem = data => (
             // resizeMode="contain"
           />
         </Center>
-        <VStack w="60%" px={2} space={3}>
+        <VStack w="74%" px={2} space={3}>
           <Text
             isTruncated
             color={WARNA_SEKUNDER}
@@ -70,18 +73,44 @@ const renderitem = data => (
             fontSize={responsiveFontSize(2.2)}>
             {data.item.name}
           </Text>
-          <Text color={WARNA_DISABLE} bold fontSize={responsiveFontSize(2.2)}>
-            ${data.item.price}
-          </Text>
+          <Box
+            flexDirection={'row'}
+            justifyContent={'space-between'}
+            alignItems={'center'}>
+            <Text
+              color={WARNA_DISABLE}
+              bold
+              fontSize={responsiveFontSize(2.2)}
+              pr={responsiveHeight(3)}>
+              ${data.item.price}
+            </Text>
+            <NumericInput
+              // value={value}
+              totalWidth={140}
+              totalHeight={30}
+              iconSize={25}
+              step={1}
+              maxValue={data.item.countInStock}
+              minValue={0}
+              borderColor={WARNA_DEEPYELLOW}
+              rounded
+              textColor={WARNA_SEKUNDER}
+              iconStyle={{color: WARNA_SEKUNDER}}
+              rightButtonBackgroundColor={WARNA_UTAMA}
+              leftButtonBackgroundColor={WARNA_UTAMA}
+              ml={3}
+              // pl={5}
+            />
+          </Box>
         </VStack>
-        <Center>
+        {/* <Center>
           <Button
             bg={WARNA_UTAMA}
             _pressed={{bg: WARNA_UTAMA}}
             _text={{color: WARNA_SEKUNDER, fontSize: responsiveFontSize(2)}}>
             2
           </Button>
-        </Center>
+        </Center> */}
       </HStack>
     </Box>
   </Pressable>

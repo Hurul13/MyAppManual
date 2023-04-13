@@ -131,18 +131,18 @@ const DetailProduct2 = ({navigation, onValueChange, route}) => {
         <Text style={styles.text}>{materials.name}</Text>
         {/* <IconMaterial name="heart" size={26} style={styles.iconLike} /> */}
       </View>
-      <Text style={styles.text1}>{materials.ingredients}</Text>
+      <Text style={styles.text1}>Sisa stok {materials.countInStock}</Text>
       <Box
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
         marginHorizontal={responsiveHeight(3)}>
-        <Box>
-          <Text style={styles.text3}>${materials.price}</Text>
+        <Text style={styles.text3}>${materials.price}</Text>
+        {/* <Box>
           <Box>
             <Rating value={materials.rating} text={materials.numReviews} />
           </Box>
-        </Box>
+        </Box> */}
         {/* <Spacer /> */}
         <HStack space={2} alignItems="center" my={5}>
           {materials.countInStock > 0 ? (
