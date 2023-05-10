@@ -1,0 +1,175 @@
+// filter by kategory yg ngga berfungsi
+
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  FlatList,
+  TextInput,
+} from 'react-native';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+} from '../../utils/constant';
+
+const ReviewRating = () => {
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    fetch('http://192.168.1.3/homeii/web/api/v1/supplier-barang/index')
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data.data);
+        setFilteredProducts(data.data);
+        const allCategories = data.map(product => product.nama_barang);
+        const uniqueCategories = [...new Set(allCategories)];
+        setCategories(uniqueCategories);
+      });
+  }, []);
+
+  const handleCategorySelect = category => {
+    setSelectedCategory(category);
+    if (category) {
+      const filteredProducts = products.filter(
+        product => product.nama_barang === category,
+      );
+      setFilteredProducts(filteredProducts);
+    } else {
+      setFilteredProducts(products);
+    }
+  };
+
+  const handleSearch = query => {
+    setSearchQuery(query);
+    const filteredProducts = products.filter(product =>
+      product.nama_barang.toLowerCase().includes(query.toLowerCase()),
+    );
+    setFilteredProducts(filteredProducts);
+  };
+
+  const renderItem = ({item}) => {
+    return (
+      <View style={styles.card}>
+        <Image
+          style={styles.image}
+          source={require('../../assets/Images/batu.jpg')}
+        />
+        <Text style={styles.name}>{item.nama_barang}</Text>
+        <Text style={styles.price}>Harga: {item.harga_proyek}</Text>
+        <Text style={styles.stock}>Stok: {item.stok}</Text>
+      </View>
+    );
+  };
+  const listCategory = ['batu', 'semen', 'pasir'];
+  return (
+    <View style={styles.container}>
+      <View style={styles.filter}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <Text
+            style={[
+              styles.category,
+              !selectedCategory && styles.selectedCategory,
+            ]}
+            onPress={() => handleCategorySelect(null)}>
+            semua
+          </Text>
+          {categories.map(category => (
+            <Text
+              key={category}
+              style={[
+                styles.category,
+                selectedCategory === category && styles.selectedCategory,
+              ]}
+              onPress={() => handleCategorySelect(category)}>
+              {category}
+            </Text>
+          ))}
+        </ScrollView>
+      </View>
+      <View style={styles.search}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Cari barang..."
+          value={searchQuery}
+          placeholderTextColor={WARNA_DISABLE}
+          onChangeText={handleSearch}
+        />
+      </View>
+      <FlatList
+        data={filteredProducts}
+        renderItem={renderItem}
+        keyExtractor={item => item.id.toString()}
+        numColumns={2}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  filter: {
+    marginBottom: 10,
+  },
+  category: {
+    marginRight: 10,
+    padding: 5,
+    backgroundColor: '#ccc',
+    borderRadius: 5,
+  },
+  selectedCategory: {
+    backgroundColor: '#f00',
+    color: '#fff',
+  },
+  search: {
+    marginBottom: 10,
+  },
+  searchInput: {
+    padding: 10,
+    backgroundColor: '#fff',
+    color: 'black',
+  },
+  card: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    marginHorizontal: 8,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  image: {
+    width: 120,
+    height: 120,
+    marginBottom: 8,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: 'red',
+  },
+  price: {
+    fontSize: 14,
+    color: 'green',
+    marginBottom: 8,
+  },
+  stock: {
+    fontSize: 12,
+    color: 'gray',
+  },
+});
+
+export default ReviewRating;

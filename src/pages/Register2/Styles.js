@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(-10),
     borderTopLeftRadius: 18,
     borderTopRightRadius: 18,
-    height: responsiveHeight(120),
+    height: responsiveHeight(100),
     shadowColor: 'black',
     shadowOffset: {
       width: 0,

@@ -20,6 +20,14 @@ const styles = StyleSheet.create({
     paddingBottom: responsiveHeight(20),
     backgroundColor: WARNA_WHITE,
   },
+  spaceWrap: {
+    width: responsiveWidth(100),
+    height: responsiveHeight(39),
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: WARNA_BORDER,
+    borderColor: WARNA_BORDER,
+  },
   wrap: {
     width: responsiveWidth(100),
     height: responsiveHeight(39),

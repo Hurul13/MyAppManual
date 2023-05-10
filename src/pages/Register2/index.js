@@ -47,39 +47,13 @@ const Register2 = ({navigation}) => {
         </View>
         <View style={styles.viewBox}>
           <View>
-            <Text style={styles.textUser}>Nama *</Text>
+            <Text style={styles.textUser}>Name *</Text>
             <View style={styles.boxInput}>
               <View style={styles.boxIcon}>
                 <IconMaterial name="account" size={35} style={styles.icon} />
               </View>
               <TextInput
-                placeholder="Masukan nama ... "
-                placeholderTextColor={WARNA_DISABLE}
-                style={styles.textInput}
-              />
-            </View>
-          </View>
-          <View>
-            <Text style={styles.textPass}>Email *</Text>
-            <View style={styles.boxInput}>
-              <View style={styles.boxIcon}>
-                <IconMaterial name="email" size={35} style={styles.icon} />
-              </View>
-              <TextInput
-                placeholder="Masukan email ... "
-                placeholderTextColor={WARNA_DISABLE}
-                style={styles.textInput}
-              />
-            </View>
-          </View>
-          <View>
-            <Text style={styles.textPass}>No. Telpon *</Text>
-            <View style={styles.boxInput}>
-              <View style={styles.boxIcon}>
-                <IconMaterial name="phone" size={35} style={styles.icon} />
-              </View>
-              <TextInput
-                placeholder="Masukan no telpon ...  "
+                placeholder="name"
                 placeholderTextColor={WARNA_DISABLE}
                 style={styles.textInput}
               />
@@ -96,12 +70,39 @@ const Register2 = ({navigation}) => {
                 />
               </View>
               <TextInput
-                placeholder="Masukan username ... "
+                placeholder="username"
                 placeholderTextColor={WARNA_DISABLE}
                 style={styles.textInput}
               />
             </View>
           </View>
+          <View>
+            <Text style={styles.textPass}>Email *</Text>
+            <View style={styles.boxInput}>
+              <View style={styles.boxIcon}>
+                <IconMaterial name="email" size={35} style={styles.icon} />
+              </View>
+              <TextInput
+                placeholder="mail@mail.co"
+                placeholderTextColor={WARNA_DISABLE}
+                style={styles.textInput}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.textPass}>Phone *</Text>
+            <View style={styles.boxInput}>
+              <View style={styles.boxIcon}>
+                <IconMaterial name="phone" size={35} style={styles.icon} />
+              </View>
+              <TextInput
+                placeholder="08#######"
+                placeholderTextColor={WARNA_DISABLE}
+                style={styles.textInput}
+              />
+            </View>
+          </View>
+
           <View>
             <Text style={styles.textPass}>Password *</Text>
             <View style={styles.boxInput}>
@@ -109,14 +110,14 @@ const Register2 = ({navigation}) => {
                 <IconMaterial name="lock" size={35} style={styles.icon} />
               </View>
               <TextInput
-                placeholder="Masukan password ..."
+                placeholder="••••••••••••"
                 placeholderTextColor={WARNA_DISABLE}
                 secureTextEntry
                 style={styles.textInput}
               />
             </View>
           </View>
-          <View>
+          {/* <View>
             <Text style={styles.textPass}>Konfirmasi Password *</Text>
             <View style={styles.boxInput}>
               <View style={styles.boxIcon}>
@@ -129,7 +130,7 @@ const Register2 = ({navigation}) => {
                 style={styles.textInput}
               />
             </View>
-          </View>
+          </View> */}
           <View style={styles.space1}>
             <CheckBox />
             <Text style={styles.textFP}>

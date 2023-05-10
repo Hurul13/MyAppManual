@@ -10,6 +10,9 @@ import {
   WARNA_SEKUNDER,
   WARNA_WHITE,
   WARNA_GRAYTUA,
+  WARNA_BORDER,
+  WARNA_RED,
+  WARNA_GREEN,
 } from '../../utils/constant';
 
 const styles = StyleSheet.create({
@@ -38,41 +41,30 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveHeight(3),
     marginVertical: responsiveWidth(5),
   },
-  box1: {
-    backgroundColor: WARNA_WHITE,
-    width: responsiveWidth(88),
-    height: responsiveHeight(6),
-    borderRadius: 8,
-    borderColor: WARNA_WHITE,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-
   textInput: {
-    width: responsiveWidth(73),
-    height: responsiveHeight(6),
-    color: WARNA_SEKUNDER,
-    borderWidth: 1,
-    borderColor: WARNA_WHITE,
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8,
-    fontSize: responsiveFontSize(1.8),
-  },
-  boxSearch: {
+    height: 52,
+    width: '85%',
+    borderColor: '#ccc',
     // borderWidth: 1,
-    width: responsiveWidth(14.9),
-    height: responsiveHeight(6),
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 16,
+    color: 'black',
+    marginVertical: responsiveHeight(2.5),
+    marginHorizontal: responsiveHeight(3),
     backgroundColor: WARNA_WHITE,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // borderWidth: 1,
+    alignSelf: 'center',
   },
-  iconSearch: {
-    color: WARNA_DISABLE,
-  },
+  // box1: {
+  //   backgroundColor: WARNA_WHITE,
+  //   width: responsiveWidth(88),
+  //   height: responsiveHeight(6),
+  //   borderRadius: 8,
+  //   borderColor: WARNA_WHITE,
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  // },
   boxFilter: {
     width: responsiveWidth(13),
     height: responsiveHeight(6),
@@ -83,9 +75,6 @@ const styles = StyleSheet.create({
   },
   iconFilter: {
     color: WARNA_WHITE,
-  },
-  box: {
-    height: responsiveHeight(180),
   },
   categoriesListContainer: {
     alignItems: 'center',
@@ -138,18 +127,27 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
     borderWidth: 1,
   },
+  spaceImg: {
+    height: responsiveHeight(13),
+    width: responsiveWidth(40.5),
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderWidth: 1,
+    backgroundColor: WARNA_BORDER,
+    borderColor: WARNA_BORDER,
+  },
   boxText: {
     marginHorizontal: responsiveHeight(2),
     marginBottom: responsiveHeight(2),
   },
   text: {
-    fontSize: responsiveFontSize(2.1),
+    fontSize: responsiveFontSize(2),
     fontWeight: '400',
     color: WARNA_SEKUNDER,
   },
   text1: {
     fontSize: responsiveFontSize(1.4),
-    color: WARNA_GRAYTUA,
+    color: WARNA_RED,
     // marginTop: responsiveHeight(0.3),
   },
   boxPrice: {
@@ -161,8 +159,8 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(2),
   },
   text2: {
-    fontSize: responsiveFontSize(2.5),
-    color: WARNA_SEKUNDER,
+    fontSize: responsiveFontSize(2.3),
+    color: WARNA_GREEN,
     fontWeight: 'bold',
   },
   rating: {
@@ -178,6 +176,21 @@ const styles = StyleSheet.create({
   },
   boxCard: {
     marginBottom: responsiveHeight(2),
+  },
+  category: {
+    // borderWidth: 1,
+    paddingHorizontal: responsiveHeight(2),
+    marginHorizontal: responsiveHeight(0.5),
+    marginVertical: responsiveWidth(4),
+    paddingVertical: responsiveWidth(2),
+    borderRadius: 50 / 2,
+  },
+  categoryText: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+  },
+  categoryBar: {
+    marginHorizontal: responsiveHeight(2),
   },
 });
 

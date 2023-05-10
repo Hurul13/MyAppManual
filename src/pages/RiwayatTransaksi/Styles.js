@@ -45,15 +45,18 @@ const styles = StyleSheet.create({
     paddingVertical: responsiveWidth(8),
   },
 
-  cartCard: {
-    borderRadius: 10,
-    borderColor: WARNA_DISABLE,
-    borderWidth: 1,
-    // elevation: 1,
-    marginHorizontal: responsiveHeight(3),
-    marginVertical: responsiveWidth(1),
+  card: {
+    backgroundColor: WARNA_WHITE,
+    borderRadius: 8,
+    paddingVertical: responsiveWidth(1),
     paddingHorizontal: responsiveHeight(2),
-    // backgroundColor: WARNA_DEEPYELLOW,
+    // width: '100%',
+    marginVertical: responsiveWidth(2),
+    marginHorizontal: responsiveHeight(3),
+  },
+  elevation: {
+    shadowColor: WARNA_SEKUNDER,
+    elevation: 7,
   },
   box1: {
     paddingVertical: responsiveWidth(2),
@@ -66,52 +69,34 @@ const styles = StyleSheet.create({
     color: WARNA_SEKUNDER,
     paddingRight: responsiveHeight(1),
   },
-  text: {
-    color: WARNA_SEKUNDER,
-  },
   space: {
-    paddingVertical: responsiveWidth(2),
+    paddingVertical: responsiveWidth(3),
     flexDirection: 'row',
   },
   img: {
-    height: responsiveHeight(10),
-    width: responsiveWidth(23),
+    height: responsiveHeight(8),
+    width: responsiveWidth(19),
     borderRadius: 5,
-  },
-  space1: {
-    paddingHorizontal: responsiveWidth(2),
-  },
-  text1: {
-    color: WARNA_SEKUNDER,
-    fontSize: responsiveFontSize(2.2),
-    fontWeight: 'bold',
   },
   space2: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    marginTop: responsiveHeight(2.8),
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
-  space4: {
-    flexDirection: 'row',
-    paddingVertical: responsiveWidth(2),
+  space1: {
+    paddingHorizontal: responsiveWidth(2),
+    justifyContent: 'space-between',
   },
-  iconTime: {
-    color: WARNA_DISABLE,
-    paddingRight: responsiveHeight(0.5),
+  text1: {
+    color: WARNA_SEKUNDER,
+    fontWeight: 'bold',
   },
   text2: {
-    color: WARNA_DISABLE,
+    color: WARNA_SEKUNDER,
   },
   space3: {
-    alignItems: 'flex-end',
-  },
-  text3: {
-    color: WARNA_GRAYTUA,
-  },
-  text4: {
-    color: WARNA_GRAYTUA,
-    fontSize: responsiveHeight(1.8),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   space5: {
     borderTopWidth: 1,
@@ -130,9 +115,9 @@ const styles = StyleSheet.create({
     // fontWeight: '500',
   },
   text7: {
-    color: WARNA_SEKUNDER,
+    color: WARNA_GREEN,
     fontSize: responsiveFontSize(1.8),
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
   text6: {
     fontSize: responsiveFontSize(1.3),

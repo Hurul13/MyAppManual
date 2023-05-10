@@ -23,9 +23,11 @@ import {
   MinPlus,
   Accordion,
   AccordionRating,
+  Rating,
+  Buttone,
+  Review,
 } from '../../components';
 import Share from 'react-native-share';
-import {Rating, Buttone, Review} from '../../components';
 import {
   responsiveHeight,
   responsiveWidth,
@@ -83,7 +85,7 @@ const DetailProduct2 = ({navigation, onValueChange, route}) => {
   };
 
   const [value, setValue] = useState(0);
-  const materials = route.params;
+  const item = route.params;
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -113,7 +115,9 @@ const DetailProduct2 = ({navigation, onValueChange, route}) => {
           ))}
         </View>
       </View> */}
-      <Image source={materials.image} alt="Image" style={styles.wrap} />
+      <View style={styles.spaceWrap}>
+        {/* <Image source={materials.image} alt="Image" style={styles.wrap} /> */}
+      </View>
       <View style={styles.header}>
         <TouchableOpacity style={styles.bulat}>
           <IconMaterial
@@ -128,16 +132,16 @@ const DetailProduct2 = ({navigation, onValueChange, route}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.space}>
-        <Text style={styles.text}>{materials.name}</Text>
+        <Text style={styles.text}>{item.nama_barang}</Text>
         {/* <IconMaterial name="heart" size={26} style={styles.iconLike} /> */}
       </View>
-      <Text style={styles.text1}>Sisa stok {materials.countInStock}</Text>
+      <Text style={styles.text1}>Sisa stok {item.stok}</Text>
       <Box
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
         marginHorizontal={responsiveHeight(3)}>
-        <Text style={styles.text3}>${materials.price}</Text>
+        <Text style={styles.text3}>Rp {item.harga_proyek}</Text>
         {/* <Box>
           <Box>
             <Rating value={materials.rating} text={materials.numReviews} />
@@ -145,14 +149,14 @@ const DetailProduct2 = ({navigation, onValueChange, route}) => {
         </Box> */}
         {/* <Spacer /> */}
         <HStack space={2} alignItems="center" my={5}>
-          {materials.countInStock > 0 ? (
+          {item.stok > 0 ? (
             <NumericInput
               value={value}
               totalWidth={140}
               totalHeight={30}
               iconSize={25}
               step={1}
-              maxValue={materials.countInStock}
+              maxValue={item.stok}
               minValue={0}
               borderColor={WARNA_DEEPYELLOW}
               rounded
@@ -177,11 +181,11 @@ const DetailProduct2 = ({navigation, onValueChange, route}) => {
         fontSize={responsiveFontSize(1.8)}
         marginHorizontal={responsiveHeight(3)}
         marginVertical={responsiveHeight(2)}>
-        {materials.desc}
+        {item.deskripsi}
       </Text>
       <Buttone
         bg={WARNA_UTAMA}
-        onPress={() => navigation.navigate('Keranjang2')}
+        onPress={() => navigation.navigate('Keranjang2', item)}
         color={WARNA_SEKUNDER}
         mt={5}
         mx={responsiveHeight(3)}>

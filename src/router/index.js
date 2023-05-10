@@ -6,12 +6,16 @@ import {
   Splash,
   Homes,
   Homes2,
+  Homes3,
   Catalogue,
   Profile,
+  Profile2,
   Login,
   Login2,
+  Login3,
   Register,
   Register2,
+  Register3,
   EditProfile,
   EditProfile2,
   RiwayatTransaksi,
@@ -20,6 +24,7 @@ import {
   SyaratKetentuan,
   Keranjang,
   Keranjang2,
+  Keranjang3,
   Notifikasi,
   DetailProduct,
   DetailProduct2,
@@ -89,6 +94,11 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="Login3"
+        component={Login3}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="Register"
         component={Register}
         options={{headerShown: false}}
@@ -96,6 +106,16 @@ const Router = () => {
       <Stack.Screen
         name="Register2"
         component={Register2}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Register3"
+        component={Register3}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Profile2"
+        component={Profile2}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -136,6 +156,11 @@ const Router = () => {
       <Stack.Screen
         name="Keranjang2"
         component={Keranjang2}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Keranjang3"
+        component={Keranjang3}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -216,6 +241,11 @@ const Router = () => {
       <Stack.Screen
         name="Homes2"
         component={Homes2}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Homes3"
+        component={Homes3}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

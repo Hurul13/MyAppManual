@@ -1,0 +1,434 @@
+// home seblumnya
+
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  TouchableHighlight,
+  TextInput,
+  FlatList,
+} from 'react-native';
+import {Text, Box, Pressable, Input} from 'native-base';
+import React, {useEffect, useState} from 'react';
+import styles from './Styles';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import LinearGradient from 'react-native-linear-gradient';
+import {WARNA_DISABLE, WARNA_WHITE, WARNA_RED} from '../../utils/constant';
+import {
+  responsiveHeight,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+import material from '../../utils/material';
+import banner from '../../utils/banner';
+import {ScrollView} from 'react-native-virtualized-view';
+import {Rating} from '../../components';
+
+const API_URL = 'http://192.168.1.3/homeii/web/api/v1/supplier-barang/index';
+
+const Homes = ({navigation}) => {
+  const navigateTo = async page => {
+    navigation.navigate(page);
+  };
+
+  const Banner = ({banners}) => {
+    return (
+      <TouchableHighlight
+        underlayColor={WARNA_WHITE}
+        activeOpacity={0.9}
+        // onPress={() => navigation.navigate('DetailProduct', banners)}
+      >
+        <View style={styles.boxBanner}>
+          <Image source={banners.image} style={styles.imgs} />
+          <View style={styles.bgTrans}>
+            <Text style={styles.text4} isTruncated>
+              {banners.title}
+            </Text>
+            <Text style={styles.text5} isTruncated>
+              {banners.decs}
+            </Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  };
+
+  const [dataMaterial, setDataMaterial] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const json = await response.json();
+      setDataMaterial(json.data);
+      // console.log(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderItem = ({item}) => {
+    const {nama_barang, stok, harga_proyek, gambar, deskripsi} = item;
+    return (
+      <TouchableHighlight
+        underlayColor={WARNA_WHITE}
+        activeOpacity={0.9}
+        // onPress={getData}
+        onPress={() => navigation.navigate('DetailProduct2', item)}>
+        <View style={styles.card}>
+          <View style={styles.spaceImg}>
+            {/* <Image source={gambar} style={styles.img} /> */}
+          </View>
+          <View style={styles.boxPrice}>
+            <Text style={styles.text2}>Rp {harga_proyek}</Text>
+            {/* <Rating value={materials.rating} /> */}
+          </View>
+          <View style={styles.boxText}>
+            <Text style={styles.text} isTruncated>
+              {nama_barang}
+            </Text>
+            <Text style={styles.text1}>Sisa stok {stok}</Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  };
+
+  return (
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Image
+            source={require('../../assets/Images/logoHOMEI.png')}
+            style={styles.logo}
+            size={25}></Image>
+          <View style={styles.space}>
+            {/* <Icon
+              name="bell"
+              size={23}
+              style={styles.iconBell}
+              onPress={() => navigateTo('Notifikasi')}
+            /> */}
+            <Pressable
+              top={-8}
+              // ml={responsiveHeight(2)}
+              onPress={() => navigateTo('Keranjang3')}>
+              <IconMaterial
+                name="shopping"
+                size={30}
+                style={styles.iconTroll}
+              />
+              <Box
+                px={responsiveHeight(0.5)}
+                rounded="full"
+                position="absolute"
+                bg={WARNA_RED}
+                left={responsiveHeight(2)}
+                top={responsiveHeight(-0.3)}
+                _text={{
+                  color: WARNA_WHITE,
+                  fontSize: responsiveFontSize(1.3),
+                  textAlign: 'center',
+                }}>
+                5
+              </Box>
+            </Pressable>
+          </View>
+        </View>
+        <LinearGradient
+          colors={['#FDD329', '#FDD329', '#FDD329', '#F2F2F2']}
+          style={styles.boxLinear}>
+          <View style={styles.box1}>
+            <TextInput
+              placeholder="Search Material ... "
+              // variant="filled"
+              // type="search"
+              placeholderTextColor={WARNA_DISABLE}
+              style={styles.textInput}
+            />
+            <IconMaterial name="magnify" size={26} style={styles.iconSearch} />
+          </View>
+          {/* <View></View> */}
+          <FlatList
+            // style={styles.boxCard}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            data={banner}
+            renderItem={({item}) => <Banner banners={item} />}
+          />
+        </LinearGradient>
+        {/* <View style={styles.material}>
+          <View style={styles.space2}>
+            <Text style={styles.textJudul}>Material sering dibeli</Text>
+            <TouchableOpacity
+              onPress={() => navigateTo('Homes2')}
+              style={styles.space1}>
+              <IconMaterial
+                name="chevron-right"
+                size={19}
+                style={styles.iconNext}
+              />
+              <Text style={styles.textSubJudul}>Selengkapnya</Text>
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.boxCard}
+            data={material.slice(0, material.length > 3 ? 3 : material.length)}
+            renderItem={({item}) => <Card materials={item} />}
+          />
+        </View> */}
+        <View>
+          <View style={styles.space2}>
+            <Text style={styles.textJudul} isTruncated>
+              Bahan material untuk anda
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigateTo('Homes3')}
+              style={styles.space1}>
+              <IconMaterial
+                name="chevron-right"
+                size={21}
+                style={styles.iconNext}
+              />
+              <Text style={styles.textSubJudul}>Selengkapnya</Text>
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            style={styles.boxCard}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            data={dataMaterial.slice(
+              0,
+              dataMaterial.length > 4 ? 4 : dataMaterial.length,
+            )}
+            renderItem={renderItem}
+            keyExtractor={item => item.id.toString()}
+          />
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+export default Homes;
+
+
+
+
+// halaman style nya
+
+import {StyleSheet} from 'react-native';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+  WARNA_BORDER,
+} from '../../utils/constant';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: responsiveHeight(3),
+    marginVertical: responsiveWidth(3),
+    alignItems: 'center',
+  },
+  space: {
+    // flexDirection: 'row-reverse',
+    // marginVertical: responsiveHeight(1),
+  },
+  iconBell: {
+    color: WARNA_UTAMA,
+  },
+  iconTroll: {
+    // marginHorizontal: responsiveHeight(2),
+    color: WARNA_UTAMA,
+  },
+  logo: {
+    width: responsiveWidth(21),
+    height: responsiveHeight(7),
+  },
+  boxLinear: {
+    marginTop: responsiveHeight(-1),
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+    height: responsiveHeight(36),
+
+    // borderWidth: 1
+  },
+  box1: {
+    backgroundColor: WARNA_WHITE,
+    width: responsiveWidth(87),
+    height: responsiveHeight(6),
+    marginTop: responsiveHeight(4),
+    marginLeft: responsiveHeight(3),
+    borderRadius: 8,
+  },
+  textInput: {
+    width: responsiveWidth(75),
+    height: responsiveHeight(6),
+    color: WARNA_WHITE,
+    // borderWidth: 1,
+    borderRadius: 8,
+    // borderColor: WARNA_SEKUNDER,
+    marginLeft: responsiveWidth(12),
+    marginTop: responsiveHeight(0, 5),
+    marginBottom: responsiveHeight(2),
+    fontSize: responsiveFontSize(1.8),
+  },
+  iconSearch: {
+    color: WARNA_DISABLE,
+    marginTop: responsiveHeight(-6.5),
+    marginLeft: responsiveHeight(2),
+  },
+
+  material: {
+    marginVertical: responsiveWidth(-8),
+  },
+  space2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: responsiveHeight(3),
+    alignItems: 'center',
+    marginVertical: responsiveWidth(3),
+    // marginTop: responsiveHeight(3),
+  },
+  textJudul: {
+    color: WARNA_SEKUNDER,
+    fontSize: responsiveFontSize(2.1),
+    fontWeight: '700',
+  },
+  space1: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+  },
+  textSubJudul: {
+    color: WARNA_GRAYTUA,
+    fontSize: responsiveFontSize(1.5),
+  },
+  iconNext: {
+    color: WARNA_GRAYTUA,
+  },
+  card: {
+    // height: responsiveHeight(24.7),
+    width: responsiveWidth(41),
+    // marginHorizontal: responsiveHeight(3),
+    marginVertical: responsiveWidth(2),
+    marginLeft: responsiveHeight(3),
+    borderRadius: 15,
+    borderColor: WARNA_UTAMA,
+    borderWidth: 1,
+    elevation: 13,
+    backgroundColor: WARNA_WHITE,
+  },
+  addToCartBtn: {
+    height: responsiveHeight(3.5),
+    width: responsiveWidth(7.4),
+    borderRadius: 20,
+    backgroundColor: WARNA_UTAMA,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  img: {
+    height: responsiveHeight(13),
+    width: responsiveWidth(40.5),
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderWidth: 1,
+  },
+  spaceImg: {
+    height: responsiveHeight(13),
+    width: responsiveWidth(40.5),
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderWidth: 1,
+    backgroundColor: WARNA_BORDER,
+    borderColor: WARNA_BORDER,
+  },
+  boxText: {
+    marginHorizontal: responsiveHeight(2),
+    marginBottom: responsiveHeight(2),
+  },
+  text: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: '400',
+    color: WARNA_SEKUNDER,
+  },
+  text1: {
+    fontSize: responsiveFontSize(1.4),
+    color: WARNA_GRAYTUA,
+    // marginTop: responsiveHeight(0.3),
+  },
+  boxPrice: {
+    marginHorizontal: responsiveHeight(2),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: responsiveWidth(2),
+    marginTop: responsiveHeight(2),
+  },
+  text2: {
+    fontSize: responsiveFontSize(2.3),
+    color: WARNA_SEKUNDER,
+    fontWeight: 'bold',
+  },
+  text3: {
+    fontSize: responsiveFontSize(1.9),
+    color: WARNA_SEKUNDER,
+  },
+  boxCard: {
+    marginBottom: responsiveHeight(4),
+    marginTop: responsiveHeight(1),
+  },
+  boxBanner: {
+    marginHorizontal: responsiveHeight(3),
+    borderRadius: 20,
+    marginVertical: responsiveWidth(5),
+    borderWidth: 1,
+    borderColor: WARNA_WHITE,
+  },
+  imgs: {
+    borderRadius: 20,
+    width: responsiveWidth(87),
+    height: responsiveHeight(20),
+  },
+  bgTrans: {
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: WARNA_SEKUNDER,
+    justifyContent: 'center',
+    marginTop: responsiveHeight(-7),
+    paddingHorizontal: responsiveHeight(2),
+    paddingVertical: responsiveWidth(3),
+    opacity: 0.8,
+    borderTopWidth: 1,
+    borderColor: WARNA_BORDER,
+  },
+  text4: {
+    color: WARNA_WHITE,
+    fontSize: responsiveFontSize(2),
+    fontWeight: '600',
+  },
+  text5: {
+    color: WARNA_WHITE,
+    fontSize: responsiveFontSize(1.4),
+  },
+});
+
+export default styles;

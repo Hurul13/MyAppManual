@@ -6,10 +6,9 @@ import {
   TextInput,
   FlatList,
 } from 'react-native';
-import {Text, Box, Pressable, Input} from 'native-base';
+import {Text, Box, Pressable} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import {WARNA_DISABLE, WARNA_WHITE, WARNA_RED} from '../../utils/constant';
@@ -17,10 +16,10 @@ import {
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import material from '../../utils/material';
 import banner from '../../utils/banner';
 import {ScrollView} from 'react-native-virtualized-view';
-import {Rating} from '../../components';
+import {BannerMaterialHome, Rating} from '../../components';
+import {url} from '../../utils/url';
 
 const Homes = ({navigation}) => {
   const navigateTo = async page => {
@@ -49,49 +48,58 @@ const Homes = ({navigation}) => {
     );
   };
 
-  const [dataMaterial, setDataMaterial] = useState({
-    gambar: '',
-    nama_barang: '',
-    stok: '',
-    harga_proyek: '',
-  });
-  const getData = () => {
-    fetch('http://localhost/homei/web/api/v1/supplier-barang/index')
-      .then(response => response.json())
-      .then(json => {
-        console.log(json);
-        setDataMaterial(json.data);
-      });
+  const [data, setData] = useState([]);
+  const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `${url}supplier-barang/index`,
+        // 'http://192.168.1.3/homeii/web/api/v1/supplier-barang/index',
+      );
+      const json = await response.json();
+      setData(json.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const Card = ({materials}) => {
+  const renderProduct = ({item}) => {
+    const {nama_barang, stok, harga_proyek, gambar, deskripsi} = item;
     return (
-      <TouchableHighlight
-        underlayColor={WARNA_WHITE}
-        activeOpacity={0.9}
-        // onPress={getData}
-      >
-        <TouchableOpacity
-          onPress={() => navigation.navigate('DetailProduct2', materials)}>
-          <View style={styles.card}>
-            <View style={styles.cardImg}>
-              <Image source={materials.image} style={styles.img} />
-            </View>
-            <View style={styles.boxPrice}>
-              <Text style={styles.text2}>${materials.price}</Text>
-              {/* <Rating value={materials.rating} /> */}
-            </View>
-            <View style={styles.boxText}>
-              <Text style={styles.text} isTruncated>
-                {materials.name}
-              </Text>
-              <Text style={styles.text1}>
-                Sisa stok {materials.countInStock}
-              </Text>
-            </View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('DetailProduct2', item)}>
+        <View style={styles.card}>
+          <View style={styles.spaceImg}>
+            {/* <Image
+              style={styles.img}
+              source={require('../../assets/Images/batu.jpg')}
+            /> */}
           </View>
-        </TouchableOpacity>
-      </TouchableHighlight>
+          <View style={styles.boxPrice}>
+            <Text isTruncated style={styles.text2}>
+              Rp. {harga_proyek}
+            </Text>
+            {/* <Rating value={materials.rating} /> */}
+          </View>
+          <View style={styles.boxText}>
+            <Text isTruncated style={styles.text}>
+              {nama_barang}
+            </Text>
+            <Text style={styles.text1}>Stok: {stok}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const filterData = () => {
+    return data.filter(item =>
+      item.nama_barang.toLowerCase().includes(searchText.toLowerCase()),
     );
   };
 
@@ -141,22 +149,20 @@ const Homes = ({navigation}) => {
           style={styles.boxLinear}>
           <View style={styles.box1}>
             <TextInput
-              placeholder="Search Material ... "
-              // variant="filled"
-              // type="search"
+              placeholder="Search material ..."
               placeholderTextColor={WARNA_DISABLE}
+              onChangeText={text => setSearchText(text)}
+              value={searchText}
               style={styles.textInput}
             />
-            <IconMaterial name="magnify" size={26} style={styles.iconSearch} />
           </View>
-          {/* <View></View> */}
-          <FlatList
-            // style={styles.boxCard}
+          {/* <FlatList
             showsHorizontalScrollIndicator={false}
             horizontal
             data={banner}
             renderItem={({item}) => <Banner banners={item} />}
-          />
+          /> */}
+          <BannerMaterialHome />
         </LinearGradient>
         {/* <View style={styles.material}>
           <View style={styles.space2}>
@@ -200,8 +206,12 @@ const Homes = ({navigation}) => {
             style={styles.boxCard}
             showsVerticalScrollIndicator={false}
             numColumns={2}
-            data={material.slice(0, material.length > 4 ? 4 : material.length)}
-            renderItem={({item}) => <Card materials={item} />}
+            data={filterData().slice(
+              0,
+              filterData().length > 4 ? 4 : filterData().length,
+            )}
+            renderItem={renderProduct}
+            keyExtractor={item => item.id}
           />
         </View>
       </View>

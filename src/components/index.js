@@ -3,7 +3,7 @@ import TabItem from './TabItem';
 import CheckBox from './CheckBox';
 import Navigation from './Navigation';
 import FontAwesome from './FontAwesome';
-import SearchBar from './SearchBar';
+import MyCheckBox from './MyCheckBox';
 import Banner from './Banner';
 import BottomUtamaHome from './BottomUtamaHome';
 import BannerMaterialHome from './BannerMaterialHome';
@@ -26,6 +26,9 @@ import CartItem from './CartItem';
 import TabsEditProfile from './TabsEditProfile';
 import EditProfileTab from './EditProfileTab';
 import AddressProfileTab from './AddressProfileTab';
+import FilterByCategory from './FilterMaterial/FilterByCategory';
+import FilterBySeacrh from './FilterMaterial/FilterBySeacrh';
+import FilterBySeacrhCategory from './FilterMaterial/FilterBySeacrhCategory';
 
 export {
   Animations,
@@ -50,10 +53,13 @@ export {
   Navigation,
   Rating,
   Review,
-  SearchBar,
+  MyCheckBox,
   TabItem,
   Message,
   TabsEditProfile,
   EditProfileTab,
   AddressProfileTab,
+  FilterByCategory,
+  FilterBySeacrh,
+  FilterBySeacrhCategory,
 };

@@ -14,6 +14,7 @@ const TabItem = ({isFocused, onPress, onLongPress, label}) => {
         <Ionicon name="home-outline" size={23} color="#34495E" light />
       );
 
+    // <View></View>
     if (label === 'Catalogue')
       return isFocused ? (
         <Ionicon name="grid" size={23} color="#FDCD29" />

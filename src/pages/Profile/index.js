@@ -1,4 +1,11 @@
-import {Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -11,10 +18,38 @@ import {
   responsiveHeight,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {url} from '../../utils/url';
 
 const Profile = ({navigation}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(
+        `${url}auth/logout`,
+        // 'http://192.168.1.3/homeii/web/api/v1/auth/logout',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.ok) {
+        throw new Error('Logout failed');
+      }
+      await AsyncStorage.removeItem('token');
+      navigation.replace('Login3');
+      console.log('Logout success');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+      console.log('Logout failed');
+    }
   };
 
   return (
@@ -177,7 +212,8 @@ const Profile = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.space2}
-            onPress={() => navigateTo('Login2')}>
+            // onPress={() => navigateTo('Login3')}
+            onPress={handleLogout}>
             <View style={styles.space3}>
               <View style={styles.box3}>
                 <View style={styles.box4}>
@@ -195,6 +231,7 @@ const Profile = ({navigation}) => {
               </View>
             </View>
             <Text style={styles.text4}>Logout</Text>
+            {/* <Text style={{color: WARNA_RED}}>{message}</Text> */}
           </TouchableOpacity>
         </View>
       </ScrollView>

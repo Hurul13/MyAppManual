@@ -1,0 +1,44 @@
+buatkan code react native halama register, halaman login dan halaman utama(home, catalogue, profil), dimana user hanya bisa melihat halaman utaman terutama halaman utama home tanpa bisa membuka semua fitur yang ada sebelum user melakukan register serta login pada aplikasi.
+1. halaman register fetch memanggil api dengan url: 'http://192.168.1.3/homeii/web/api/v1/auth/register'.
+    a  buat halaman register dengan data api  
+    b. menampilkan username, dan menampilkan data name, username, email, phone dan password (dimana ada icon untuk show atau hide password).  
+    c. tidak usah pakai loading 
+    d.  beri keterangan pada consolo sukses atau tidaknya. 
+    e.  beri alert untuk sukses atau tidaknya pada saat ngisi data api nya 
+    f. bottom register sukses akan pindah ke halaman home
+    g. ada jeda 3 detik untuk pindah ke halaman home
+    h. tambahkan style pada code nya
+    i. berikan bottom text login untuk ke halam login kalo sudah pernah melakukan register
+    j. simpan data token yg didapat 
+2. halaman login fetch memanggil api dengan url: 'http://192.168.1.3/homeii/web/api/v1/auth/login'.
+    a. buat halaman login dengan data api 
+    b. menampilkan username, dan password (dimana ada icon untuk show atau hide password).
+    c. ada bottom lupa password.  
+    d. tidak usah pakai loading 
+    e. beri keterangan pada consolo sukses atau tidaknya. 
+    f. beri alert untuk sukses atau tidaknya pada saat ngisi data api nya 
+    g. bottom login sukses akan pindah ke halaman home
+    h. ada jeda 3 detik untuk pindah ke halaman home
+    i. tambahkan style pada code nya
+    j. berikan bottom text register untuk ke halam register kalo belum pernah melakukan register
+    k. simpan data token yg didapat agar bisa digunakan untuk bottom logout yang ada dihalaman profil
+3. halaman utama
+    a. ada footer dimana ada 3 tombol bottom home, catalogue, dan profil
+    b. halaman utama home 
+        1. ada fitur keranjang, 
+        2. ada banner dengan scroll sendiri (menampilkan data gambar, title, deskripsi)
+        3. ada fitur search untuk mencari produk (by nama_barang), 
+        4. ada cart-cart produk (dengan data api 'http://localhost/homei/web/api/v1/supplier-barang/index', menampilkan data gambar, nama_barang, stok, harga_proyek) menggunakan flatlist
+    c. halaman utama catalogue
+        1. ada fitur search dengan data nama_barang
+        2. ada fitur filter by category (batu, semen, pasir, bata, cat, keramik, genteng) dengan data nama_barang
+        3. ada cart-cart produk (dengan data api 'http://localhost/homei/web/api/v1/supplier-barang/index', menampilkan data gambar, nama_barang, stok, harga_proyek) menggunakan flatlist
+    d. halaman utama profil
+        1. ada fitur keranjang
+        2. ada profil data dengan menampilkan photo(bisa mengubah foto), dan username (mengambil data dari login dengan mengambil token login)
+        3. ada fitur bottom edit profil
+        4. ada fitur bottom riwayat pesanan
+        5. ada fitur bottom tentang
+        6. ada fitur bottom syarat dan ketentuan
+        7. ada fitur bottom kebijakan privasi
+        8. ada fitur bottom logout (dengan ada api 'http://localhost/homei/web/api/v1/auth/logout' dimana mengambil data token dari login untuk bisa berhasil logout)

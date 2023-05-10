@@ -1,0 +1,409 @@
+// halaman catalogue sebelumnya
+
+import {
+  // Text,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+  TouchableHighlight,
+  FlatList,
+} from 'react-native';
+import {Text} from 'native-base';
+import React, {useEffect, useState} from 'react';
+import styles from './Styles';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import LinearGradient from 'react-native-linear-gradient';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+} from '../../utils/constant';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+import categories from '../../utils/categories';
+import material from '../../utils/material';
+import {Rating} from '../../components';
+// import {ScrollView} from 'react-native-virtualized-view';
+
+const API_URL = 'http://192.168.1.3/homeii/web/api/v1/supplier-barang/index';
+
+const Catalogue = ({navigation}, {materials}) => {
+  const navigateTo = async page => {
+    navigation.navigate(page);
+  };
+  const [selectedCategoryIndex, setSelectedCategoryIndex] = React.useState(0);
+
+  const Category = () => {
+    return (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.categoriesListContainer}>
+        {categories.map((category, index) => (
+          <TouchableOpacity
+            key={index}
+            activeOpacity={0.8}
+            onPress={() => setSelectedCategoryIndex(index)}>
+            <View
+              style={{
+                backgroundColor:
+                  selectedCategoryIndex == index ? WARNA_SEKUNDER : WARNA_UTAMA,
+                ...styles.categoryBtn,
+              }}>
+              <View style={styles.categoryBtnImgCon}>
+                <Image source={category.image} style={styles.imgCategory} />
+              </View>
+              <Text
+                style={{
+                  fontSize: responsiveFontSize(1.8),
+                  fontWeight: 'bold',
+                  color:
+                    selectedCategoryIndex == index ? WARNA_UTAMA : WARNA_WHITE,
+                }}>
+                {category.name}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    );
+  };
+
+  {
+    /* <TouchableOpacity
+            key={index}
+            activeOpacity={0.8}
+            onPress={() => setSelectedCategoryIndex(index)}>
+            <View
+              style={{
+                backgroundColor:
+                  selectedCategoryIndex == index ? WARNA_SEKUNDER : WARNA_WHITE,
+                ...styles.categoryBtn,
+              }}>
+              <Text
+                style={{
+                  // borderColor:
+                  //   selectedCategoryIndex == index ? WARNA_UTAMA : WARNA_WHITE,
+                  fontSize: responsiveFontSize(2.5),
+                  borderBottomWidth: 1,
+                  paddingVertical: responsiveWidth(1),
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  borderWidth: 1,
+                  paddingHorizontal: responsiveHeight(2),
+                  color:
+                    selectedCategoryIndex == index
+                      ? WARNA_UTAMA
+                      : WARNA_SEKUNDER,
+                }}>
+                {category.name}
+              </Text>
+            </View>
+          </TouchableOpacity> */
+  }
+  const [dataMaterial, setDataMaterial] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const json = await response.json();
+      setDataMaterial(json.data);
+      // console.log(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderItem = ({item}) => {
+    const {nama_barang, stok, harga_proyek, gambar, deskripsi} = item;
+    return (
+      <TouchableHighlight
+        underlayColor={WARNA_WHITE}
+        activeOpacity={0.9}
+        // onPress={getData}
+        onPress={() => navigation.navigate('DetailProduct2', item)}>
+        <View style={styles.card}>
+          <View style={styles.spaceImg}>
+            {/* <Image source={gambar} style={styles.img} /> */}
+          </View>
+          <View style={styles.boxPrice}>
+            <Text style={styles.text2}>Rp {harga_proyek}</Text>
+            {/* <Rating value={materials.rating} /> */}
+          </View>
+          <View style={styles.boxText}>
+            <Text style={styles.text} isTruncated>
+              {nama_barang}
+            </Text>
+            <Text style={styles.text1}>Sisa stok {stok}</Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.boxContainer}>
+        <View style={styles.boxHeader}>
+          <View style={styles.boxHeader1}>
+            <View style={styles.header}>
+              <View style={styles.box1}>
+                <View style={styles.boxSearch}>
+                  <IconMaterial
+                    name="magnify"
+                    size={26}
+                    style={styles.iconSearch}
+                  />
+                </View>
+                <TextInput
+                  placeholder="Search Material..."
+                  placeholderTextColor={WARNA_DISABLE}
+                  style={styles.textInput}></TextInput>
+              </View>
+              {/* <TouchableOpacity>
+                <View style={styles.boxFilter}>
+                  <IconMaterial
+                    name="filter-variant"
+                    size={33}
+                    style={styles.iconFilter}
+                  />
+                </View>
+              </TouchableOpacity> */}
+            </View>
+          </View>
+        </View>
+        <View style={styles.box}>
+          {/* <FlatList
+            // style={styles.boxCard}
+            // showsVerticalScrollIndicator={false}
+            // numColumns={2}
+            data={categories}
+            renderItem={({item}) => <Category category={item} />}
+          /> */}
+          <View>
+            <Category></Category>
+          </View>
+          <FlatList
+            style={styles.boxCard}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            data={dataMaterial}
+            renderItem={renderItem}
+            keyExtractor={item => item.id.toString()}
+          />
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+export default Catalogue;
+
+// halaman style 
+
+import {StyleSheet} from 'react-native';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+  WARNA_BORDER,
+} from '../../utils/constant';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  boxContainer: {
+    backgroundColor: WARNA_WHITE,
+  },
+  boxHeader: {
+    backgroundColor: WARNA_WHITE,
+    borderBottomLeftRadius: 35,
+    borderBottomRightRadius: 35,
+  },
+  boxHeader1: {
+    backgroundColor: WARNA_UTAMA,
+    width: responsiveWidth(100),
+    height: responsiveHeight(11),
+    borderBottomLeftRadius: 35,
+    borderBottomRightRadius: 35,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: responsiveHeight(3),
+    marginVertical: responsiveWidth(5),
+  },
+  box1: {
+    backgroundColor: WARNA_WHITE,
+    width: responsiveWidth(88),
+    height: responsiveHeight(6),
+    borderRadius: 8,
+    borderColor: WARNA_WHITE,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  textInput: {
+    width: responsiveWidth(73),
+    height: responsiveHeight(6),
+    color: WARNA_SEKUNDER,
+    borderWidth: 1,
+    borderColor: WARNA_WHITE,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+    fontSize: responsiveFontSize(1.8),
+  },
+  boxSearch: {
+    // borderWidth: 1,
+    width: responsiveWidth(14.9),
+    height: responsiveHeight(6),
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+    backgroundColor: WARNA_WHITE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // borderWidth: 1,
+  },
+  iconSearch: {
+    color: WARNA_DISABLE,
+  },
+  boxFilter: {
+    width: responsiveWidth(13),
+    height: responsiveHeight(6),
+    borderRadius: 8,
+    backgroundColor: WARNA_SEKUNDER,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconFilter: {
+    color: WARNA_WHITE,
+  },
+  box: {
+    // height: responsiveHeight(180),
+  },
+  categoriesListContainer: {
+    alignItems: 'center',
+    paddingVertical: responsiveWidth(6),
+    paddingHorizontal: responsiveHeight(3),
+  },
+  categoryBtn: {
+    height: responsiveHeight(6.5),
+    width: responsiveWidth(33),
+    marginRight: responsiveHeight(1),
+    borderRadius: 30,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  imgCategory: {
+    height: responsiveHeight(5),
+    width: responsiveWidth(10.5),
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: WARNA_WHITE,
+    marginHorizontal: responsiveHeight(0.7),
+  },
+
+  card: {
+    // height: responsiveHeight(25.7),
+    width: responsiveWidth(41),
+    marginLeft: responsiveHeight(3),
+    marginTop: responsiveHeight(0.5),
+    marginBottom: responsiveHeight(2),
+    borderRadius: 15,
+    borderColor: WARNA_UTAMA,
+    borderWidth: 1,
+    elevation: 13,
+    backgroundColor: WARNA_WHITE,
+  },
+  addToCartBtn: {
+    height: responsiveHeight(3.5),
+    width: responsiveWidth(7.4),
+    borderRadius: 20,
+    backgroundColor: WARNA_UTAMA,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  img: {
+    height: responsiveHeight(13),
+    width: responsiveWidth(40.5),
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderWidth: 1,
+  },
+  spaceImg: {
+    height: responsiveHeight(13),
+    width: responsiveWidth(40.5),
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderWidth: 1,
+    backgroundColor: WARNA_BORDER,
+    borderColor: WARNA_BORDER,
+  },
+  boxText: {
+    marginHorizontal: responsiveHeight(2),
+    marginBottom: responsiveHeight(2),
+  },
+  text: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: '400',
+    color: WARNA_SEKUNDER,
+  },
+  text1: {
+    fontSize: responsiveFontSize(1.4),
+    color: WARNA_GRAYTUA,
+    // marginTop: responsiveHeight(0.3),
+  },
+  boxPrice: {
+    marginHorizontal: responsiveHeight(2),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: responsiveWidth(2),
+    marginTop: responsiveHeight(2),
+  },
+  text2: {
+    fontSize: responsiveFontSize(2.3),
+    color: WARNA_SEKUNDER,
+    fontWeight: 'bold',
+  },
+  rating: {
+    flexDirection: 'row-reverse',
+  },
+  iconStar: {
+    color: WARNA_UTAMA,
+    paddingHorizontal: responsiveHeight(0.3),
+  },
+  text3: {
+    fontSize: responsiveFontSize(1.9),
+    color: WARNA_SEKUNDER,
+  },
+  boxCard: {
+    marginBottom: responsiveHeight(2),
+  },
+});
+
+export default styles;

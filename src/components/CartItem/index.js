@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {
   Box,
-  HStack,
   Text,
   Button,
   Pressable,
   Center,
+  HStack,
   Image,
   VStack,
 } from 'native-base';
@@ -24,10 +24,10 @@ import {
   WARNA_RED,
   WARNA_DEEPYELLOW,
 } from '../../utils/constant';
-import {SwipeListView} from 'react-native-swipe-list-view';
 import material from '../../utils/material';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import Buttone from '../Buttone';
+import {SwipeListView} from 'react-native-swipe-list-view';
 import {useNavigation} from '@react-navigation/native';
 import NumericInput from 'react-native-numeric-input';
 

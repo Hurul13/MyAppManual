@@ -1,4 +1,12 @@
-import {Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Linking,
+  Platform,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,36 +30,47 @@ const Tentang = ({navigation}) => {
         </View>
         <View style={styles.box}>
           <Text style={styles.text1}>Kontak Kami</Text>
-          <View style={styles.profilMap}>
-            <View style={styles.box2}>
-              <View style={styles.box3}>
-                <IconMaterial
-                  name="map-marker"
-                  size={26}
-                  style={styles.iconMap}
-                />
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL('https://goo.gl/maps/xGnNDTuEbm4MtcR27')
+            }>
+            <View style={styles.profilMap}>
+              <View style={styles.box2}>
+                <View style={styles.box3}>
+                  <IconMaterial
+                    name="map-marker"
+                    size={26}
+                    style={styles.iconMap}
+                  />
+                </View>
+                <Text style={styles.text2}>
+                  Jl. Sumatera 1-15, Surabaya - Jawa Timur, Indonsia 60131
+                </Text>
               </View>
-              <Text style={styles.text2}>
-                Jl. Sumatera 1-15, Surabaya - Jawa Timur, Indonsia 60131
-              </Text>
             </View>
-          </View>
-          <View style={styles.profilTelpon}>
-            <View style={styles.box2}>
-              <View style={styles.box3}>
-                <IconMaterial name="phone" size={26} style={styles.iconMap} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => Linking.openURL('tel:+6281333600959')}>
+            <View style={styles.profilTelpon}>
+              <View style={styles.box2}>
+                <View style={styles.box3}>
+                  <IconMaterial name="phone" size={26} style={styles.iconMap} />
+                </View>
+                <Text style={styles.text2}>+6281333600959</Text>
               </View>
-              <Text style={styles.text2}>031-99443480 / 081333600959</Text>
             </View>
-          </View>
-          <View style={styles.profilTelpon}>
-            <View style={styles.box2}>
-              <View style={styles.box3}>
-                <IconMaterial name="email" size={26} style={styles.iconMap} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => Linking.openURL('mailto:admin@homei.com')}>
+            <View style={styles.profilTelpon}>
+              <View style={styles.box2}>
+                <View style={styles.box3}>
+                  <IconMaterial name="email" size={26} style={styles.iconMap} />
+                </View>
+                <Text style={styles.text2}>admin@homei.com</Text>
               </View>
-              <Text style={styles.text2}>admin@homei.com</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

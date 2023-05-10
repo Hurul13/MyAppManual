@@ -1,0 +1,186 @@
+// sukses hanya saja campur pada warna
+
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  ScrollView,
+  TextInput,
+} from 'react-native';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+} from '../../utils/constant';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
+
+const API_URL = 'http://192.168.1.3/homeii/web/api/v1/supplier-barang/index';
+
+const ReviewRating = () => {
+  const [data, setData] = useState([]);
+  const [filter, setFilter] = useState('');
+  const [category, setCategory] = useState('');
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const response = await fetch(API_URL);
+    const result = await response.json();
+    setData(result.data);
+  };
+
+  const handleFilter = item => {
+    if (category === '') return true;
+    return item.nama_barang.toLowerCase().includes(category.toLowerCase());
+  };
+
+  const handleCategoryChange = value => {
+    setCategory(value);
+  };
+
+  const renderItem = ({item}) => {
+    return (
+      <View style={styles.card}>
+        <Image
+          source={require('../../assets/Images/batu.jpg')}
+          style={styles.image}
+        />
+        <Text style={styles.title}>{item.nama_barang}</Text>
+        <Text style={styles.price}>Harga: {item.harga_proyek}</Text>
+        <Text style={styles.stock}>Stok: {item.stok}</Text>
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Cari barang"
+        placeholderTextColor={WARNA_DISABLE}
+        onChangeText={setFilter}
+        value={filter}
+      />
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <Text style={styles.category} onPress={() => handleCategoryChange('')}>
+          All
+        </Text>
+        <Text
+          style={styles.category}
+          onPress={() => handleCategoryChange('batu')}>
+          Batu
+        </Text>
+        <Text
+          style={styles.category}
+          onPress={() => handleCategoryChange('semen')}>
+          Semen
+        </Text>
+        <Text
+          style={styles.category}
+          onPress={() => handleCategoryChange('pasir')}>
+          Pasir
+        </Text>
+        <Text
+          style={styles.category}
+          onPress={() => handleCategoryChange('keramik')}>
+          Keramik
+        </Text>
+        <Text
+          style={styles.category}
+          onPress={() => handleCategoryChange('genteng')}>
+          Genteng
+        </Text>
+        <Text
+          style={styles.category}
+          onPress={() => handleCategoryChange('besi')}>
+          Besi
+        </Text>
+      </ScrollView>
+      <FlatList
+        data={data.filter(
+          item =>
+            item.nama_barang.toLowerCase().includes(filter.toLowerCase()) &&
+            handleFilter(item),
+        )}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#F5F5F5',
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#CCCCCC',
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginBottom: 10,
+    color: 'black',
+  },
+  category: {
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: 'black',
+    color: 'white',
+    paddingHorizontal: responsiveHeight(2),
+    paddingVertical: responsiveWidth(1),
+    // paddingTop: responsiveHeight(5),
+    marginVertical: responsiveHeight(2),
+    marginHorizontal: responsiveWidth(1),
+    textAlign: 'center',
+    // fontSize: responsiveFontSize(2),
+    // padding: 20,
+  },
+  card: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    marginHorizontal: 8,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  image: {
+    width: 120,
+    height: 120,
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: 'red',
+  },
+  price: {
+    fontSize: 14,
+    color: 'green',
+    marginBottom: 8,
+  },
+  stock: {
+    fontSize: 12,
+    color: 'gray',
+  },
+});
+
+export default ReviewRating;

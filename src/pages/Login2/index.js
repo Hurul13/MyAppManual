@@ -30,7 +30,7 @@ const Login2 = ({navigation}) => {
               <IconMaterial name="account-box" size={35} style={styles.icon} />
             </View>
             <TextInput
-              placeholder="Masukan username ... "
+              placeholder="username"
               placeholderTextColor={WARNA_DISABLE}
               style={styles.textInput}
             />
@@ -43,7 +43,7 @@ const Login2 = ({navigation}) => {
               <IconMaterial name="lock" size={35} style={styles.icon} />
             </View>
             <TextInput
-              placeholder="Masukan password ..."
+              placeholder="••••••••••••"
               placeholderTextColor={WARNA_DISABLE}
               style={styles.textInput}
               secureTextEntry
