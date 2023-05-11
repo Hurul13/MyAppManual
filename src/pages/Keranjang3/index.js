@@ -1,66 +1,43 @@
-import {View, TouchableOpacity, SafeAreaView, FlatList} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {
-  Box,
-  Pressable,
-  Input,
-  // ScrollView,
-  Center,
-  HStack,
-  Button,
-  Text,
+  View,
+  // Text,
+  StyleSheet,
+  FlatList,
   Image,
-  VStack,
-} from 'native-base';
-import React, {useEffect, useState} from 'react';
+  TouchableOpacity,
+} from 'react-native';
+import {Button, Center, Text, HStack} from 'native-base';
 import styles from './Styles';
-import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-import material from '../../utils/material';
-import {CartItem, Buttone} from '../../components';
-import {ScrollView} from 'react-native-virtualized-view';
-import {SwipeListView} from 'react-native-swipe-list-view';
-import {useNavigation} from '@react-navigation/native';
 import NumericInput from 'react-native-numeric-input';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {url} from '../../utils/url';
 import {
+  responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
-  responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 import {
   WARNA_DISABLE,
-  WARNA_UTAMA,
-  WARNA_SEKUNDER,
-  WARNA_WHITE,
   WARNA_GRAYTUA,
-  WARNA_BORDER,
-  WARNA_RED,
+  WARNA_SEKUNDER,
+  WARNA_UTAMA,
   WARNA_DEEPYELLOW,
+  WARNA_WHITE,
+  WARNA_BORDER,
 } from '../../utils/constant';
+import {Buttone} from '../../components';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const API_URL =
-  'http://192.168.1.10/homei/web/api/v1/supplier-order-cart/index';
+const URL = `${url}supplier-barang/index`;
 
 const Keranjang3 = ({navigation}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };
-
-  // const item = route.params;
-  const Swiper = () => {
-    <SwipeListView
-      rightOpenValue={-50}
-      previewRowKey="0"
-      previewOpenValue={-40}
-      previewOpenDelay={3000}
-      data={dataMaterial.slice(0, 5)}
-      renderItem={renderitem}
-      renderHiddenItem={hiddenItem}
-      showsVerticalScrollIndicator={false}
-      keyExtractor={item => item.id.toString()}
-    />;
-  };
-  // const [value, setValue] = useState(0);
-
-  const [dataMaterial, setDataMaterial] = useState([]);
+  const [data, setData] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [totalHarga, setTotalHarga] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -68,100 +45,81 @@ const Keranjang3 = ({navigation}) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(API_URL);
+      const response = await fetch(URL);
       const json = await response.json();
-      setDataMaterial(json.data);
-      // console.log(json);
+      setData(json.data);
     } catch (error) {
       console.error(error);
     }
   };
-  const renderitem = ({item}) => {
-    <Pressable>
-      <Box ml={6} mb={3}>
-        <HStack
-          alignItems="center"
-          bg={WARNA_WHITE}
-          shadow={1}
-          rounded={10}
-          borderWidth={1}
-          borderColor={WARNA_BORDER}
-          overflow="hidden">
-          <Center w="25%" bg={WARNA_BORDER}>
-            <Image
-              source={item.gambar}
-              alt={item.nama_barang}
-              w={120}
-              h={24}
-              // resizeMode="contain"
-            />
-          </Center>
-          <VStack w="74%" px={2} space={3}>
-            <Text
-              isTruncated
-              color={WARNA_SEKUNDER}
-              bold
-              fontSize={responsiveFontSize(2.2)}>
-              {item.nama_barang}
-            </Text>
-            <Box
-              flexDirection={'row'}
-              justifyContent={'space-between'}
-              alignItems={'center'}>
-              <Text
-                color={WARNA_DISABLE}
-                bold
-                fontSize={responsiveFontSize(2.2)}
-                pr={responsiveHeight(3)}>
-                Rp {item.harga_proyek}
-              </Text>
-              <NumericInput
-                // value={value}
-                totalWidth={140}
-                totalHeight={30}
-                iconSize={25}
-                step={1}
-                maxValue={item.stok}
-                minValue={0}
-                borderColor={WARNA_DEEPYELLOW}
-                rounded
-                textColor={WARNA_SEKUNDER}
-                iconStyle={{color: WARNA_SEKUNDER}}
-                rightButtonBackgroundColor={WARNA_UTAMA}
-                leftButtonBackgroundColor={WARNA_UTAMA}
-                ml={3}
-                // pl={5}
-              />
-            </Box>
-          </VStack>
-          {/* <Center>
-          <Button
-            bg={WARNA_UTAMA}
-            _pressed={{bg: WARNA_UTAMA}}
-            _text={{color: WARNA_SEKUNDER, fontSize: responsiveFontSize(2)}}>
-            2
-          </Button>
-        </Center> */}
-        </HStack>
-      </Box>
-    </Pressable>;
+
+  const handleDeleteItem = id => {
+    const newData = data.filter(item => item.id !== id);
+    setData(newData);
+    setSelectedItems(selectedItems.filter(itemId => itemId !== id));
   };
 
-  const hiddenItem = () => {
-    <Pressable
-      w={50}
-      roundedTopRight={10}
-      roundedBottomRight={10}
-      borderWidth={1}
-      borderColor={WARNA_BORDER}
-      h="88%"
-      ml="auto"
-      justifyContent="center"
-      bg={WARNA_RED}>
-      <Center alignItems="center" space={2}>
-        <IconMaterial name="delete" size={24} color={WARNA_WHITE} />
-      </Center>
-    </Pressable>;
+  const handleCheckItem = (id, harga) => {
+    if (selectedItems.includes(id)) {
+      setSelectedItems(selectedItems.filter(itemId => itemId !== id));
+      setTotalHarga(totalHarga - harga);
+    } else {
+      setSelectedItems([...selectedItems, id]);
+      setTotalHarga(totalHarga + harga);
+    }
+  };
+
+  const renderItem = ({item}) => {
+    const {id, gambar, harga_proyek, nama_barang, stok} = item;
+    const isSelected = selectedItems.includes(id);
+
+    return (
+      <View style={styles.card}>
+        <View style={styles.spaceImg}>
+          {/* <Image source={{uri: gambar}} style={styles.gambar} /> */}
+        </View>
+        <View style={styles.space1}>
+          <View style={styles.textContainer}>
+            <Text isTruncated style={styles.nama}>
+              {nama_barang}
+            </Text>
+            <Text style={styles.harga}>Rp {harga_proyek}</Text>
+            <NumericInput
+              // value={stok}
+              // onChange={value => console.log(value)}
+              minValue={0}
+              maxValue={stok}
+              totalWidth={140}
+              totalHeight={30}
+              iconSize={25}
+              step={1}
+              borderColor={WARNA_DEEPYELLOW}
+              rounded
+              textColor={WARNA_SEKUNDER}
+              iconStyle={{color: WARNA_SEKUNDER}}
+              rightButtonBackgroundColor={WARNA_UTAMA}
+              leftButtonBackgroundColor={WARNA_UTAMA}
+            />
+          </View>
+          <View style={styles.space2}>
+            <TouchableOpacity
+              onPress={() => handleCheckItem(id, harga_proyek)}
+              style={styles.checkButton}>
+              {isSelected ? (
+                <Icon name="check-square-o" size={20} color="green" />
+              ) : (
+                <Icon name="square-o" size={20} color="grey" />
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleDeleteItem(id)}
+              style={styles.deleteButton}>
+              <Icon name="trash" size={20} color="red" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
   };
 
   return (
@@ -173,74 +131,23 @@ const Keranjang3 = ({navigation}) => {
         <Text style={styles.judulBar}>Keranjang</Text>
       </View>
       <View style={styles.box}>
-        <Box
-        // flex={1}
-        // safeAreaTop
-        // bg={WARNA_BORDER}
-        >
-          {/* <Center w="full" py={5}>
-            <Text color={WARNA_SEKUNDER} fontSize={20} bold>
-              Cart
-            </Text>
-          </Center> */}
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            // pt={responsiveHeight(6)}
-          >
-            <TouchableOpacity
-              onPress={() => navigation.navigate('DetailProduct2')}>
-              {/* <CartItem /> */}
-              <Pressable
-                mr={6}
-                // onPress={() => navigation.navigate('Keranjang2')}
-              >
-                <Swiper />
-              </Pressable>
-            </TouchableOpacity>
-            <Center mt={5}>
-              <HStack
-                rounded={50}
-                justifyContent="space-between"
-                bg={WARNA_WHITE}
-                shadow={2}
-                w="90%"
-                pl={5}
-                h={45}
-                borderWidth={1}
-                borderColor={WARNA_BORDER}
-                alignItems="center">
-                <Text fontSize={responsiveFontSize(2)} bold>
-                  Total
-                </Text>
-                <Button
-                  px={10}
-                  h={45}
-                  rounded={50}
-                  bg={WARNA_UTAMA}
-                  _text={{
-                    color: WARNA_SEKUNDER,
-                    fontWeight: '800',
-                    fontSize: responsiveFontSize(2),
-                  }}
-                  _pressed={{bg: WARNA_UTAMA}}>
-                  $356
-                </Button>
-              </HStack>
-            </Center>
-            <Center px={5}>
-              <Buttone
-                bg={WARNA_UTAMA}
-                color={WARNA_SEKUNDER}
-                borderWidth={1}
-                borderColor={WARNA_BORDER}
-                mt={10}
-                mb={12}
-                onPress={() => navigation.navigate('Checkout')}>
-                CHECKOUT
-              </Buttone>
-            </Center>
-          </ScrollView>
-        </Box>
+        <FlatList
+          data={data.slice(0, data.length > 5 ? 5 : data.length)}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+        />
+        <View style={styles.bottom}>
+          <View style={styles.bottomTotal}>
+            <Text style={styles.totalHarga1}>Total Harga</Text>
+            <Text style={styles.totalHarga}>Rp. {totalHarga}</Text>
+          </View>
+          <TouchableOpacity
+            // onPress={() => console.log('checkout')}
+            onPress={() => navigation.navigate('Checkout')}
+            style={styles.checkoutButton}>
+            <Text style={styles.checkoutText}>CHECKOUT</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

@@ -185,7 +185,7 @@ const DetailProduct2 = ({navigation, onValueChange, route}) => {
       </Text>
       <Buttone
         bg={WARNA_UTAMA}
-        onPress={() => navigation.navigate('Keranjang2', item)}
+        onPress={() => navigation.navigate('Keranjang3', item)}
         color={WARNA_SEKUNDER}
         mt={5}
         mx={responsiveHeight(3)}>

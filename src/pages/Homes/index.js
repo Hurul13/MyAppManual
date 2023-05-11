@@ -121,7 +121,7 @@ const Homes = ({navigation}) => {
             <Pressable
               top={-8}
               // ml={responsiveHeight(2)}
-              onPress={() => navigateTo('Keranjang2')}>
+              onPress={() => navigateTo('Keranjang3')}>
               <IconMaterial
                 name="shopping"
                 size={30}

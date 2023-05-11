@@ -70,7 +70,7 @@ const Profile = ({navigation}) => {
             <Pressable
               // ml={responsiveHeight(2)}
               // top={-3}
-              onPress={() => navigateTo('Keranjang2')}>
+              onPress={() => navigateTo('Keranjang3')}>
               <IconMaterial
                 name="shopping"
                 size={30}
