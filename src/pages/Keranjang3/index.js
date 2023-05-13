@@ -26,8 +26,8 @@ import {
   WARNA_WHITE,
   WARNA_BORDER,
 } from '../../utils/constant';
-import {Buttone} from '../../components';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Buttone} from '../../components';
 
 const URL = `${url}supplier-barang/index`;
 
@@ -57,12 +57,13 @@ const Keranjang3 = ({navigation}) => {
     const newData = data.filter(item => item.id !== id);
     setData(newData);
     setSelectedItems(selectedItems.filter(itemId => itemId !== id));
+    setTotalHarga(totalHarga - data.find(item => item.id === id).harga_proyek);
   };
 
-  const handleCheckItem = (id, harga) => {
+  const handleCheckItem = (id, harga, stok) => {
     if (selectedItems.includes(id)) {
       setSelectedItems(selectedItems.filter(itemId => itemId !== id));
-      setTotalHarga(totalHarga - harga);
+      setTotalHarga(totalHarga - harga * stok);
     } else {
       setSelectedItems([...selectedItems, id]);
       setTotalHarga(totalHarga + harga);
@@ -86,8 +87,8 @@ const Keranjang3 = ({navigation}) => {
             <Text style={styles.harga}>Rp {harga_proyek}</Text>
             <NumericInput
               // value={stok}
-              // onChange={value => console.log(value)}
-              minValue={0}
+              onChange={value => console.log(value)}
+              minValue={1}
               maxValue={stok}
               totalWidth={140}
               totalHeight={30}

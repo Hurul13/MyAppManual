@@ -57,9 +57,11 @@ const ImagePiecker = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        source={require('../../assets/Images/user1.jpg')}
-        style={styles.fotoProfil}></Image>
+      <View style={styles.fotoProfil}>
+        {/* <Image
+          source={require('../../assets/Images/user1.jpg')}
+          style={styles.fotoProfil}></Image> */}
+      </View>
       <View>
         {imageCamera != null && (
           <Image

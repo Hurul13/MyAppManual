@@ -214,13 +214,13 @@ const Register3 = ({navigation}) => {
               />
             </View>
           </View> */}
-          <View style={styles.space1}>
+          {/* <View style={styles.space1}>
             <CheckBox />
             <Text style={styles.textFP}>
               Dengan mendaftar, saya menyetujui Syarat dan Ketentuan serta
               Kebijakan privasi
             </Text>
-          </View>
+          </View> */}
           <TouchableOpacity
             // onPress={() => navigateTo('Login2')}
             onPress={handleRegister}>

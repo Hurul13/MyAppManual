@@ -1,0 +1,88 @@
+import React, {useState} from 'react';
+import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+import Midtrans from '@knax/react-native-midtrans';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+} from '../../utils/constant';
+
+const CheckoutPayment = () => {
+  const [amount, setAmount] = useState('');
+  const [orderId, setOrderId] = useState('');
+
+  const onPay = async () => {
+    try {
+      const result = await Midtrans.pay({
+        clientKey: 'SB-Mid-client-X2roVPgN4X-6EOvk',
+        merchantBaseUrl: 'G741458688',
+        amount,
+        orderId,
+        items: [
+          {
+            id: 'item1',
+            price: 10000,
+            quantity: 1,
+            name: 'Item 1',
+          },
+          {
+            id: 'item2',
+            price: 20000,
+            quantity: 2,
+            name: 'Item 2',
+          },
+        ],
+      });
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>Amount:</Text>
+      <TextInput
+        style={styles.input}
+        value={amount}
+        onChangeText={setAmount}
+        placeholder="amount"
+        placeholderTextColor={WARNA_DISABLE}
+      />
+      <Text style={styles.label}>Order ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={orderId}
+        onChangeText={setOrderId}
+        placeholder="orderId"
+        placeholderTextColor={WARNA_DISABLE}
+      />
+      <Button title="Pay" onPress={onPay} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: 'black',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 16,
+    color: 'black',
+  },
+});
+
+export default CheckoutPayment;

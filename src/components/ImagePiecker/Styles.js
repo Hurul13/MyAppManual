@@ -9,6 +9,7 @@ import {
   WARNA_UTAMA,
   WARNA_SEKUNDER,
   WARNA_WHITE,
+  WARNA_BORDER,
 } from '../../utils/constant';
 
 const styles = StyleSheet.create({
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
     borderColor: WARNA_UTAMA,
     borderWidth: 2,
     justifyContent: 'center',
+    backgroundColor: WARNA_SEKUNDER,
   },
   upFotoProfil: {
     width: responsiveWidth(23),
