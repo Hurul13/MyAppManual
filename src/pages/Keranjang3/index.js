@@ -77,7 +77,10 @@ const Keranjang3 = ({navigation}) => {
     return (
       <View style={styles.card}>
         <View style={styles.spaceImg}>
-          {/* <Image source={{uri: gambar}} style={styles.gambar} /> */}
+          <Image
+            source={require('../../assets/Images/batu.jpg')}
+            style={styles.img}
+          />
         </View>
         <View style={styles.space1}>
           <View style={styles.textContainer}>

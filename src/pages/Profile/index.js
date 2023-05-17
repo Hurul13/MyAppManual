@@ -4,6 +4,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  ToastAndroid,
   Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -26,6 +27,33 @@ const Profile = ({navigation}) => {
     navigation.navigate(page);
   };
 
+  const [cartCount, setCartCount] = useState(0);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch(`${url}supplier-barang/index`)
+      .then(response => response.json())
+      .then(json => setData(json.data))
+      .catch(error => console.error(error));
+  }, []);
+
+  const handleCardClick = item => {
+    navigation.navigate('DetailProduct3', {item});
+  };
+
+  // untuk menampilkan banyaknya cart
+  useEffect(() => {
+    AsyncStorage.getItem('cart')
+      .then(data => {
+        if (data !== null) {
+          const cart = JSON.parse(data);
+          setCartCount(cart.length);
+        }
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  // logic logout
   const handleLogout = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -46,8 +74,11 @@ const Profile = ({navigation}) => {
       await AsyncStorage.removeItem('token');
       navigation.replace('Login3');
       console.log('Logout success');
+      ToastAndroid.show('Logout Berhasil', ToastAndroid.SHORT);
     } catch (error) {
-      Alert.alert('Error', error.message);
+      // Alert.alert('Error', error.message);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+
       console.log('Logout failed');
     }
   };
@@ -70,7 +101,8 @@ const Profile = ({navigation}) => {
             <Pressable
               // ml={responsiveHeight(2)}
               // top={-3}
-              onPress={() => navigateTo('Keranjang3')}>
+              // onPress={handleCardClick}
+              onPress={() => navigateTo('Keranjang4')}>
               <IconMaterial
                 name="shopping"
                 size={30}
@@ -88,7 +120,7 @@ const Profile = ({navigation}) => {
                   fontSize: responsiveFontSize(1.3),
                   textAlign: 'center',
                 }}>
-                5
+                {cartCount}
               </Box>
             </Pressable>
           </View>

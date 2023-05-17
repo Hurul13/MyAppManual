@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   SafeAreaView,
+  ToastAndroid,
   Alert,
 } from 'react-native';
 import styles from './Styles';
@@ -77,12 +78,15 @@ const Register3 = ({navigation}) => {
       .then(data => {
         if (data.success) {
           console.log(data);
-          alert('Register berhasil');
+          // alert('Register berhasil');
+          ToastAndroid.show('Register Berhasil', ToastAndroid.SHORT);
+
           setTimeout(() => {
             navigation.navigate('Login3');
           }, 2000); // 3 detik jeda sebelum pindah ke halaman home
         } else {
-          alert('Data salah.');
+          // alert('Data salah.');
+          ToastAndroid.show('Data Salah', ToastAndroid.SHORT);
         }
       })
       .catch(error => console.error(error));

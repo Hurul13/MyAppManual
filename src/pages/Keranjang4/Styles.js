@@ -14,6 +14,7 @@ import {
   WARNA_BORDER,
   WARNA_BLACK,
   WARNA_SILVER,
+  WARNA_GREEN,
 } from '../../utils/constant';
 
 const styles = StyleSheet.create({
@@ -79,18 +80,41 @@ const styles = StyleSheet.create({
   space1: {
     flexDirection: 'row',
     paddingVertical: responsiveWidth(2),
+    // alignItems: 'center'
+  },
+  space3: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
   },
   space2: {
     flexDirection: 'row',
-    paddingHorizontal: responsiveHeight(0.8),
-    width: '20%',
+    // paddingHorizontal: responsiveHeight(0.8),
+    width: '22%',
     // borderWidth: 1,
     justifyContent: 'space-between',
+    // paddingVertical: responsiveWidth(1.5),
+    alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  checkbox: {
+    // backgroundColor: WARNA_BORDER,
+    // borderWidth: 1,
+    // borderColor: WARNA_GREEN,
+    width: responsiveWidth(4.9),
+    height: responsiveHeight(2.3),
+    // alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: responsiveHeight(0.3),
+    borderRadius: 4,
+  },
+  deleteButton: {
+    paddingBottom: 1,
+    // paddingTop: responsiveHeight(-),
   },
   textContainer: {
     paddingHorizontal: responsiveHeight(1),
     // borderWidth: 1,
-    width: '63%',
+    width: '83%',
   },
   nama: {
     fontSize: responsiveFontSize(2),
@@ -106,7 +130,7 @@ const styles = StyleSheet.create({
   bottom: {
     // backgroundColor: WARNA_UTAMA,
     borderTopWidth: 1,
-    borderColor: WARNA_BORDER,
+    borderColor: WARNA_SILVER,
     alignItems: 'center',
     // borderTopRightRadius: 10,
     // borderTopLeftRadius: 10,
@@ -124,7 +148,7 @@ const styles = StyleSheet.create({
     height: 45,
     paddingLeft: 5,
     borderWidth: 1,
-    borderColor: WARNA_BORDER,
+    borderColor: WARNA_SILVER,
     alignItems: 'center',
   },
   totalHarga1: {

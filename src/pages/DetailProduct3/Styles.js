@@ -11,6 +11,7 @@ import {
   WARNA_WHITE,
   WARNA_GRAYTUA,
   WARNA_BORDER,
+  WARNA_BLACK,
 } from '../../utils/constant';
 const {width: SCREENWIDTH} = Dimensions.get('screen');
 
@@ -27,6 +28,12 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
     backgroundColor: WARNA_BORDER,
     borderColor: WARNA_BORDER,
+  },
+  spaceWrapImg: {
+    width: responsiveWidth(100),
+    height: responsiveHeight(39),
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   wrap: {
     width: responsiveWidth(100),
@@ -59,7 +66,7 @@ const styles = StyleSheet.create({
     width: responsiveWidth(10),
     height: responsiveHeight(4.7),
     borderRadius: 100 / 2,
-    backgroundColor: WARNA_SEKUNDER,
+    backgroundColor: WARNA_BLACK,
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',
@@ -84,7 +91,7 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(34),
   },
   text: {
-    color: WARNA_SEKUNDER,
+    color: WARNA_BLACK,
     fontSize: responsiveFontSize(2.6),
     fontWeight: '600',
     // textAlign: 'center',
@@ -93,8 +100,8 @@ const styles = StyleSheet.create({
     color: WARNA_SEKUNDER,
   },
   text1: {
-    color: WARNA_GRAYTUA,
-    fontSize: responsiveFontSize(1.8),
+    // color: warna,
+    // fontSize: responsiveFontSize(1.8),
     marginHorizontal: responsiveHeight(3),
   },
   space1: {
@@ -105,10 +112,13 @@ const styles = StyleSheet.create({
   },
 
   text3: {
-    color: WARNA_SEKUNDER,
+    color: WARNA_GRAYTUA,
     fontSize: responsiveFontSize(3),
     paddingTop: responsiveHeight(1),
-    fontWeight: 'bold',
+    fontWeight: '600',
+  },
+  bottomToCart: {
+    marginBottom: responsiveHeight(3),
   },
 });
 

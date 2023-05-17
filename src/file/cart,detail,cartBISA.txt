@@ -1,0 +1,601 @@
+// halaman card
+
+import React, {useState, useEffect} from 'react';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {url} from '../../utils/url';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {WARNA_BLACK} from '../../utils/constant';
+
+const CheckoutAddress = ({navigation}) => {
+  const [data, setData] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    fetch(`${url}supplier-barang/index`)
+      .then(response => response.json())
+      .then(json => setData(json.data))
+      .catch(error => console.error(error));
+  }, []);
+
+  const handleCardClick = item => {
+    navigation.navigate('CheckoutShipping', {item});
+  };
+
+  const handleCartClick = () => {
+    navigation.navigate('CheckoutSelesai');
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.cartContainer}>
+        <TouchableOpacity onPress={handleCartClick}>
+          {/* <Image
+            source={require('./assets/cart.png')}
+            style={styles.cartIcon}
+          /> */}
+          <IconMaterial name="shopping" size={30} style={styles.cartIcon} />
+          <Text style={styles.cartCount}>{cartCount}</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.cardContainer}>
+        {data.map(item => (
+          <TouchableOpacity
+            key={item.id}
+            style={styles.card}
+            onPress={() => handleCardClick(item)}>
+            <Image
+              source={require('../../assets/Images/batu.jpg')}
+              style={styles.cardImage}
+            />
+            <Text style={styles.cardTitle}>{item.nama_barang}</Text>
+            <Text style={styles.cardPrice}>Rp {item.harga_proyek}</Text>
+            <Text style={styles.cardStock}>Stok: {item.stok}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cartContainer: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    alignItems: 'center',
+  },
+  cartIcon: {
+    width: 30,
+    height: 30,
+    color: WARNA_BLACK,
+    // backgroundColor: WARNA_BLACK,
+  },
+  cartCount: {
+    backgroundColor: 'red',
+    color: 'white',
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    textAlign: 'center',
+    fontSize: 12,
+    marginTop: -20,
+    marginLeft: 10,
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 80,
+  },
+  card: {
+    width: 150,
+    height: 200,
+    margin: 10,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+  },
+  cardImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 10,
+    textAlign: 'center',
+    color: WARNA_BLACK,
+  },
+  cardPrice: {
+    fontSize: 14,
+    marginTop: 5,
+    color: WARNA_BLACK,
+    textAlign: 'center',
+  },
+  cardStock: {
+    fontSize: 12,
+    marginTop: 5,
+    color: WARNA_BLACK,
+    textAlign: 'center',
+  },
+});
+
+export default CheckoutAddress;
+
+
+
+// halaman detail produk
+
+import React, {useState, useEffect} from 'react';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import NumericInput from 'react-native-numeric-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {WARNA_BLACK} from '../../utils/constant';
+
+const CheckoutShipping = ({route, navigation}) => {
+  const {item} = route.params;
+  const [product, setProduct] = useState(item);
+  const [quantity, setQuantity] = useState(1);
+
+  const handleAddToCart = async () => {
+    try {
+      const cartItems = await AsyncStorage.getItem('cart');
+      let newCartItems = [];
+      if (cartItems !== null) {
+        newCartItems = JSON.parse(cartItems);
+      }
+      const existingItemIndex = newCartItems.findIndex(
+        cartItem => cartItem.id === product.id,
+      );
+      if (existingItemIndex !== -1) {
+        newCartItems[existingItemIndex].quantity += quantity;
+      } else {
+        newCartItems.push({...product, quantity});
+      }
+      await AsyncStorage.setItem('cart', JSON.stringify(newCartItems));
+      navigation.navigate('CheckoutPayment');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Image
+        source={require('../../assets/Images/batu.jpg')}
+        style={styles.image}
+      />
+      <Text style={styles.title}>{product.nama_barang}</Text>
+      <Text style={styles.price}>Rp {product.harga_proyek}</Text>
+      <Text style={styles.description}>{product.deskripsi}</Text>
+      <View style={styles.quantityContainer}>
+        <Text style={styles.quantityLabel}>Stok:</Text>
+        <NumericInput
+          value={quantity}
+          onChange={setQuantity}
+          minValue={1}
+          maxValue={product.stok}
+          totalWidth={100}
+          totalHeight={30}
+          iconSize={25}
+          step={1}
+          valueType="real"
+          rounded
+          textColor="#B0228C"
+          iconStyle={{color: 'white'}}
+          rightButtonBackgroundColor="#B0228C"
+          leftButtonBackgroundColor="#B0228C"
+        />
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleAddToCart}>
+        <Text style={styles.buttonText}>Add to Cart</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: 20,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+    textAlign: 'center',
+    color: WARNA_BLACK,
+  },
+  price: {
+    fontSize: 16,
+    marginTop: 10,
+    color: WARNA_BLACK,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 14,
+    marginTop: 10,
+    color: WARNA_BLACK,
+    textAlign: 'justify',
+  },
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  quantityLabel: {
+    fontSize: 16,
+    color: WARNA_BLACK,
+    marginRight: 10,
+  },
+  button: {
+    backgroundColor: '#B0228C',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+
+export default CheckoutShipping;
+
+
+
+
+// halaman cart
+
+import React, {useState, useEffect} from 'react';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import NumericInput from 'react-native-numeric-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  WARNA_BLACK,
+  WARNA_RED,
+  WARNA_UNGUPINK,
+  WARNA_WHITE,
+} from '../../utils/constant';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+} from 'react-native-responsive-dimensions';
+
+const CheckoutPayment = ({navigation}) => {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const getCartItems = async () => {
+      try {
+        const items = await AsyncStorage.getItem('cart');
+        if (items !== null) {
+          setCartItems(JSON.parse(items));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getCartItems();
+  }, []);
+
+  const handleDeleteItem = async id => {
+    try {
+      const newCartItems = cartItems.filter(item => item.id !== id);
+      await AsyncStorage.setItem('cart', JSON.stringify(newCartItems));
+      setCartItems(newCartItems);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      await AsyncStorage.removeItem('cart');
+      setCartItems([]);
+      navigation.navigate('CheckoutSelesai');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getTotalPrice = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.harga_proyek * item.quantity,
+      0,
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      {cartItems.map(item => (
+        <View key={item.id} style={styles.card}>
+          <Image
+            source={require('../../assets/Images/batu.jpg')}
+            style={styles.image}
+          />
+          <View style={styles.details}>
+            <Text style={styles.title}>{item.nama_barang}</Text>
+            <Text style={styles.price}>Rp {item.harga_proyek}</Text>
+            <View style={styles.quantityContainer}>
+              <Text style={styles.quantityLabel}>Quantity:</Text>
+              <NumericInput
+                value={item.quantity}
+                minValue={1}
+                maxValue={item.stok}
+                totalWidth={100}
+                totalHeight={30}
+                iconSize={25}
+                step={1}
+                valueType="real"
+                rounded
+                textColor="#B0228C"
+                iconStyle={{color: 'white'}}
+                rightButtonBackgroundColor="#B0228C"
+                leftButtonBackgroundColor="#B0228C"
+              />
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => handleDeleteItem(item.id)}>
+            <Text style={styles.deleteButtonText}>X</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
+      <View style={styles.totalContainer}>
+        <Text style={styles.totalLabel}>Total:</Text>
+        <Text style={styles.totalPrice}>Rp {getTotalPrice()}</Text>
+      </View>
+      <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
+        <Text style={styles.checkoutButtonText}>Checkout</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: 20,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#f2f2f2',
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 10,
+    width: '100%',
+  },
+  image: {
+    width: 80,
+    height: 80,
+    resizeMode: 'contain',
+  },
+  details: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  price: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  quantityLabel: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  quantityContainer: {},
+  deleteButton: {
+    backgroundColor: WARNA_RED,
+  },
+  deleteButtonText: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+    padding: 6,
+  },
+  totalContainer: {
+    backgroundColor: WARNA_UNGUPINK,
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    padding: 8,
+  },
+  totalLabel: {
+    color: WARNA_WHITE,
+  },
+  totalPrice: {
+    color: WARNA_WHITE,
+  },
+  checkoutButton: {
+    backgroundColor: WARNA_UNGUPINK,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 15,
+  },
+  checkoutButtonText: {
+    color: WARNA_WHITE,
+    paddingVertical: responsiveHeight(2),
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+  },
+});
+export default CheckoutPayment;
+
+
+
+// halaman checkout
+
+import React, {useState, useEffect} from 'react';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {WARNA_BLACK} from '../../utils/constant';
+
+const CheckoutSelesai = () => {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const getCartItems = async () => {
+      try {
+        const items = await AsyncStorage.getItem('cart');
+        if (items !== null) {
+          setCartItems(JSON.parse(items));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getCartItems();
+  }, []);
+
+  const getTotalPrice = () => {
+    const subtotal = cartItems.reduce(
+      (total, item) => total + item.harga_proyek * item.quantity,
+      0,
+    );
+    const shipping = 5000; // harga pengiriman
+    return subtotal + shipping;
+  };
+
+  return (
+    <View style={styles.container}>
+      {cartItems.map(item => (
+        <View key={item.id} style={styles.card}>
+          <Image
+            source={require('../../assets/Images/batu.jpg')}
+            style={styles.image}
+          />
+          <View style={styles.details}>
+            <Text style={styles.title}>{item.nama_barang}</Text>
+            <Text style={styles.price}>Rp {item.harga_proyek}</Text>
+            <View style={styles.quantityContainer}>
+              <Text style={styles.quantityLabel}>Quantity:</Text>
+              <Text style={styles.quantity}>{item.quantity}</Text>
+            </View>
+          </View>
+        </View>
+      ))}
+      <View style={styles.totalContainer}>
+        <Text style={styles.totalLabel}>Total:</Text>
+        <Text style={styles.totalPrice}>Rp {getTotalPrice()}</Text>
+      </View>
+      <TouchableOpacity style={styles.checkoutButton}>
+        <Text style={styles.checkoutButtonText}>Checkout</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: 20,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#f2f2f2',
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 10,
+    width: '100%',
+  },
+  image: {
+    width: 80,
+    height: 80,
+    resizeMode: 'contain',
+  },
+  details: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  price: {
+    color: WARNA_BLACK,
+    fontSize: 14,
+  },
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  quantityLabel: {
+    fontSize: 14,
+    color: WARNA_BLACK,
+    marginRight: 5,
+  },
+  quantity: {
+    fontSize: 14,
+    color: WARNA_BLACK,
+    fontWeight: 'bold',
+  },
+  totalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 20,
+    width: '100%',
+  },
+  totalLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+    marginRight: 10,
+  },
+  totalPrice: {
+    fontSize: 16,
+    color: WARNA_BLACK,
+    fontWeight: 'bold',
+  },
+  checkoutButton: {
+    backgroundColor: '#B0228C',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  checkoutButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+export default CheckoutSelesai;

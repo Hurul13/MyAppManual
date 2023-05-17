@@ -15,10 +15,19 @@ import {
   WARNA_UTAMA,
   WARNA_WHITE,
   WARNA_SEKUNDER,
+  WARNA_GREEN,
+  WARNA_RED,
 } from '../../utils/constant';
+import {
+  responsiveHeight,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
 import {Rating} from '../../components';
 import {url} from '../../utils/url';
 // import {ScrollView} from 'react-native-virtualized-view';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const API_URL = `${url}supplier-barang/index`;
 
 const Catalogue = ({navigation}) => {
   const navigateTo = async page => {
@@ -94,6 +103,7 @@ const Catalogue = ({navigation}) => {
   //         </TouchableOpacity> */
   // }
 
+  const [cartCount, setCartCount] = useState(0);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [categories, setCategories] = useState([
@@ -114,14 +124,29 @@ const Catalogue = ({navigation}) => {
     fetchData();
   }, []);
 
+  // const fetchData = async () => {
+  //   const response = await fetch(
+  //     `${url}supplier-barang/index`,
+  //     // 'http://192.168.1.3/homeii/web/api/v1/supplier-barang/index',
+  //   );
+  //   const json = await response.json();
+  //   setData(json.data);
+  //   setFilteredData(json.data);
+  // };
+
   const fetchData = async () => {
-    const response = await fetch(
-      `${url}supplier-barang/index`,
-      // 'http://192.168.1.3/homeii/web/api/v1/supplier-barang/index',
-    );
-    const json = await response.json();
-    setData(json.data);
-    setFilteredData(json.data);
+    try {
+      const response = await fetch(API_URL);
+      const json = await response.json();
+      setData(json.data);
+      setFilteredData(json.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCardPress = item => {
+    navigation.navigate('DetailProduct3', {item});
   };
 
   const filterData = category => {
@@ -156,28 +181,48 @@ const Catalogue = ({navigation}) => {
   };
 
   const renderCard = ({item}) => {
-    const {nama_barang, stok, harga_proyek, gambar, deskripsi} = item;
+    // const {nama_barang, stok, harga_proyek, gambar, deskripsi} = item;
     return (
       <TouchableOpacity
         style={styles.card}
-        onPress={() => navigation.navigate('DetailProduct2', item)}>
+        // onPress={() => navigation.navigate('DetailProduct2', item)}
+        onPress={() => handleCardPress(item)}>
         <View style={styles.spaceImg}>
-          {/* <Image
+          <Image
             source={require('../../assets/Images/batu.jpg')}
             style={styles.img}
-          /> */}
+          />
         </View>
         <View style={styles.boxPrice}>
-          <Text style={styles.text2} isTruncated>
-            Rp. {harga_proyek}
+          <Text style={styles.text} isTruncated>
+            {item.nama_barang}
           </Text>
           {/* <Rating value={materials.rating} /> */}
         </View>
         <View style={styles.boxText}>
-          <Text style={styles.text} isTruncated>
-            {nama_barang}
+          <Text style={styles.text2} isTruncated>
+            Rp. {item.harga_proyek}
           </Text>
-          <Text style={styles.text1}>Stok: {stok}</Text>
+          {/* <Text style={styles.text1}>Stok: {stok}</Text> */}
+          <View>
+            {item.stok > 0 ? (
+              <Text
+                style={{
+                  fontSize: responsiveFontSize(1.4),
+                  color: WARNA_GREEN,
+                }}>
+                Sisa stok: {item.stok}
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontSize: responsiveFontSize(1.4),
+                  color: WARNA_RED,
+                }}>
+                Sisa stok: {item.stok}
+              </Text>
+            )}
+          </View>
         </View>
       </TouchableOpacity>
     );

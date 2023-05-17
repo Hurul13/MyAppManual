@@ -4,6 +4,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  ToastAndroid,
   Image,
   // Alert,
 } from 'react-native';
@@ -44,12 +45,14 @@ const Login3 = ({navigation}) => {
       .then(data => {
         if (data.success) {
           console.log(data);
-          alert('Login berhasil');
+          // alert('Login berhasil');
+          ToastAndroid.show('Login Berhasil', ToastAndroid.SHORT);
           setTimeout(() => {
             navigation.navigate('MainApp');
           }, 2000); // 3 detik jeda sebelum pindah ke halaman home
         } else {
-          alert('Username atau password salah.');
+          // alert('Data salah.');
+          ToastAndroid.show('Data Salah', ToastAndroid.SHORT);
         }
       })
       .catch(error => console.error(error));
@@ -98,9 +101,9 @@ const Login3 = ({navigation}) => {
                 placeholder="••••••••••••"
                 placeholderTextColor={WARNA_DISABLE}
                 style={styles.textInput}
+                onChangeText={text => setPassword(text)}
                 secureTextEntry={!showPassword}
                 value={password}
-                onChangeText={text => setPassword(text)}
               />
               <IconMaterial
                 name={showPassword ? 'eye' : 'eye-off'}

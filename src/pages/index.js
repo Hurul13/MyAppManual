@@ -2,6 +2,7 @@ import Splash from './Splash';
 import Homes from './Homes';
 import Homes2 from './Homes2';
 import Homes3 from './Homes3';
+import Homes4 from './Homes4';
 import Catalogue from './Catalogue';
 import Profile from './Profile';
 import Profile2 from './Profile2';
@@ -20,13 +21,17 @@ import SyaratKetentuan from './SyaratKetentuan';
 import Keranjang from './Keranjang';
 import Keranjang2 from './Keranjang2';
 import Keranjang3 from './Keranjang3';
+import Keranjang4 from './Keranjang4';
 import Notifikasi from './Notifikasi';
 import DetailProduct from './DetailProduct';
 import DetailProduct2 from './DetailProduct2';
+import DetailProduct3 from './DetailProduct3';
 import Checkout from './Checkout';
+import Checkout2 from './Checkout2';
 import CheckoutAddress from './CheckoutAddress';
 import CheckoutPayment from './CheckoutPayment';
 import CheckoutShipping from './CheckoutShipping';
+import CheckoutSelesai from './CheckoutSelesai';
 import CheckoutBerhasil from './CheckoutBerhasil';
 import ReviewRating from './ReviewRating';
 import RincianPesanan from './RincianPesanan';
@@ -38,6 +43,7 @@ export {
   Homes,
   Homes2,
   Homes3,
+  Homes4,
   Catalogue,
   Profile,
   Profile2,
@@ -56,13 +62,17 @@ export {
   Keranjang,
   Keranjang2,
   Keranjang3,
+  Keranjang4,
   Notifikasi,
   DetailProduct,
   DetailProduct2,
+  DetailProduct3,
   Checkout,
+  Checkout2,
   CheckoutAddress,
   CheckoutPayment,
   CheckoutShipping,
+  CheckoutSelesai,
   CheckoutBerhasil,
   ReviewRating,
   RincianPesanan,

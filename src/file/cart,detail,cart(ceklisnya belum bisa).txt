@@ -1,0 +1,385 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+
+const HomeScreen = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('http://192.168.1.3/homeii/web/api/v1/supplier-barang/index')
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => console.error(error));
+  }, []);
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      {data.map((item) => (
+        <TouchableOpacity
+          key={item.id}
+          onPress={() => navigation.navigate('Detail', { item })}
+          style={{
+            backgroundColor: '#fff',
+            borderRadius: 10,
+            padding: 10,
+            margin: 10,
+            width: '90%',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          <Image
+            source={{ uri: item.gambar }}
+            style={{ width: 100, height: 100 }}
+          />
+          <View style={{ marginLeft: 10 }}>
+            <Text style={{ fontSize: 18 }}>{item.nama_barang}</Text>
+            <Text style={{ fontSize: 16 }}>Harga: {item.harga_proyek}</Text>
+            <Text style={{ fontSize: 16 }}>Stok: {item.stok}</Text>
+          </View>
+        </TouchableOpacity>
+      ))}
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Cart')}
+        style={{
+          backgroundColor: '#fff',
+          borderRadius: 50,
+          padding: 10,
+          position: 'absolute',
+          bottom: 20,
+          right: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Text style={{ fontSize: 18, marginRight: 10 }}>
+          {data.length}
+        </Text>
+        <Icon name="cart" size={30} color="#000" />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default HomeScreen;
+
+
+//
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import NumericInput from 'react-native-numeric-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const DetailScreen = ({ route, navigation }) => {
+  const { item } = route.params;
+  const [quantity, setQuantity] = useState(1);
+
+  const addToCart = async () => {
+    try {
+      const cartItems = await AsyncStorage.getItem('cartItems');
+      let items = [];
+      if (cartItems !== null) {
+        items = JSON.parse(cartItems);
+      }
+      const newItem = { ...item, quantity };
+      items.push(newItem);
+      await AsyncStorage.setItem('cartItems', JSON.stringify(items));
+      navigation.navigate('Cart');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Image source={{ uri: item.gambar }} style={{ width: 200, height: 200 }} />
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginVertical: 10 }}>
+        {item.nama_barang}
+      </Text>
+      <Text style={{ fontSize: 18, marginVertical: 10 }}>
+        Harga: {item.harga_proyek}
+      </Text>
+      <Text style={{ fontSize: 18, marginVertical: 10 }}>
+        Deskripsi: {item.deskripsi}
+      </Text>
+      <NumericInput
+        value={quantity}
+        onChange={setQuantity}
+        minValue={1}
+        maxValue={item.stok}
+        totalWidth={200}
+        totalHeight={50}
+        iconSize={25}
+        step={1}
+        valueType="real"
+        rounded
+        textColor="#000"
+        iconStyle={{ color: 'white' }}
+        rightButtonBackgroundColor="#000"
+        leftButtonBackgroundColor="#000"
+      />
+      <TouchableOpacity
+        onPress={addToCart}
+        style={{
+          backgroundColor: '#000',
+          borderRadius: 10,
+          padding: 10,
+          margin: 10,
+        }}
+      >
+        <Text style={{ color: '#fff', fontSize: 18 }}>Add to Cart</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default DetailScreen;
+
+//
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import NumericInput from 'react-native-numeric-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const CartScreen = ({ navigation }) => {
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const getCartItems = async () => {
+      try {
+        const items = await AsyncStorage.getItem('cartItems');
+        if (items !== null) {
+          setCartItems(JSON.parse(items));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getCartItems();
+  }, []);
+
+  useEffect(() => {
+    let total = 0;
+    cartItems.forEach((item) => {
+      total += item.harga_proyek * item.quantity;
+    });
+    setTotalPrice(total);
+  }, [cartItems]);
+
+  const handleDelete = async (id) => {
+    try {
+      const newItems = cartItems.filter((item) => item.id !== id);
+      await AsyncStorage.setItem('cartItems', JSON.stringify(newItems));
+      setCartItems(newItems);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const newItems = cartItems.filter((item) => !item.checked);
+      await AsyncStorage.setItem('cartItems', JSON.stringify(newItems));
+      setCartItems(newItems);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      {cartItems.map((item) => (
+        <View
+          key={item.id}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 10,
+          }}
+        >
+          <Image
+            source={{ uri: item.gambar }}
+            style={{ width: 100, height: 100 }}
+          />
+          <View style={{ marginLeft: 10 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+              {item.nama_barang}
+            </Text>
+            <Text style={{ fontSize: 16 }}>Harga: {item.harga_proyek}</Text>
+            <NumericInput
+              value={item.quantity}
+              onChange={(value) => {
+                const newItems = cartItems.map((i) =>
+                  i.id === item.id ? { ...i, quantity: value } : i
+                );
+                setCartItems(newItems);
+                AsyncStorage.setItem('cartItems', JSON.stringify(newItems));
+              }}
+              minValue={1}
+              maxValue={item.stok}
+              totalWidth={200}
+              totalHeight={50}
+              iconSize={25}
+              step={1}
+              valueType="real"
+              rounded
+              textColor="#000"
+              iconStyle={{ color: 'white' }}
+              rightButtonBackgroundColor="#000"
+              leftButtonBackgroundColor="#000"
+            />
+            <TouchableOpacity
+              onPress={() => handleDelete(item.id)}
+              style={{ marginTop: 10 }}
+            >
+              <Text style={{ color: 'red' }}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                const newItems = cartItems.map((i) =>
+                  i.id === item.id ? { ...i, checked: !i.checked } : i
+                );
+                setCartItems(newItems);
+              }}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 10,
+              }}
+            >
+              <Text style={{ marginRight: 10 }}>Checkout</Text>
+              <View
+                style={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: '#000',
+                  backgroundColor: item.checked ? '#000' : '#fff',
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      ))}
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 20 }}>
+        Total: {totalPrice}
+      </Text>
+      <TouchableOpacity
+        onPress={handleCheckout}
+        style={{
+          backgroundColor: '#000',
+          borderRadius: 10,
+          padding: 10,
+          margin: 10,
+        }}
+      >
+        <Text  In the previous answer, I accidentally cut off the end of the code for the cart page. Here's the complete code:
+
+```javascript
+        style={{ color: '#fff', fontSize: 18 }}
+        >
+          Checkout
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default CartScreen;
+
+//
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const CheckoutScreen = ({ navigation }) => {
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [shippingCost, setShippingCost] = useState(10);
+
+  useEffect(() => {
+    const getCartItems = async () => {
+      try {
+        const items = await AsyncStorage.getItem('cartItems');
+        if (items !== null) {
+          setCartItems(JSON.parse(items).filter((item) => item.checked));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getCartItems();
+  }, []);
+
+  useEffect(() => {
+    let total = 0;
+    cartItems.forEach((item) => {
+      total += item.harga_proyek * item.quantity;
+    });
+    setTotalPrice(total);
+  }, [cartItems]);
+
+  const handleCheckout = async () => {
+    try {
+      // TODO: handle checkout logic
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      {cartItems.map((item) => (
+        <View
+          key={item.id}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 10,
+          }}
+        >
+          <Image
+            source={{ uri: item.gambar }}
+            style={{ width: 100, height: 100 }}
+          />
+          <View style={{ marginLeft: 10 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+              {item.nama_barang}
+            </Text>
+            <Text style={{ fontSize: 16 }}>Harga: {item.harga_proyek}</Text>
+            <Text style={{ fontSize: 16 }}>
+              Jumlah: {item.quantity} x {item.harga_proyek} ={' '}
+              {item.quantity * item.harga_proyek}
+            </Text>
+          </View>
+        </View>
+      ))}
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 20 }}>
+        Total: {totalPrice}
+      </Text>
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 20 }}>
+        Shipping Cost: {shippingCost}
+      </Text>
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 20 }}>
+        Order Total: {totalPrice + shippingCost}
+      </Text>
+      <TouchableOpacity
+        onPress={handleCheckout}
+        style={{
+          backgroundColor: '#000',
+          borderRadius: 10,
+          padding: 10,
+          margin: 10,
+        }}
+      >
+        <Text style={{ color: '#fff', fontSize: 18 }}>Checkout</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default CheckoutScreen;

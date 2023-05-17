@@ -96,12 +96,14 @@ const styles = StyleSheet.create({
     // borderRadius: 8,
     // marginHorizontal: responsiveHeight(2),
   },
-  containerSlide: {},
+  containerSlide: {
+    borderRadius: 10,
+  },
   slide: {
     width: Dimensions.get('window').width * 0.9,
     height: 160,
     marginRight: 2,
-    // borderRadius: 8,
+    borderRadius: 8,
   },
   image: {
     width: Dimensions.get('window').width * 0.9,

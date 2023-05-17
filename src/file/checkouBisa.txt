@@ -1,0 +1,219 @@
+// halaman cart
+
+import React, {useState, useEffect} from 'react';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
+import NumericInput from 'react-native-numeric-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {WARNA_BLACK, WARNA_GRAYTUA, WARNA_RED} from '../../utils/constant';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+const CheckoutPayment = ({navigation}) => {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const getCartItems = async () => {
+      try {
+        const items = await AsyncStorage.getItem('cartItems');
+        if (items !== null) {
+          setCartItems(JSON.parse(items));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getCartItems();
+  }, []);
+
+  const handleDelete = async id => {
+    try {
+      const items = await AsyncStorage.getItem('cartItems');
+      let newItems = [];
+      if (items !== null) {
+        newItems = JSON.parse(items).filter(item => item.id !== id);
+        await AsyncStorage.setItem('cartItems', JSON.stringify(newItems));
+        setCartItems(newItems);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      await AsyncStorage.removeItem('cartItems');
+      navigation.navigate('CheckoutSelesai');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.harga_proyek * item.quantity,
+    0,
+  );
+
+  return (
+    <View style={{flex: 1, padding: 5}}>
+      {cartItems.map(item => (
+        <View
+          key={item.id}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginVertical: 10,
+            width: '90%',
+          }}>
+          <Image
+            source={require('../../assets/Images/batu.jpg')}
+            style={{width: 100, height: 100}}
+          />
+          <View style={{flex: 1, marginLeft: 10}}>
+            <Text
+              style={{fontSize: 18, fontWeight: 'bold', color: WARNA_BLACK}}>
+              {item.nama_barang}
+            </Text>
+            <Text style={{fontSize: 16, color: WARNA_GRAYTUA}}>
+              Harga: {item.harga_proyek}
+            </Text>
+            <NumericInput
+              value={item.quantity}
+              totalWidth={100}
+              totalHeight={30}
+              minValue={1}
+              maxValue={item.stok}
+              iconSize={20}
+              step={1}
+              valueType="real"
+              rounded
+              textColor="#B0228C"
+              iconStyle={{color: 'white'}}
+              rightButtonBackgroundColor="#B0228C"
+              leftButtonBackgroundColor="#B0228C"
+            />
+          </View>
+          <TouchableOpacity onPress={() => handleDelete(item.id)}>
+            {/* <Image
+              source={require('./delete.png')}
+              style={{width: 30, height: 30}}
+            /> */}
+            <Icon name="trash" size={30} style={{color: WARNA_RED}} />
+          </TouchableOpacity>
+        </View>
+      ))}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginVertical: 10,
+          width: '90%',
+        }}>
+        <Text style={{fontSize: 18, fontWeight: 'bold', color: WARNA_BLACK}}>
+          Total Harga: {totalPrice}
+        </Text>
+        <TouchableOpacity
+          onPress={handleCheckout}
+          style={{
+            backgroundColor: '#B0228C',
+            borderRadius: 10,
+            padding: 10,
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 18, color: '#fff'}}>Checkout</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default CheckoutPayment;
+
+
+
+
+
+
+// halaman checkout
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { WARNA_BLACK, WARNA_GRAYTUA, WARNA_GREEN } from '../../utils/constant';
+
+const CheckoutSelesai = ({navigation}) => {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const getCartItems = async () => {
+      try {
+        const items = await AsyncStorage.getItem('cartItems');
+        if (items !== null) {
+          setCartItems(JSON.parse(items));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getCartItems();
+  }, []);
+
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.harga_proyek * item.quantity,
+    0,
+  );
+
+  const shippingCost = 10;
+
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      {cartItems.map(item => (
+        <View
+          key={item.id}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginVertical: 10,
+            width: '90%',
+          }}>
+          <Image
+            source={require('../../assets/Images/batu.jpg')}
+            style={{width: 100, height: 100}}
+          />
+          <View style={{flex: 1, marginLeft: 10}}>
+            <Text style={{fontSize: 18, fontWeight: 'bold', color: WARNA_BLACK}}>
+              {item.nama_barang}
+            </Text>
+            <Text style={{fontSize: 16, color: WARNA_GRAYTUA}}>Harga: {item.harga_proyek}</Text>
+            <Text style={{fontSize: 16, color: WARNA_GREEN}}>Jumlah: {item.quantity}</Text>
+          </View>
+        </View>
+      ))}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginVertical: 10,
+          width: '90%',
+        }}>
+        <Text style={{fontSize: 18, fontWeight: 'bold', color: WARNA_BLACK}}>
+          Total Harga: {totalPrice + shippingCost}
+        </Text>
+        <Text style={{fontSize: 18, color: WARNA_BLACK}}>Biaya Pengiriman: {shippingCost}</Text>
+      </View>
+      <TouchableOpacity
+        style={{
+          backgroundColor: 'blue',
+          padding: 10,
+          borderRadius: 5,
+          marginTop: 20,
+        }}
+        onPress={() => navigation.navigate('Payment')}>
+        <Text style={{color: 'white', fontSize: 18}}>Pembayaran</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+export default CheckoutSelesai;

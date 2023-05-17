@@ -13,8 +13,6 @@ import {
   WARNA_BORDER,
   WARNA_GREEN,
   WARNA_RED,
-  WARNA_BLACK,
-  WARNA_SILVER,
 } from '../../utils/constant';
 
 const styles = StyleSheet.create({
@@ -123,9 +121,9 @@ const styles = StyleSheet.create({
     marginVertical: responsiveWidth(2),
     marginLeft: responsiveHeight(3),
     borderRadius: 15,
-    borderColor: WARNA_SILVER,
+    borderColor: WARNA_UTAMA,
     borderWidth: 1,
-    // elevation: 13,
+    elevation: 13,
     backgroundColor: WARNA_WHITE,
   },
   addToCartBtn: {
@@ -157,10 +155,9 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(2),
   },
   text: {
-    fontSize: responsiveFontSize(2.3),
+    fontSize: responsiveFontSize(2),
     fontWeight: '400',
-    color: WARNA_BLACK,
-    fontWeight: 'bold',
+    color: WARNA_SEKUNDER,
   },
   text1: {
     fontSize: responsiveFontSize(1.4),
@@ -176,9 +173,9 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(2),
   },
   text2: {
-    fontSize: responsiveFontSize(2.1),
-    color: WARNA_GRAYTUA,
-    fontWeight: '500',
+    fontSize: responsiveFontSize(2.3),
+    color: WARNA_GREEN,
+    fontWeight: 'bold',
   },
   text3: {
     fontSize: responsiveFontSize(1.9),

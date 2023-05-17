@@ -7,6 +7,7 @@ import {
   Homes,
   Homes2,
   Homes3,
+  Homes4,
   Catalogue,
   Profile,
   Profile2,
@@ -32,11 +33,15 @@ import {
   CheckoutAddress,
   CheckoutPayment,
   CheckoutShipping,
+  CheckoutSelesai,
   CheckoutBerhasil,
   ReviewRating,
   RincianPesanan,
   EditAddress,
   NewAddress,
+  DetailProduct3,
+  Keranjang4,
+  Checkout2,
 } from '../pages';
 import {
   BottomNavigation,
@@ -164,6 +169,11 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="Keranjang4"
+        component={Keranjang4}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="Notifikasi"
         component={Notifikasi}
         options={{headerShown: false}}
@@ -179,8 +189,18 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="DetailProduct3"
+        component={DetailProduct3}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
         name="Checkout"
         component={Checkout}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Checkout2"
+        component={Checkout2}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -196,6 +216,11 @@ const Router = () => {
       <Stack.Screen
         name="CheckoutShipping"
         component={CheckoutShipping}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CheckoutSelesai"
+        component={CheckoutSelesai}
         options={{headerShown: false}}
       />
       <Stack.Screen
@@ -246,6 +271,11 @@ const Router = () => {
       <Stack.Screen
         name="Homes3"
         component={Homes3}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Homes4"
+        component={Homes4}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

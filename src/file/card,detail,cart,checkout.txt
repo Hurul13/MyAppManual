@@ -1,0 +1,530 @@
+// halaman card
+
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+} from 'react-native';
+import {
+  WARNA_BLACK,
+  WARNA_GRAYTUA,
+  WARNA_GREEN,
+  WARNA_SILVER,
+} from '../../utils/constant';
+import {url} from '../../utils/url';
+
+const API_URL = `${url}supplier-barang/index`;
+
+const ProductCard = ({item, onPress}) => {
+  return (
+    <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
+      <Image
+        source={require('../../assets/Images/batu.jpg')}
+        style={styles.cardImage}
+      />
+      <Text style={styles.cardTitle}>{item.nama_barang}</Text>
+      <Text style={styles.cardPrice}>{`Rp ${item.harga_proyek}`}</Text>
+      <Text style={styles.cardStock}>{`Stok: ${item.stok}`}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const CheckoutAddress = ({navigation}) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const result = await response.json();
+      setData(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePress = item => {
+    navigation.navigate('CheckoutShipping', {item});
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => (
+          <ProductCard item={item} onPress={() => handlePress(item)} />
+        )}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: WARNA_SILVER,
+  },
+  cardContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+  },
+  cardImage: {
+    height: 150,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  cardTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 5,
+    color: WARNA_BLACK,
+  },
+  cardPrice: {
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginBottom: 5,
+    color: WARNA_GRAYTUA,
+  },
+  cardStock: {
+    fontSize: 14,
+    color: WARNA_GREEN,
+  },
+});
+
+export default CheckoutAddress;
+
+
+// halaman detail produk
+
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {WARNA_BLACK, WARNA_GRAYTUA} from '../../utils/constant';
+import {url} from '../../utils/url';
+
+const API_URL = `${url}supplier-barang/index`;
+const CheckoutShipping = ({route, navigation}) => {
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const {item} = route.params;
+    setProduct(item);
+  }, []);
+
+  const handleAddToCart = async () => {
+    try {
+      const cartItems = await AsyncStorage.getItem('cartItems');
+      let newCartItems = [];
+      if (cartItems) {
+        newCartItems = JSON.parse(cartItems);
+      }
+      newCartItems.push(product);
+      await AsyncStorage.setItem('cartItems', JSON.stringify(newCartItems));
+      Alert.alert('Success', 'Product added to cart');
+      navigation.navigate('CheckoutPayment');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      {product ? (
+        <>
+          <Image
+            source={require('../../assets/Images/batu.jpg')}
+            style={styles.productImage}
+          />
+          <Text style={styles.productTitle}>{product.nama_barang}</Text>
+          <Text
+            style={styles.productPrice}>{`Rp ${product.harga_proyek}`}</Text>
+          <Text style={styles.productDescription}>{product.deskripsi}</Text>
+          <TouchableOpacity style={styles.button} onPress={handleAddToCart}>
+            <Text style={styles.buttonText}>Add to Cart</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <Text>Loading...</Text>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  productImage: {
+    height: 200,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  productTitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 5,
+    color: WARNA_BLACK,
+  },
+  productPrice: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 5,
+    color: WARNA_GRAYTUA,
+  },
+  productDescription: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: WARNA_BLACK,
+  },
+  button: {
+    backgroundColor: '#0066CC',
+    borderRadius: 8,
+    padding: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+});
+
+export default CheckoutShipping;
+
+
+// halaman cart
+
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  FlatList,
+  Alert,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  WARNA_BLACK,
+  WARNA_BLUE,
+  WARNA_GRAYTUA,
+  WARNA_GREEN,
+  WARNA_WHITE,
+} from '../../utils/constant';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {url} from '../../utils/url';
+
+const API_URL = `${url}supplier-barang/index`;
+const CheckoutPayment = ({navigation}) => {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchCartItems();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const fetchCartItems = async () => {
+    try {
+      const items = await AsyncStorage.getItem('cartItems');
+      if (items) {
+        setCartItems(JSON.parse(items));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRemoveItem = async id => {
+    try {
+      const newCartItems = cartItems.filter(item => item.id !== id);
+      await AsyncStorage.setItem('cartItems', JSON.stringify(newCartItems));
+      setCartItems(newCartItems);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      await AsyncStorage.removeItem('cartItems');
+      setCartItems([]);
+      Alert.alert('Success', 'Checkout success');
+      navigation.navigate('CheckoutSelesai');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const renderItem = ({item}) => (
+    <TouchableOpacity style={styles.card}>
+      <Image
+        source={require('../../assets/Images/batu.jpg')}
+        style={styles.cardImage}
+      />
+      <View style={styles.cardText}>
+        <Text style={styles.cardTitle}>{item.nama_barang}</Text>
+        <Text style={styles.cardPrice}>{`Rp ${item.harga_proyek}`}</Text>
+        <TouchableOpacity
+          style={styles.cardButton}
+          onPress={() => handleRemoveItem(item.id)}>
+          <Text style={styles.cardButtonText}>Remove</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      {cartItems.length > 0 ? (
+        <>
+          <FlatList
+            data={cartItems}
+            renderItem={renderItem}
+            keyExtractor={item => item.id.toString()}
+            style={styles.list}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleCheckout}>
+            <Text style={styles.buttonText}>Checkout</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <Text>Your cart is empty</Text>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  list: {
+    flex: 1,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginBottom: 10,
+    padding: 10,
+  },
+  cardImage: {
+    width: 80,
+    height: 80,
+    marginRight: 10,
+    borderRadius: 8,
+  },
+  cardText: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 5,
+    color: WARNA_BLACK,
+  },
+  cardPrice: {
+    fontSize: 14,
+    marginBottom: 5,
+    color: WARNA_GRAYTUA,
+  },
+  cardButton: {
+    backgroundColor: '#FF0000',
+  },
+  cardButtonText: {
+    color: WARNA_WHITE,
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  button: {
+    backgroundColor: WARNA_BLUE,
+  },
+  buttonText: {
+    color: WARNA_WHITE,
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+    textAlign: 'center',
+    padding: 10,
+  },
+});
+
+export default CheckoutPayment;
+
+
+// halaman checkout
+
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  FlatList,
+  Alert,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {url} from '../../utils/url';
+import {
+  WARNA_BLACK,
+  WARNA_BLUE,
+  WARNA_GRAYTUA,
+  WARNA_WHITE,
+} from '../../utils/constant';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
+
+const API_URL = `${url}supplier-barang/index`;
+const CheckoutSelesai = ({navigation}) => {
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchCartItems();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [cartItems]);
+
+  const fetchCartItems = async () => {
+    try {
+      const items = await AsyncStorage.getItem('cartItems');
+      if (items) {
+        setCartItems(JSON.parse(items));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const calculateTotalPrice = () => {
+    const price = cartItems.reduce((acc, item) => acc + item.harga_proyek, 0);
+    setTotalPrice(price);
+  };
+
+  const handleCheckout = async () => {
+    try {
+      await AsyncStorage.removeItem('cartItems');
+      setCartItems([]);
+      Alert.alert('Success', 'Checkout success');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const renderItem = ({item}) => (
+    <View style={styles.card}>
+      <Image source={{uri: item.gambar}} style={styles.cardImage} />
+      <View style={styles.cardText}>
+        <Text style={styles.cardTitle}>{item.nama_barang}</Text>
+        <Text style={styles.cardPrice}>{`Rp ${item.harga_proyek}`}</Text>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={cartItems}
+        renderItem={renderItem}
+        keyExtractor={item => item.id.toString()}
+        style={styles.list}
+      />
+      <View style={styles.totalPriceContainer}>
+        <Text
+          style={styles.totalPriceText}>{`Total Price: Rp ${totalPrice}`}</Text>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleCheckout}>
+        <Text style={styles.buttonText}>Checkout</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  list: {
+    flex: 1,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginBottom: 10,
+    padding: 10,
+  },
+  cardImage: {
+    width: 80,
+    height: 80,
+    marginRight: 10,
+    borderRadius: 8,
+  },
+  cardText: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 5,
+    color: WARNA_BLACK,
+  },
+  cardPrice: {
+    fontSize: 14,
+    marginBottom: 5,
+    color: WARNA_GRAYTUA,
+  },
+  totalPriceContainer: {
+    alignItems: 'flex-end',
+    marginBottom: 10,
+  },
+  totalPriceText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: WARNA_BLUE,
+  },
+  button: {
+    backgroundColor: '#FF0000',
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: WARNA_WHITE,
+    textAlign: 'center',
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+  },
+});
+
+export default CheckoutSelesai;
