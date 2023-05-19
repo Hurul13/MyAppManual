@@ -5,7 +5,7 @@ import styles from './Styles';
 const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace('MainApp');
+      navigation.replace('Login3');
     }, 3000);
   }, [navigation]);
 

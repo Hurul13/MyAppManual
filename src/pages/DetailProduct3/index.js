@@ -111,6 +111,10 @@ const DetailProduct3 = ({navigation}) => {
             .then(() => {
               setCartCount(cart.length);
               navigation.navigate('Keranjang4');
+              ToastAndroid.show(
+                'Berhasil Memasukkan ke Keranjang',
+                ToastAndroid.SHORT,
+              );
             })
             .catch(error => console.error(error));
         } else {
@@ -119,6 +123,10 @@ const DetailProduct3 = ({navigation}) => {
             .then(() => {
               setCartCount(cart.length);
               navigation.navigate('Keranjang4');
+              ToastAndroid.show(
+                'Berhasil Memasukkan ke Keranjang',
+                ToastAndroid.SHORT,
+              );
             })
             .catch(error => console.error(error));
         }

@@ -103,6 +103,7 @@ const Keranjang4 = ({navigation}) => {
   const handleCheckout = () => {
     const checkedItems = cart.filter(item => item.checked);
     AsyncStorage.setItem('checkedItems', JSON.stringify(checkedItems));
+    ToastAndroid.show('Melakukan Pesanan', ToastAndroid.SHORT);
     navigation.navigate('Checkout2');
   };
 

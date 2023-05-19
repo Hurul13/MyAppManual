@@ -13,6 +13,10 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        // jcenter()
+        // maven { url "https://jitpack.io" }
+         // Add the midtrans repository into the list of repositories
+    // maven { url "http://dl.bintray.com/pt-midtrans/maven" }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.3.1")

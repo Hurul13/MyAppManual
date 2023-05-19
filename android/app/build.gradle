@@ -94,6 +94,19 @@ android {
     // defaultConfig {
     //   targetSdkVersion 30}
 
+    // Define Merchant BASE URL and CLIENT KEY for each flavors
+//   productFlavors {
+//           sandbox {
+//               buildConfigField "String", "BASE_URL", "\"https://merchant-url-sandbox.com/\""
+//               buildConfigField "String", "CLIENT_KEY", "\"VT-CLIENT-sandbox-client-key\""
+//           }
+
+//           production {
+//               buildConfigField "String", "BASE_URL", "\"https://merchant-url-production.com/\""
+//               buildConfigField "String", "CLIENT_KEY", "\"VT-CLIENT-production-client-key\""
+//          }
+//   }
+
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -159,10 +172,15 @@ dependencies {
     // implementation project(':react-native-linear-gradient')
 
     // implementation project(':react-native-fingerprint-scanner')
+    //  implementation 'com.midtrans:uikit:2.0.0-SANDBOX' // change the number to the latest version
+    // implementation 'com.midtrans:uikit:2.0.0' // change the number to the latest version
 
     implementation("com.facebook.react:react-android")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
+
+//     sandboxImplementation 'com.midtrans:uikit:2.0.0-SANDBOX' // change the version to latest one
+//   productionImplementation 'com.midtrans:uikit:2.0.0' // change the version to latest one
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

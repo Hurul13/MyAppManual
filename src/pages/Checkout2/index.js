@@ -30,6 +30,7 @@ import {
 } from '../../utils/constant';
 import {ScrollView} from 'react-native-virtualized-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import {Midtrans} from 'midtrans-react-native';
 
 const Checkout2 = ({navigation}) => {
   const navigateTo = async page => {
@@ -85,6 +86,27 @@ const Checkout2 = ({navigation}) => {
       </View>
     );
   };
+
+  // useEffect(() => {
+  //   Midtrans.configure({
+  //     clientKey: 'SB-Mid-client-X2roVPgN4X-6EOvk', // Ganti dengan client key Midtrans Anda
+  //     serverKey: 'SB-Mid-server-tdXIBx0yrHgAgJsJixDx9Sji', // Ganti dengan server key Midtrans Anda
+  //     isProduction: false, // Setel ke false untuk menggunakan sandbox environment
+  //   });
+  // }, []);
+
+  // const handlePayment = async () => {
+  //   try {
+  //     const token = await Midtrans.createTransactionToken({
+  //       orderId: 'ORDER_ID', // Ganti dengan ID pesanan Anda
+  //       grossAmount: 100000, // Ganti dengan jumlah total pembayaran
+  //     });
+
+  //     // Lakukan pemanggilan API ke server Anda untuk menyimpan token transaksi dan melakukan proses checkout
+  //   } catch (error) {
+  //     console.log('Error creating transaction token:', error);
+  //   }
+  // };
 
   return (
     <ScrollView style={styles.all}>
@@ -163,6 +185,7 @@ const Checkout2 = ({navigation}) => {
               <Buttone
                 bg={WARNA_UTAMA}
                 color={WARNA_SEKUNDER}
+                // onPress={handlePayment}
                 onPress={() => navigateTo('CheckoutBerhasil')}
                 mt={5}
                 mx={responsiveHeight(3)}>
