@@ -1,0 +1,219 @@
+// add alamat
+
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {url} from '../../utils/url';
+import {
+  WARNA_BLACK,
+  WARNA_GRAYTUA,
+  WARNA_GREEN,
+  WARNA_DISABLE,
+} from '../../utils/constant';
+import React, {useState} from 'react';
+import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+
+const CheckoutSelesai = ({navigation}) => {
+  const [namaPenerima, setNamaPenerima] = useState('');
+  const [alamatPenerima, setAlamatPenerima] = useState('');
+  const [provinsiId, setProvinsiId] = useState('');
+  const [kotaId, setKotaId] = useState('');
+  const [kecamatanId, setKecamatanId] = useState('');
+  const [desaId, setDesaId] = useState('');
+
+  const handleAddAddress = () => {
+    fetch(`${url}user-address/create-user-address?user_id=111122`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:
+          'Bearer BASICAPPMTY4NTErK0lteDdxeWJyakJtWE1JRT_RmJUS_E2c0RiTTk1WTQ3cHNKUCswNzcyMQ==APP',
+      },
+      body: JSON.stringify({
+        nama_penerima: namaPenerima,
+        alamat_penerima: alamatPenerima,
+        provinsi_id: provinsiId,
+        kota_id: kotaId,
+        kecamatan_id: kecamatanId,
+        desa_id: desaId,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        navigation.navigate('CheckoutShipping');
+      })
+      .catch(error => console.error(error));
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>Nama Penerima:</Text>
+      <TextInput
+        style={styles.input}
+        value={namaPenerima}
+        onChangeText={text => setNamaPenerima(text)}
+      />
+      <Text style={styles.label}>Alamat Penerima:</Text>
+      <TextInput
+        style={styles.input}
+        value={alamatPenerima}
+        onChangeText={text => setAlamatPenerima(text)}
+      />
+      <Text style={styles.label}>Provinsi ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={provinsiId}
+        onChangeText={text => setProvinsiId(text)}
+      />
+      <Text style={styles.label}>Kota ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={kotaId}
+        onChangeText={text => setKotaId(text)}
+      />
+      <Text style={styles.label}>Kecamatan ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={kecamatanId}
+        onChangeText={text => setKecamatanId(text)}
+      />
+      <Text style={styles.label}>Desa ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={desaId}
+        onChangeText={text => setDesaId(text)}
+      />
+      <Button title="Submit" onPress={handleAddAddress} />
+      <View style={{marginTop: 8}}>
+        <Button
+          title="My Alamat"
+          onPress={() => navigation.navigate('CheckoutShipping')}
+        />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: WARNA_BLACK,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    color: WARNA_BLACK,
+  },
+});
+
+export default CheckoutSelesai;
+
+
+//view alamat
+
+import {url} from '../../utils/url';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {WARNA_BLACK, WARNA_DISABLE} from '../../utils/constant';
+import React, {useState, useEffect} from 'react';
+import {View, Text, Button, StyleSheet} from 'react-native';
+
+const CheckoutShipping = ({navigation}) => {
+  const [addresses, setAddresses] = useState([]);
+
+  useEffect(() => {
+    fetch(`${url}user-address/index`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setAddresses(data.data);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Alamat</Text>
+        <Button
+          title="Tambah Alamat"
+          onPress={() => navigation.navigate('CheckoutSelesai')}
+        />
+      </View>
+      <View style={styles.table}>
+        <View style={styles.row}>
+          <Text style={styles.headerCell}>Nama Penerima</Text>
+          <Text style={styles.headerCell}>Alamat Penerima</Text>
+          <Text style={styles.headerCell}>Provinsi ID</Text>
+          <Text style={styles.headerCell}>Kota ID</Text>
+          <Text style={styles.headerCell}>Kecamatan ID</Text>
+          <Text style={styles.headerCell}>Desa ID</Text>
+        </View>
+        {addresses.map(address => (
+          <View key={address.id} style={styles.row}>
+            <Text style={styles.cell}>{address.nama_penerima}</Text>
+            <Text style={styles.cell}>{address.alamat_penerima}</Text>
+            <Text style={styles.cell}>{address.provinsi_id}</Text>
+            <Text style={styles.cell}>{address.kota_id}</Text>
+            <Text style={styles.cell}>{address.kecamatan_id}</Text>
+            <Text style={styles.cell}>{address.desa_id}</Text>
+            <Button
+              title="Edit"
+              onPress={() => navigation.navigate('CheckoutSelesai')}
+            />
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  table: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  row: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  headerCell: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  cell: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    color: WARNA_BLACK,
+  },
+});
+
+export default CheckoutShipping;

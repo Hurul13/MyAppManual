@@ -1,0 +1,143 @@
+import {url} from '../../utils/url';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {WARNA_BLACK, WARNA_DISABLE} from '../../utils/constant';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  ToastAndroid,
+  StyleSheet,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const CheckoutShipping = ({navigation}) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch(`${url}auth/login`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+
+        // Alert.alert('Login successful');
+        ToastAndroid.show('Login successful', ToastAndroid.SHORT);
+        // await AsyncStorage.setItem('token', data.token);
+        setTimeout(() => {
+          navigation.navigate('CheckoutPayment');
+        }, 3000);
+      } else {
+        // Alert.alert('Login failed');
+        ToastAndroid.show('Login failed', ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <TextInput
+        style={styles.input}
+        placeholderTextColor={WARNA_DISABLE}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={[styles.input, styles.passwordInput]}
+          placeholderTextColor={WARNA_DISABLE}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+        />
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          {showPassword ? (
+            <IconMaterial name="eye-off" size={20} color="#000" />
+          ) : (
+            <IconMaterial name="eye" size={20} color="#000" />
+          )}
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+        <Text style={styles.bottomText}>Forgot Password?</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('CheckoutAddress')}>
+        <Text style={styles.bottomText}>Don't have an account? Register</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    width: '80%',
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    color: WARNA_BLACK,
+    marginBottom: 10,
+  },
+  passwordContainer: {
+    width: '80%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  passwordInput: {
+    flex: 1,
+  },
+  button: {
+    width: '80%',
+    height: 50,
+    backgroundColor: '#007bff',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  bottomText: {
+    color: WARNA_BLACK,
+    marginTop: 20,
+  },
+});
+
+export default CheckoutShipping;

@@ -1,0 +1,373 @@
+// create alamat bisa
+
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {url} from '../../utils/url';
+import {
+  WARNA_BLACK,
+  WARNA_GRAYTUA,
+  WARNA_GREEN,
+  WARNA_DISABLE,
+} from '../../utils/constant';
+import React, {useState} from 'react';
+import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+
+const CheckoutSelesai = ({navigation}) => {
+  const [namaPenerima, setNamaPenerima] = useState('');
+  const [alamatPenerima, setAlamatPenerima] = useState('');
+  const [provinsiId, setProvinsiId] = useState('');
+  const [kotaId, setKotaId] = useState('');
+  const [kecamatanId, setKecamatanId] = useState('');
+  const [desaId, setDesaId] = useState('');
+
+  const handleAddAddress = () => {
+    fetch(`${url}user-address/create-user-address?user_id=111122`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:
+          'Bearer BASICAPPMTY4NTErMG8xMEZsUTljTVRMdXZp_VIi5M_d2dpVlpNY2J6KzdSYkQ1KzMwNzg0APP',
+      },
+      body: JSON.stringify({
+        nama_penerima: namaPenerima,
+        alamat_penerima: alamatPenerima,
+        provinsi_id: provinsiId,
+        kota_id: kotaId,
+        kecamatan_id: kecamatanId,
+        desa_id: desaId,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        navigation.navigate('CheckoutShipping');
+      })
+      .catch(error => console.error(error));
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>Nama Penerima:</Text>
+      <TextInput
+        style={styles.input}
+        value={namaPenerima}
+        onChangeText={text => setNamaPenerima(text)}
+      />
+      <Text style={styles.label}>Alamat Penerima:</Text>
+      <TextInput
+        style={styles.input}
+        value={alamatPenerima}
+        onChangeText={text => setAlamatPenerima(text)}
+      />
+      <Text style={styles.label}>Provinsi ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={provinsiId}
+        onChangeText={text => setProvinsiId(text)}
+      />
+      <Text style={styles.label}>Kota ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={kotaId}
+        onChangeText={text => setKotaId(text)}
+      />
+      <Text style={styles.label}>Kecamatan ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={kecamatanId}
+        onChangeText={text => setKecamatanId(text)}
+      />
+      <Text style={styles.label}>Desa ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={desaId}
+        onChangeText={text => setDesaId(text)}
+      />
+      <Button title="Submit" onPress={handleAddAddress} />
+      <View style={{marginTop: 8}}>
+        <Button
+          title="My Alamat"
+          onPress={() => navigation.navigate('CheckoutShipping')}
+        />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: WARNA_BLACK,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    color: WARNA_BLACK,
+  },
+});
+
+export default CheckoutSelesai;
+
+
+// alamat bisa
+
+import {url} from '../../utils/url';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {WARNA_BLACK, WARNA_DISABLE, WARNA_GRAYTUA} from '../../utils/constant';
+import React, {useState, useEffect} from 'react';
+import {View, Text, Button, StyleSheet} from 'react-native';
+// import { Ionicons } from '@expo/vector-icons';
+
+const CheckoutShipping = ({navigation}) => {
+  const [addresses, setAddresses] = useState([]);
+
+  useEffect(() => {
+    fetch(`${url}user-address/index`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setAddresses(data.data);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  const handleDelete = id => {
+    fetch(`${url}user-address/delete?id=${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization:
+          'Bearer BASICAPPMTY4NTErMG8xMEZsUTljTVRMdXZp_VIi5M_d2dpVlpNY2J6KzdSYkQ1KzMwNzg0APP',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // Remove deleted address from state
+        setAddresses(addresses.filter(address => address.id !== id));
+      })
+      .catch(error => console.error(error));
+  };
+
+  const handleUpdate = id => {
+    navigation.navigate('CheckoutPayment', {id});
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Alamat</Text>
+      </View>
+      {addresses.map(address => (
+        <View key={address.id} style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>{address.nama_penerima}</Text>
+            <View style={{flexDirection: 'row'}}>
+              <IconMaterial
+                name="delete"
+                size={24}
+                color="red"
+                onPress={() => handleDelete(address.id)}
+              />
+              <IconMaterial
+                name="pencil"
+                size={24}
+                color="blue"
+                onPress={() => handleUpdate(address.id)}
+              />
+            </View>
+          </View>
+          <Text style={styles.cardText}>{address.alamat_penerima}</Text>
+          <Text style={styles.cardText}>
+            {address.provinsi_id}, {address.kota_id}, {address.kecamatan_id},{' '}
+            {address.desa_id}
+          </Text>
+        </View>
+      ))}
+      <Button
+        title="Tambah Alamat"
+        onPress={() => navigation.navigate('CheckoutSelesai')}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  card: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  cardText: {
+    fontSize: 16,
+    color: WARNA_BLACK,
+  },
+});
+
+export default CheckoutShipping;
+
+
+// upadte alamat bisa
+
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {url} from '../../utils/url';
+import {WARNA_BLACK, WARNA_GRAYTUA, WARNA_GREEN} from '../../utils/constant';
+import React, {useState, useEffect} from 'react';
+import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+
+const CheckoutPayment = ({route, navigation}) => {
+  const {id} = route.params;
+  const [address, setAddress] = useState({});
+
+  useEffect(() => {
+    fetch(`${url}user-address/index?id=${id}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setAddress(data.data);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  const handleUpdate = () => {
+    fetch(`${url}user-address/update-user-address?id=${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:
+          'Bearer BASICAPPMTY4NTErMG8xMEZsUTljTVRMdXZp_VIi5M_d2dpVlpNY2J6KzdSYkQ1KzMwNzg0APP',
+      },
+      body: JSON.stringify(address),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        navigation.goBack();
+      })
+      .catch(error => console.error(error));
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Edit Alamat</Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Nama Penerima</Text>
+        <TextInput
+          style={styles.cardInput}
+          value={address.nama_penerima}
+          onChangeText={text => setAddress({...address, nama_penerima: text})}
+        />
+        <Text style={styles.cardTitle}>Alamat Penerima</Text>
+        <TextInput
+          style={styles.cardInput}
+          value={address.alamat_penerima}
+          onChangeText={text => setAddress({...address, alamat_penerima: text})}
+        />
+        <Text style={styles.cardTitle}>Provinsi</Text>
+        <TextInput
+          style={styles.cardInput}
+          value={address.provinsi_id}
+          onChangeText={text => setAddress({...address, provinsi_id: text})}
+        />
+        <Text style={styles.cardTitle}>Kota</Text>
+        <TextInput
+          style={styles.cardInput}
+          value={address.kota_id}
+          onChangeText={text => setAddress({...address, kota_id: text})}
+        />
+        <Text style={styles.cardTitle}>Kecamatan</Text>
+        <TextInput
+          style={styles.cardInput}
+          value={address.kecamatan_id}
+          onChangeText={text => setAddress({...address, kecamatan_id: text})}
+        />
+        <Text style={styles.cardTitle}>Desa</Text>
+        <TextInput
+          style={styles.cardInput}
+          value={address.desa_id}
+          onChangeText={text => setAddress({...address, desa_id: text})}
+        />
+      </View>
+      <Button title="Update Alamat" onPress={() => handleUpdate()} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  card: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  cardInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    color: WARNA_BLACK,
+  },
+});
+
+export default CheckoutPayment;

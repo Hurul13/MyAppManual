@@ -37,6 +37,8 @@ import ReviewRating from './ReviewRating';
 import RincianPesanan from './RincianPesanan';
 import EditAddress from './EditAddress';
 import NewAddress from './NewAddress';
+import UpdateAddress from './UpdateAddress';
+import TambahAlamat from './TambahAlamat';
 
 export {
   Splash,
@@ -78,4 +80,6 @@ export {
   RincianPesanan,
   EditAddress,
   NewAddress,
+  UpdateAddress,
+  TambahAlamat,
 };

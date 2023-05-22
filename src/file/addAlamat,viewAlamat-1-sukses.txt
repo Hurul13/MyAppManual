@@ -1,0 +1,189 @@
+// new address sukses
+
+
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {url} from '../../utils/url';
+import {
+  WARNA_BLACK,
+  WARNA_GRAYTUA,
+  WARNA_GREEN,
+  WARNA_DISABLE,
+} from '../../utils/constant';
+import React, {useState} from 'react';
+import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+
+const CheckoutSelesai = () => {
+  const [namaPenerima, setNamaPenerima] = useState('');
+  const [alamatPenerima, setAlamatPenerima] = useState('');
+  const [provinsiId, setProvinsiId] = useState('');
+  const [kotaId, setKotaId] = useState('');
+  const [kecamatanId, setKecamatanId] = useState('');
+  const [desaId, setDesaId] = useState('');
+
+  const handleSubmit = () => {
+    fetch(
+      `${url}user-address/create-user-address?user_id=111122`,
+      // 'http://localhost/homeii/web/api/v1/user-address/create-user-address?user_id=111122',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:
+            'Bearer BASICAPPMTY4NTErNFVqRGhoSU5vY1JqdFBxbDFqamNU_V0UUv_TWR0TGFaUUY3a05iekNCU0RWcyswMDg2Mg==APP',
+        },
+        body: JSON.stringify({
+          nama_penerima: namaPenerima,
+          alamat_penerima: alamatPenerima,
+          provinsi_id: provinsiId,
+          kota_id: kotaId,
+          kecamatan_id: kecamatanId,
+          desa_id: desaId,
+        }),
+      },
+    )
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // save data to be used in edit address page
+      })
+      .catch(error => console.error(error));
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>Nama Penerima:</Text>
+      <TextInput
+        style={styles.input}
+        value={namaPenerima}
+        onChangeText={text => setNamaPenerima(text)}
+      />
+      <Text style={styles.label}>Alamat Penerima:</Text>
+      <TextInput
+        style={styles.input}
+        value={alamatPenerima}
+        onChangeText={text => setAlamatPenerima(text)}
+      />
+      <Text style={styles.label}>Provinsi ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={provinsiId}
+        onChangeText={text => setProvinsiId(text)}
+      />
+      <Text style={styles.label}>Kota ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={kotaId}
+        onChangeText={text => setKotaId(text)}
+      />
+      <Text style={styles.label}>Kecamatan ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={kecamatanId}
+        onChangeText={text => setKecamatanId(text)}
+      />
+      <Text style={styles.label}>Desa ID:</Text>
+      <TextInput
+        style={styles.input}
+        value={desaId}
+        onChangeText={text => setDesaId(text)}
+      />
+      <Button title="Submit" onPress={handleSubmit} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: WARNA_BLACK,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    color: WARNA_BLACK,
+  },
+});
+
+export default CheckoutSelesai;
+
+
+
+
+
+// tambah data berhasil
+
+import {url} from '../../utils/url';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {WARNA_BLACK, WARNA_DISABLE} from '../../utils/constant';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, Button} from 'react-native';
+
+const CheckoutShipping = ({navigation}) => {
+  const navigateTo = async page => {
+    navigation.navigate(page);
+  };
+  const [addressData, setAddressData] = useState(null);
+
+  useEffect(() => {
+    fetch(`${url}user-address/view?id=67960498`)
+      .then(response => response.json())
+      .then(data => setAddressData(data.data))
+      .catch(error => console.error(error));
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      {addressData ? (
+        <>
+          <Text style={styles.label}>Nama Penerima:</Text>
+          <Text style={styles.text}>{addressData.nama_penerima}</Text>
+          <Text style={styles.label}>Alamat Penerima:</Text>
+          <Text style={styles.text}>{addressData.alamat_penerima}</Text>
+          <Text style={styles.label}>Provinsi ID:</Text>
+          <Text style={styles.text}>{addressData.provinsi_id}</Text>
+          <Text style={styles.label}>Kota ID:</Text>
+          <Text style={styles.text}>{addressData.kota_id}</Text>
+          <Text style={styles.label}>Kecamatan ID:</Text>
+          <Text style={styles.text}>{addressData.kecamatan_id}</Text>
+          <Text style={styles.label}>Desa ID:</Text>
+          <Text style={styles.text}>{addressData.desa_id}</Text>
+        </>
+      ) : (
+        <Text>Loading...</Text>
+      )}
+      <Button
+        title="Tambah Alamat"
+        onPress={() => navigation.navigate('CheckoutSelesai')}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: WARNA_BLACK,
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: WARNA_BLACK,
+  },
+});
+export default CheckoutShipping;

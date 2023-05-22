@@ -42,6 +42,8 @@ import {
   DetailProduct3,
   Keranjang4,
   Checkout2,
+  UpdateAddress,
+  TambahAlamat,
 } from '../pages';
 import {
   BottomNavigation,
@@ -276,6 +278,16 @@ const Router = () => {
       <Stack.Screen
         name="Homes4"
         component={Homes4}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="UpdateAddress"
+        component={UpdateAddress}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TambahAlamat"
+        component={TambahAlamat}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

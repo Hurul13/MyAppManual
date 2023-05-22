@@ -30,12 +30,13 @@ import {
 } from '../../utils/constant';
 import {ScrollView} from 'react-native-virtualized-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import {Midtrans} from 'midtrans-react-native';
+import {url} from '../../utils/url';
 
-const Checkout2 = ({navigation}) => {
+const Checkout2 = ({navigation, route}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };
+  const {address} = route.params;
 
   const [shippingPrice, setShippingPrice] = useState(10);
   const [checkedItems, setCheckedItems] = useState([]);
@@ -87,27 +88,6 @@ const Checkout2 = ({navigation}) => {
     );
   };
 
-  // useEffect(() => {
-  //   Midtrans.configure({
-  //     clientKey: 'SB-Mid-client-X2roVPgN4X-6EOvk', // Ganti dengan client key Midtrans Anda
-  //     serverKey: 'SB-Mid-server-tdXIBx0yrHgAgJsJixDx9Sji', // Ganti dengan server key Midtrans Anda
-  //     isProduction: false, // Setel ke false untuk menggunakan sandbox environment
-  //   });
-  // }, []);
-
-  // const handlePayment = async () => {
-  //   try {
-  //     const token = await Midtrans.createTransactionToken({
-  //       orderId: 'ORDER_ID', // Ganti dengan ID pesanan Anda
-  //       grossAmount: 100000, // Ganti dengan jumlah total pembayaran
-  //     });
-
-  //     // Lakukan pemanggilan API ke server Anda untuk menyimpan token transaksi dan melakukan proses checkout
-  //   } catch (error) {
-  //     console.log('Error creating transaction token:', error);
-  //   }
-  // };
-
   return (
     <ScrollView style={styles.all}>
       <View style={styles.container}>
@@ -124,18 +104,20 @@ const Checkout2 = ({navigation}) => {
           <View style={{paddingTop: responsiveHeight(2)}}>
             <View style={styles.space2}>
               <Text style={styles.text3}>Alamat Pengiriman</Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('TambahAlamat')}>
                 <Text style={styles.text4}>Ubah</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.space3}>
               <View style={styles.space4}>
-                <Text style={styles.text5}>Lorem Ipsum</Text>
-                <Text style={styles.text6}>0851234567</Text>
+                <Text style={styles.text5}>{address.nama_penerima}</Text>
+                {/* <Text style={styles.text6}>0851234567</Text> */}
               </View>
-              <Text style={styles.text7}>Jln. Mawar Melati Anggrek No 1</Text>
+              <Text style={styles.text7}>{address.alamat_penerima}</Text>
               <Text style={styles.text7}>
-                LILY, KOTA BUNGA, INDONESIA, 45678
+                {address.provinsi_id}, {address.kota_id}, {address.kecamatan_id}
+                , {address.desa_id}
               </Text>
             </View>
           </View>
@@ -185,7 +167,6 @@ const Checkout2 = ({navigation}) => {
               <Buttone
                 bg={WARNA_UTAMA}
                 color={WARNA_SEKUNDER}
-                // onPress={handlePayment}
                 onPress={() => navigateTo('CheckoutBerhasil')}
                 mt={5}
                 mx={responsiveHeight(3)}>

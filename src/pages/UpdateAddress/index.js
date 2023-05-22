@@ -1,15 +1,6 @@
 import {View, TouchableOpacity, ToastAndroid} from 'react-native';
-import {
-  Box,
-  Pressable,
-  Input,
-  ScrollView,
-  Text,
-  VStack,
-  FormControl,
-} from 'native-base';
+import {Box, Input, ScrollView, Text, VStack, FormControl} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Buttone} from '../../components';
 import {
@@ -27,41 +18,40 @@ import {
   WARNA_DEEPYELLOW,
   WARNA_BLACK,
 } from '../../utils/constant';
+import styles from './Styles';
 import {url} from '../../utils/url';
 
-const NewAddress = ({navigation}) => {
+const UpdateAddress = ({navigation, route}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };
-  const [namaPenerima, setNamaPenerima] = useState('');
-  const [alamatPenerima, setAlamatPenerima] = useState('');
-  const [provinsiId, setProvinsiId] = useState('');
-  const [kotaId, setKotaId] = useState('');
-  const [kecamatanId, setKecamatanId] = useState('');
-  const [desaId, setDesaId] = useState('');
-  // const [kodePos, setKodePos] = useState('');
+  const {id} = route.params;
+  const [address, setAddress] = useState({});
 
-  const handleAddAddress = () => {
-    fetch(`${url}user-address/create-user-address?user_id=111122`, {
-      method: 'POST',
+  useEffect(() => {
+    fetch(`${url}user-address/index?id=${id}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setAddress(data.data);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  const handleUpdate = () => {
+    fetch(`${url}user-address/update-user-address?id=${id}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization:
           'Bearer BASICAPPMTY4NTErUFIranF3eXhEMndOWFBpalNPTzJuRy_PRFid_twSkYwTG9CaGo3RzJZOTdHLWxLUkQrNTYwMjE=APP',
       },
-      body: JSON.stringify({
-        nama_penerima: namaPenerima,
-        alamat_penerima: alamatPenerima,
-        provinsi_id: provinsiId,
-        kota_id: kotaId,
-        kecamatan_id: kecamatanId,
-        desa_id: desaId,
-      }),
+      body: JSON.stringify(address),
     })
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        navigation.navigate('TambahAlamat');
+        navigation.goBack();
       })
       .catch(error => console.error(error));
   };
@@ -72,14 +62,10 @@ const NewAddress = ({navigation}) => {
         <TouchableOpacity onPress={navigation.goBack}>
           <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
         </TouchableOpacity>
-        <Text style={styles.judulBar}>New Address</Text>
+        <Text style={styles.judulBar}>Update Address</Text>
       </View>
       <View style={styles.box}>
-        <Box
-        // px={5}
-        // h="full"
-        // bg={WARNA_WHITE}
-        >
+        <Box>
           <ScrollView
             showsVerticalScrollIndicator={false}
             mx={responsiveHeight(2.8)}>
@@ -95,14 +81,16 @@ const NewAddress = ({navigation}) => {
                   Nama Penerima:
                 </Text>
                 <Input
-                  value={namaPenerima}
-                  onChangeText={text => setNamaPenerima(text)}
+                  value={address.nama_penerima}
+                  onChangeText={text =>
+                    setAddress({...address, nama_penerima: text})
+                  }
                   borderWidth={0.2}
+                  placeholder="Ubah nama penerima"
+                  placeholderTextColor={WARNA_GRAYTUA}
                   borderColor={WARNA_UTAMA}
                   bg={WARNA_DEEPYELLOW}
                   py={2}
-                  // placeholder={}
-                  // type={i.type}
                   color={WARNA_SEKUNDER}
                   _focus={{
                     bg: WARNA_DEEPYELLOW,
@@ -121,14 +109,16 @@ const NewAddress = ({navigation}) => {
                   Alamat Penerima:
                 </Text>
                 <Input
-                  value={alamatPenerima}
-                  onChangeText={text => setAlamatPenerima(text)}
+                  value={address.alamat_penerima}
+                  onChangeText={text =>
+                    setAddress({...address, alamat_penerima: text})
+                  }
+                  placeholder="Ubah alamat penerima"
+                  placeholderTextColor={WARNA_GRAYTUA}
                   borderWidth={0.2}
                   borderColor={WARNA_UTAMA}
                   bg={WARNA_DEEPYELLOW}
                   py={2}
-                  // placeholder={}
-                  // type={i.type}
                   color={WARNA_SEKUNDER}
                   _focus={{
                     bg: WARNA_DEEPYELLOW,
@@ -147,14 +137,16 @@ const NewAddress = ({navigation}) => {
                   Provinsi:
                 </Text>
                 <Input
-                  value={provinsiId}
-                  onChangeText={text => setProvinsiId(text)}
+                  value={address.provinsi_id}
+                  onChangeText={text =>
+                    setAddress({...address, provinsi_id: text})
+                  }
                   borderWidth={0.2}
+                  placeholder="Ubah provinsi"
+                  placeholderTextColor={WARNA_GRAYTUA}
                   borderColor={WARNA_UTAMA}
                   bg={WARNA_DEEPYELLOW}
                   py={2}
-                  // placeholder={}
-                  // type={i.type}
                   color={WARNA_SEKUNDER}
                   _focus={{
                     bg: WARNA_DEEPYELLOW,
@@ -173,14 +165,14 @@ const NewAddress = ({navigation}) => {
                   Kota:
                 </Text>
                 <Input
-                  value={kotaId}
-                  onChangeText={text => setKotaId(text)}
+                  value={address.kota_id}
+                  onChangeText={text => setAddress({...address, kota_id: text})}
                   borderWidth={0.2}
+                  placeholder="Ubah kota"
+                  placeholderTextColor={WARNA_GRAYTUA}
                   borderColor={WARNA_UTAMA}
                   bg={WARNA_DEEPYELLOW}
                   py={2}
-                  // placeholder={}
-                  // type={i.type}
                   color={WARNA_SEKUNDER}
                   _focus={{
                     bg: WARNA_DEEPYELLOW,
@@ -199,14 +191,16 @@ const NewAddress = ({navigation}) => {
                   Kecamatan:
                 </Text>
                 <Input
-                  value={kecamatanId}
-                  onChangeText={text => setKecamatanId(text)}
+                  value={address.kecamatan_id}
+                  onChangeText={text =>
+                    setAddress({...address, kecamatan_id: text})
+                  }
                   borderWidth={0.2}
+                  placeholder="Ubah kecamatan"
+                  placeholderTextColor={WARNA_GRAYTUA}
                   borderColor={WARNA_UTAMA}
                   bg={WARNA_DEEPYELLOW}
                   py={2}
-                  // placeholder={}
-                  // type={i.type}
                   color={WARNA_SEKUNDER}
                   _focus={{
                     bg: WARNA_DEEPYELLOW,
@@ -225,14 +219,14 @@ const NewAddress = ({navigation}) => {
                   Desa:
                 </Text>
                 <Input
-                  value={desaId}
-                  onChangeText={text => setDesaId(text)}
+                  value={address.desa_id}
+                  onChangeText={text => setAddress({...address, desa_id: text})}
                   borderWidth={0.2}
+                  placeholder="Ubah desa"
+                  placeholderTextColor={WARNA_GRAYTUA}
                   borderColor={WARNA_UTAMA}
                   bg={WARNA_DEEPYELLOW}
                   py={2}
-                  // placeholder={}
-                  // type={i.type}
                   color={WARNA_SEKUNDER}
                   _focus={{
                     bg: WARNA_DEEPYELLOW,
@@ -251,14 +245,15 @@ const NewAddress = ({navigation}) => {
                   Kode Pos:
                 </Text>
                 <Input
-                  value={kodePos}
-                  onChangeText={text => setKodePos(text)}
+                  value={address.kode_pos}
+                  onChangeText={text =>
+                    setAddress({...address, kode_pos: text})
+                  }
                   borderWidth={0.2}
                   borderColor={WARNA_UTAMA}
                   bg={WARNA_DEEPYELLOW}
                   py={2}
-                  // placeholder={}
-                  // type={i.type}
+                  placeholder="Ubah kode pos"
                   color={WARNA_SEKUNDER}
                   _focus={{
                     bg: WARNA_DEEPYELLOW,
@@ -276,8 +271,8 @@ const NewAddress = ({navigation}) => {
                 borderWidth={1}
                 borderColor={WARNA_BORDER}
                 mt={10}
-                onPress={handleAddAddress}>
-                SUBMIT
+                onPress={() => handleUpdate()}>
+                UPDATE
               </Buttone>
             </TouchableOpacity>
           </ScrollView>
@@ -287,4 +282,4 @@ const NewAddress = ({navigation}) => {
   );
 };
 
-export default NewAddress;
+export default UpdateAddress;

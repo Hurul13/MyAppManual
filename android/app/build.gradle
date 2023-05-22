@@ -176,6 +176,7 @@ dependencies {
     // implementation 'com.midtrans:uikit:2.0.0' // change the number to the latest version
 
     implementation("com.facebook.react:react-android")
+    // implementation project(':react-native-vector-icons')
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
 

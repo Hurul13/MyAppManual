@@ -139,7 +139,7 @@ const Profile = ({navigation}) => {
         <View>
           <Text style={styles.text3}>Profile</Text>
           <TouchableOpacity
-            onPress={() => navigateTo('EditProfile2')}
+            onPress={() => navigateTo('EditProfile')}
             style={styles.space2}>
             <View style={styles.space3}>
               <View style={styles.box3}>
@@ -158,6 +158,27 @@ const Profile = ({navigation}) => {
               </View>
             </View>
             <Text style={styles.text4}>Edit Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.space2}
+            onPress={() => navigateTo('TambahAlamat')}>
+            <View style={styles.space3}>
+              <View style={styles.box3}>
+                <View style={styles.box4}>
+                  <IconMaterial
+                    name="map-marker"
+                    size={26}
+                    style={styles.iconPen}
+                  />
+                </View>
+                <IconMaterial
+                  name="chevron-right"
+                  size={26}
+                  style={styles.iconNext}
+                />
+              </View>
+            </View>
+            <Text style={styles.text4}>Tambah Alamat</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.space2}
