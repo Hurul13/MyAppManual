@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     borderRadius: 35,
-    marginTop: responsiveHeight(-1),
+    marginTop: responsiveHeight(1),
   },
   textLogin: {
     fontWeight: 'bold',

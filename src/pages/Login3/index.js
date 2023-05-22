@@ -118,11 +118,11 @@ const Login3 = ({navigation}) => {
             </View>
           </View>
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           // onPress={handleForgotPassword}
           onPress={() => navigation.navigate('ForgotPassword')}>
           <Text style={styles.textFP}>Forgot Password?</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={handleLogin}
           // onPress={() => navigateTo('MainApp')}
