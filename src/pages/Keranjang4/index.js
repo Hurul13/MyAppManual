@@ -98,12 +98,13 @@ const Keranjang4 = ({navigation}) => {
     const newCart = cart.filter(item => item.id !== id);
     setCart(newCart);
     AsyncStorage.setItem('cart', JSON.stringify(newCart));
+    ToastAndroid.show('Berhasil menghapus', ToastAndroid.SHORT);
   };
 
   const handleCheckout = () => {
     const checkedItems = cart.filter(item => item.checked);
     AsyncStorage.setItem('checkedItems', JSON.stringify(checkedItems));
-    ToastAndroid.show('Melakukan Pesanan', ToastAndroid.SHORT);
+    ToastAndroid.show('Melakukan pesanan', ToastAndroid.SHORT);
     navigation.navigate('TambahAlamat');
   };
 

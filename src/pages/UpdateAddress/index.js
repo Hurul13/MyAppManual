@@ -44,13 +44,14 @@ const UpdateAddress = ({navigation, route}) => {
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer BASICAPPMTY4NTErUFIranF3eXhEMndOWFBpalNPTzJuRy_PRFid_twSkYwTG9CaGo3RzJZOTdHLWxLUkQrNTYwMjE=APP',
+          'Bearer BASICAPPMTY4NTErQVB1YzdNUFA1UldhY0VUb3pIMG94_UQHPY_S0hlNWs5UTVnQzBIWUNmUXN4RjVLKzc4Njg0APP',
       },
       body: JSON.stringify(address),
     })
       .then(response => response.json())
       .then(data => {
         console.log(data);
+        ToastAndroid.show('Berhasil edit alamat', ToastAndroid.SHORT);
         navigation.goBack();
       })
       .catch(error => console.error(error));

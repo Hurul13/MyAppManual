@@ -105,6 +105,7 @@ const Checkout2 = ({navigation, route}) => {
             <View style={styles.space2}>
               <Text style={styles.text3}>Alamat Pengiriman</Text>
               <TouchableOpacity
+                // ToastAndroid.show('Login Berhasil', ToastAndroid.SHORT);
                 onPress={() => navigation.navigate('TambahAlamat')}>
                 <Text style={styles.text4}>Ubah</Text>
               </TouchableOpacity>

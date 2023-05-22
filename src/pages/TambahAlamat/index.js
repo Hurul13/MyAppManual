@@ -54,12 +54,13 @@ const NewAddress = ({navigation}) => {
       method: 'DELETE',
       headers: {
         Authorization:
-          'Bearer BASICAPPMTY4NTErUFIranF3eXhEMndOWFBpalNPTzJuRy_PRFid_twSkYwTG9CaGo3RzJZOTdHLWxLUkQrNTYwMjE=APP',
+          'Bearer BASICAPPMTY4NTErQVB1YzdNUFA1UldhY0VUb3pIMG94_UQHPY_S0hlNWs5UTVnQzBIWUNmUXN4RjVLKzc4Njg0APP',
       },
     })
       .then(response => response.json())
       .then(data => {
         console.log(data);
+        ToastAndroid.show('Berhasil hapus alamat', ToastAndroid.SHORT);
         // Remove deleted address from state
         setAddresses(addresses.filter(address => address.id !== id));
       })
