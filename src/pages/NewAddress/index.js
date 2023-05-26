@@ -1,13 +1,12 @@
-import {View, TouchableOpacity, ToastAndroid} from 'react-native';
 import {
-  Box,
-  Pressable,
-  Input,
+  View,
+  TouchableOpacity,
+  ToastAndroid,
+  StyleSheet,
+  TextInput,
   ScrollView,
-  Text,
-  VStack,
-  FormControl,
-} from 'native-base';
+} from 'react-native';
+import {Box, Text, VStack} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -28,6 +27,7 @@ import {
   WARNA_BLACK,
 } from '../../utils/constant';
 import {url} from '../../utils/url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const NewAddress = ({navigation}) => {
   const navigateTo = async page => {
@@ -39,253 +39,206 @@ const NewAddress = ({navigation}) => {
   const [kotaId, setKotaId] = useState('');
   const [kecamatanId, setKecamatanId] = useState('');
   const [desaId, setDesaId] = useState('');
-  // const [kodePos, setKodePos] = useState('');
+  const [kodePos, setKodePos] = useState('');
+  const [nomorPenerima, setNomorPenerima] = useState('');
 
-  const handleAddAddress = () => {
-    fetch(`${url}user-address/create-user-address?user_id=111122`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization:
-          'Bearer BASICAPPMTY4NTErQVB1YzdNUFA1UldhY0VUb3pIMG94_UQHPY_S0hlNWs5UTVnQzBIWUNmUXN4RjVLKzc4Njg0APP',
-      },
-      body: JSON.stringify({
-        nama_penerima: namaPenerima,
-        alamat_penerima: alamatPenerima,
-        provinsi_id: provinsiId,
-        kota_id: kotaId,
-        kecamatan_id: kecamatanId,
-        desa_id: desaId,
-      }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        ToastAndroid.show('Berhasil tambah alamat', ToastAndroid.SHORT);
-        navigation.navigate('TambahAlamat');
-      })
-      .catch(error => console.error(error));
+  const handleAddAddress = async () => {
+    try {
+      const user_id = await AsyncStorage.getItem('user_id'); // Get the user_id from AsyncStorage
+      const token = await AsyncStorage.getItem('token'); // Get the token from AsyncStorage
+
+      const response = await fetch(
+        `${url}user-address/create-user-address?id=${user_id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            nama_penerima: namaPenerima,
+            alamat_penerima: alamatPenerima,
+            provinsi_id: provinsiId,
+            kota_id: kotaId,
+            kecamatan_id: kecamatanId,
+            desa_id: desaId,
+            kode_pos: kodePos,
+            nomor_penerima: nomorPenerima,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      console.log(data);
+      ToastAndroid.show('Berhasil tambah alamat', ToastAndroid.SHORT);
+      navigation.navigate('TambahAlamat');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
-        </TouchableOpacity>
-        <Text style={styles.judulBar}>New Address</Text>
-      </View>
-      <View style={styles.box}>
-        <Box
-        // px={5}
-        // h="full"
-        // bg={WARNA_WHITE}
-        >
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            mx={responsiveHeight(2.8)}>
-            <VStack space={2}>
-              <FormControl>
-                <Text
-                  style={{
-                    marginTop: responsiveHeight(2),
-                    marginVertical: responsiveWidth(1),
-                    fontSize: responsiveFontSize(1.8),
-                    fontWeight: '500',
-                  }}>
-                  Nama Penerima:
-                </Text>
-                <Input
-                  value={namaPenerima}
-                  onChangeText={text => setNamaPenerima(text)}
-                  borderWidth={0.2}
-                  borderColor={WARNA_UTAMA}
-                  bg={WARNA_DEEPYELLOW}
-                  py={2}
-                  // placeholder={}
-                  // type={i.type}
-                  color={WARNA_SEKUNDER}
-                  _focus={{
-                    bg: WARNA_DEEPYELLOW,
-                    borderColor: WARNA_UTAMA,
-                    borderWidth: 1,
-                  }}
-                  _text={{fontSize: responsiveFontSize(2)}}
-                />
-                <Text
-                  style={{
-                    marginTop: responsiveHeight(2),
-                    marginVertical: responsiveWidth(1),
-                    fontSize: responsiveFontSize(1.8),
-                    fontWeight: '500',
-                  }}>
-                  Alamat Penerima:
-                </Text>
-                <Input
-                  value={alamatPenerima}
-                  onChangeText={text => setAlamatPenerima(text)}
-                  borderWidth={0.2}
-                  borderColor={WARNA_UTAMA}
-                  bg={WARNA_DEEPYELLOW}
-                  py={2}
-                  // placeholder={}
-                  // type={i.type}
-                  color={WARNA_SEKUNDER}
-                  _focus={{
-                    bg: WARNA_DEEPYELLOW,
-                    borderColor: WARNA_UTAMA,
-                    borderWidth: 1,
-                  }}
-                  _text={{fontSize: responsiveFontSize(2)}}
-                />
-                <Text
-                  style={{
-                    marginTop: responsiveHeight(2),
-                    marginVertical: responsiveWidth(1),
-                    fontSize: responsiveFontSize(1.8),
-                    fontWeight: '500',
-                  }}>
-                  Provinsi:
-                </Text>
-                <Input
-                  value={provinsiId}
-                  onChangeText={text => setProvinsiId(text)}
-                  borderWidth={0.2}
-                  borderColor={WARNA_UTAMA}
-                  bg={WARNA_DEEPYELLOW}
-                  py={2}
-                  // placeholder={}
-                  // type={i.type}
-                  color={WARNA_SEKUNDER}
-                  _focus={{
-                    bg: WARNA_DEEPYELLOW,
-                    borderColor: WARNA_UTAMA,
-                    borderWidth: 1,
-                  }}
-                  _text={{fontSize: responsiveFontSize(2)}}
-                />
-                <Text
-                  style={{
-                    marginTop: responsiveHeight(2),
-                    marginVertical: responsiveWidth(1),
-                    fontSize: responsiveFontSize(1.8),
-                    fontWeight: '500',
-                  }}>
-                  Kota:
-                </Text>
-                <Input
-                  value={kotaId}
-                  onChangeText={text => setKotaId(text)}
-                  borderWidth={0.2}
-                  borderColor={WARNA_UTAMA}
-                  bg={WARNA_DEEPYELLOW}
-                  py={2}
-                  // placeholder={}
-                  // type={i.type}
-                  color={WARNA_SEKUNDER}
-                  _focus={{
-                    bg: WARNA_DEEPYELLOW,
-                    borderColor: WARNA_UTAMA,
-                    borderWidth: 1,
-                  }}
-                  _text={{fontSize: responsiveFontSize(2)}}
-                />
-                <Text
-                  style={{
-                    marginTop: responsiveHeight(2),
-                    marginVertical: responsiveWidth(1),
-                    fontSize: responsiveFontSize(1.8),
-                    fontWeight: '500',
-                  }}>
-                  Kecamatan:
-                </Text>
-                <Input
-                  value={kecamatanId}
-                  onChangeText={text => setKecamatanId(text)}
-                  borderWidth={0.2}
-                  borderColor={WARNA_UTAMA}
-                  bg={WARNA_DEEPYELLOW}
-                  py={2}
-                  // placeholder={}
-                  // type={i.type}
-                  color={WARNA_SEKUNDER}
-                  _focus={{
-                    bg: WARNA_DEEPYELLOW,
-                    borderColor: WARNA_UTAMA,
-                    borderWidth: 1,
-                  }}
-                  _text={{fontSize: responsiveFontSize(2)}}
-                />
-                <Text
-                  style={{
-                    marginTop: responsiveHeight(2),
-                    marginVertical: responsiveWidth(1),
-                    fontSize: responsiveFontSize(1.8),
-                    fontWeight: '500',
-                  }}>
-                  Desa:
-                </Text>
-                <Input
-                  value={desaId}
-                  onChangeText={text => setDesaId(text)}
-                  borderWidth={0.2}
-                  borderColor={WARNA_UTAMA}
-                  bg={WARNA_DEEPYELLOW}
-                  py={2}
-                  // placeholder={}
-                  // type={i.type}
-                  color={WARNA_SEKUNDER}
-                  _focus={{
-                    bg: WARNA_DEEPYELLOW,
-                    borderColor: WARNA_UTAMA,
-                    borderWidth: 1,
-                  }}
-                  _text={{fontSize: responsiveFontSize(2)}}
-                />
-                {/* <Text
-                  style={{
-                    marginTop: responsiveHeight(2),
-                    marginVertical: responsiveWidth(1),
-                    fontSize: responsiveFontSize(1.8),
-                    fontWeight: '500',
-                  }}>
-                  Kode Pos:
-                </Text>
-                <Input
-                  value={kodePos}
-                  onChangeText={text => setKodePos(text)}
-                  borderWidth={0.2}
-                  borderColor={WARNA_UTAMA}
-                  bg={WARNA_DEEPYELLOW}
-                  py={2}
-                  // placeholder={}
-                  // type={i.type}
-                  color={WARNA_SEKUNDER}
-                  _focus={{
-                    bg: WARNA_DEEPYELLOW,
-                    borderColor: WARNA_UTAMA,
-                    borderWidth: 1,
-                  }}
-                  _text={{fontSize: responsiveFontSize(2)}}
-                /> */}
-              </FormControl>
-            </VStack>
-            <TouchableOpacity>
-              <Buttone
-                bg={WARNA_UTAMA}
-                color={WARNA_SEKUNDER}
-                borderWidth={1}
-                borderColor={WARNA_BORDER}
-                mt={10}
-                onPress={handleAddAddress}>
-                SUBMIT
-              </Buttone>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={navigation.goBack}>
+            <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
+          </TouchableOpacity>
+          <Text style={styles.judulBar}>Alamat Baru</Text>
+        </View>
+        <View style={styles.box}>
+          <View style={styless.containerr}>
+            <Text style={styless.label}>Nama Penerima:</Text>
+            <TextInput
+              style={styless.input}
+              placeholder="nama pemerima"
+              placeholderTextColor={WARNA_GRAYTUA}
+              value={namaPenerima}
+              onChangeText={text => setNamaPenerima(text)}></TextInput>
+
+            <Text style={styless.label}>Nomor Telepon Penerima:</Text>
+            <TextInput
+              style={styless.input}
+              placeholder="nomor telepon penerima"
+              placeholderTextColor={WARNA_GRAYTUA}
+              keyboardType="phone-pad"
+              value={nomorPenerima}
+              onChangeText={text => setNomorPenerima(text)}
+            />
+
+            <Text style={styless.label}> Alamat Penerima:</Text>
+            <TextInput
+              style={styless.input}
+              placeholder="alamat penerima"
+              placeholderTextColor={WARNA_GRAYTUA}
+              value={alamatPenerima}
+              onChangeText={text => setAlamatPenerima(text)}
+            />
+
+            <Text style={styless.label}>Provinsi:</Text>
+            <TextInput
+              style={styless.input}
+              placeholder="provinsi"
+              placeholderTextColor={WARNA_GRAYTUA}
+              value={provinsiId}
+              onChangeText={text => setProvinsiId(text)}
+            />
+
+            <Text style={styless.label}>Kota:</Text>
+            <TextInput
+              style={styless.input}
+              placeholder="kota"
+              placeholderTextColor={WARNA_GRAYTUA}
+              value={kotaId}
+              onChangeText={text => setKotaId(text)}
+            />
+
+            <Text style={styless.label}>Kecamatan:</Text>
+            <TextInput
+              style={styless.input}
+              placeholder="kecamatan"
+              placeholderTextColor={WARNA_GRAYTUA}
+              value={kecamatanId}
+              onChangeText={text => setKecamatanId(text)}
+            />
+
+            <Text style={styless.label}>Desa:</Text>
+            <TextInput
+              style={styless.input}
+              placeholder="desa"
+              placeholderTextColor={WARNA_GRAYTUA}
+              value={desaId}
+              onChangeText={text => setDesaId(text)}
+            />
+
+            <Text style={styless.label}>Kode Pos:</Text>
+            <TextInput
+              style={styless.input}
+              placeholder="kode pos"
+              placeholderTextColor={WARNA_GRAYTUA}
+              keyboardType="phone-pad"
+              value={kodePos}
+              onChangeText={text => setKodePos(text)}
+            />
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: WARNA_UTAMA,
+                borderRadius: 8,
+                padding: responsiveHeight(1.4),
+                alignItems: 'center',
+                marginVertical: responsiveWidth(4),
+              }}
+              onPress={handleAddAddress}>
+              <Text
+                style={{
+                  color: WARNA_BLACK,
+                  fontSize: responsiveFontSize(2),
+                  fontWeight: 'bold',
+                }}>
+                SIMPAN ALAMAT
+              </Text>
             </TouchableOpacity>
-          </ScrollView>
-        </Box>
+          </View>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
+
+const styless = StyleSheet.create({
+  containerr: {
+    flex: 1,
+    margin: responsiveHeight(3),
+    // padding: 16,
+    // backgroundColor: '#FFF',
+  },
+  label: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+    marginBottom: 6,
+    color: WARNA_BLACK,
+  },
+  input: {
+    height: 40,
+    borderColor: WARNA_BORDER,
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: responsiveHeight(1.5),
+    paddingHorizontal: responsiveHeight(2),
+    color: WARNA_BLACK,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: responsiveHeight(2),
+  },
+  passwordInput: {
+    flex: 1,
+  },
+  showHideButton: {
+    padding: 8,
+    marginLeft: 8,
+    backgroundColor: '#ccc',
+    borderRadius: 4,
+  },
+  showHideButtonText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  button: {
+    backgroundColor: WARNA_UTAMA,
+    borderRadius: 8,
+    padding: responsiveHeight(1.4),
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: WARNA_BLACK,
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+  },
+});
 
 export default NewAddress;

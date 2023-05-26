@@ -111,10 +111,7 @@ const DetailProduct3 = ({navigation}) => {
             .then(() => {
               setCartCount(cart.length);
               navigation.navigate('Keranjang4');
-              ToastAndroid.show(
-                'Berhasil Memasukkan ke Keranjang',
-                ToastAndroid.SHORT,
-              );
+              ToastAndroid.show('Berhasil ditambahkan', ToastAndroid.SHORT);
             })
             .catch(error => console.error(error));
         } else {
@@ -123,10 +120,7 @@ const DetailProduct3 = ({navigation}) => {
             .then(() => {
               setCartCount(cart.length);
               navigation.navigate('Keranjang4');
-              ToastAndroid.show(
-                'Berhasil Memasukkan ke Keranjang',
-                ToastAndroid.SHORT,
-              );
+              ToastAndroid.show('Berhasil ditambahkan', ToastAndroid.SHORT);
             })
             .catch(error => console.error(error));
         }
@@ -138,7 +132,9 @@ const DetailProduct3 = ({navigation}) => {
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.spaceWrap}>
         <Image
-          source={require('../../assets/Images/batu.jpg')}
+          // source={require('../../assets/Images/batu.jpg')}
+          source={item.gambar}
+          // source={{uri: item.gambar}}
           style={styles.spaceWrapImg}
         />
       </View>
@@ -229,7 +225,7 @@ const DetailProduct3 = ({navigation}) => {
           color={WARNA_BLACK}
           mt={5}
           mx={responsiveHeight(3)}>
-          ADD TO CART
+          TAMBAH KERANJANG
         </Buttone>
       </TouchableOpacity>
     </ScrollView>

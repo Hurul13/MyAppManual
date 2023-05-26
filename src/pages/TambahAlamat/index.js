@@ -31,40 +31,66 @@ import {
 } from '../../utils/constant';
 import {url} from '../../utils/url';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const NewAddress = ({navigation}) => {
+const Address = ({navigation}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };
 
   const [addresses, setAddresses] = useState([]);
+  console.log(addresses);
 
   useEffect(() => {
-    fetch(`${url}user-address/index`)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setAddresses(data.data);
-      })
-      .catch(error => console.error(error));
+    const fetchAddresses = async () => {
+      try {
+        const user_id = await AsyncStorage.getItem('user_id');
+        const token = await AsyncStorage.getItem('token');
+
+        fetch(
+          // `${url}user-address/index`,
+          `${url}user-address/view?user_id=${user_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        )
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            setAddresses(data.data);
+          })
+          .catch(error => console.error(error));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAddresses();
   }, []);
 
-  const handleDelete = id => {
-    fetch(`${url}user-address/delete?id=${id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization:
-          'Bearer BASICAPPMTY4NTErQVB1YzdNUFA1UldhY0VUb3pIMG94_UQHPY_S0hlNWs5UTVnQzBIWUNmUXN4RjVLKzc4Njg0APP',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        ToastAndroid.show('Berhasil hapus alamat', ToastAndroid.SHORT);
-        // Remove deleted address from state
-        setAddresses(addresses.filter(address => address.id !== id));
+  const handleDelete = async id => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      fetch(`${url}user-address/delete?id=${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch(error => console.error(error));
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          ToastAndroid.show('Berhasil hapus alamat', ToastAndroid.SHORT);
+          // Remove deleted address from state
+          setAddresses(addresses.filter(address => address.id !== id));
+        })
+        .catch(error => console.error(error));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // const handleUpdate = id => {
@@ -77,7 +103,7 @@ const NewAddress = ({navigation}) => {
         <TouchableOpacity onPress={navigation.goBack}>
           <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
         </TouchableOpacity>
-        <Text style={styles.judulBar}>Tambah Alamat</Text>
+        <Text style={styles.judulBar}>Alamat Profil</Text>
       </View>
       <View style={styles.box}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -88,8 +114,8 @@ const NewAddress = ({navigation}) => {
                 onPress={() => navigation.navigate('Checkout2', {address})}>
                 <Box
                   borderWidth={0.6}
-                  borderRadius={7}
-                  borderColor={WARNA_GRAYTUA}
+                  borderRadius={8}
+                  borderColor={WARNA_BORDER}
                   shadow={0.9}
                   mb={3}
                   px={responsiveHeight(2)}
@@ -97,18 +123,41 @@ const NewAddress = ({navigation}) => {
                   // w={responsiveWidth(88)}
                   // h={responsiveHeight(11)}
                 >
-                  <Box flexDirection={'row'} pb={1}>
-                    <Text
-                      isTruncated
-                      fontSize={responsiveFontSize(2.1)}
-                      color={WARNA_SEKUNDER}
-                      // borderWidth={1}
+                  <Box
+                    flexDirection={'row'}
+                    pb={1}
+                    // borderWidth={1}
+                  >
+                    <View
                       width={'75%'}
-                      mr={2}
-                      fontWeight={700}>
-                      {address.nama_penerima}
-                    </Text>
-                    <View style={{flexDirection: 'row'}}>
+                      // borderWidth={1}
+                      flexDirection={'row'}
+                      // justifyContent={'center'}
+                      alignItems={'center'}>
+                      <Text
+                        isTruncated
+                        fontSize={responsiveFontSize(2.1)}
+                        color={WARNA_SEKUNDER}
+                        // borderWidth={1}
+                        mr={2}
+                        fontWeight={700}>
+                        {address.nama_penerima}
+                      </Text>
+                      <Text
+                        fontSize={responsiveFontSize(2.1)}
+                        color={WARNA_SEKUNDER}
+                        italic
+                        borderLeftWidth={0.5}
+                        borderColor={WARNA_DISABLE}
+                        px={responsiveHeight(1)}>
+                        {address.nomor_penerima}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        // borderWidth: 1
+                      }}>
                       <IconMaterial
                         name="delete"
                         size={24}
@@ -136,25 +185,17 @@ const NewAddress = ({navigation}) => {
                         }
                       />
                     </View>
-                    {/* <Text
-              fontSize={responsiveFontSize(2.1)}
-              color={WARNA_SEKUNDER}
-              italic
-              borderLeftWidth={0.5}
-              borderColor={WARNA_DISABLE}
-              px={responsiveHeight(1)}>
-              0851234567
-            </Text> */}
                   </Box>
                   <Text>{address.alamat_penerima}</Text>
                   <Text>
                     {address.provinsi_id}, {address.kota_id},{' '}
-                    {address.kecamatan_id}, {address.desa_id}
+                    {address.kecamatan_id}, {address.desa_id},{' '}
+                    {address.kode_pos}
                   </Text>
                 </Box>
               </TouchableOpacity>
             ))}
-            <TouchableOpacity onPress={() => navigation.navigate('NewAddress')}>
+            {/* <TouchableOpacity onPress={() => navigation.navigate('NewAddress')}>
               <Box
                 mt={3}
                 borderRadius={7}
@@ -179,6 +220,26 @@ const NewAddress = ({navigation}) => {
                   Add New Address
                 </Text>
               </Box>
+            </TouchableOpacity> */}
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: WARNA_UTAMA,
+                borderRadius: 8,
+                padding: responsiveHeight(1.4),
+                alignItems: 'center',
+                marginVertical: responsiveWidth(4),
+              }}
+              // onPress={handleUpdateProfile}
+              onPress={() => navigation.navigate('NewAddress')}>
+              <Text
+                style={{
+                  color: WARNA_BLACK,
+                  fontSize: responsiveFontSize(2),
+                  fontWeight: 'bold',
+                }}>
+                TAMBAH ALAMAT BARU
+              </Text>
             </TouchableOpacity>
           </Box>
         </ScrollView>
@@ -187,4 +248,4 @@ const NewAddress = ({navigation}) => {
   );
 };
 
-export default NewAddress;
+export default Address;

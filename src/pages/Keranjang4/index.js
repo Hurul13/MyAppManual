@@ -98,13 +98,13 @@ const Keranjang4 = ({navigation}) => {
     const newCart = cart.filter(item => item.id !== id);
     setCart(newCart);
     AsyncStorage.setItem('cart', JSON.stringify(newCart));
-    ToastAndroid.show('Berhasil menghapus', ToastAndroid.SHORT);
+    ToastAndroid.show('Berhasil hapus', ToastAndroid.SHORT);
   };
 
   const handleCheckout = () => {
     const checkedItems = cart.filter(item => item.checked);
     AsyncStorage.setItem('checkedItems', JSON.stringify(checkedItems));
-    ToastAndroid.show('Melakukan pesanan', ToastAndroid.SHORT);
+    ToastAndroid.show('Order', ToastAndroid.SHORT);
     navigation.navigate('TambahAlamat');
   };
 
@@ -116,7 +116,9 @@ const Keranjang4 = ({navigation}) => {
       <View style={styles.card}>
         <View style={styles.spaceImg}>
           <Image
-            source={require('../../assets/Images/batu.jpg')}
+            // source={require('../../assets/Images/batu.jpg')}
+            source={item.gambar}
+            // source={{uri: item.gambar}}
             style={styles.img}
           />
         </View>

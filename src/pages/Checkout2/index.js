@@ -36,6 +36,7 @@ const Checkout2 = ({navigation, route}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };
+
   const {address} = route.params;
 
   const [shippingPrice, setShippingPrice] = useState(10);
@@ -71,7 +72,9 @@ const Checkout2 = ({navigation, route}) => {
       <View style={styles.card}>
         <View style={styles.spaceImg}>
           <Image
-            source={require('../../assets/Images/batu.jpg')}
+            // source={require('../../assets/Images/batu.jpg')}
+            source={item.gambar}
+            // source={{uri: item.gambar}}
             style={styles.img}
           />
         </View>
@@ -105,7 +108,6 @@ const Checkout2 = ({navigation, route}) => {
             <View style={styles.space2}>
               <Text style={styles.text3}>Alamat Pengiriman</Text>
               <TouchableOpacity
-                // ToastAndroid.show('Login Berhasil', ToastAndroid.SHORT);
                 onPress={() => navigation.navigate('TambahAlamat')}>
                 <Text style={styles.text4}>Ubah</Text>
               </TouchableOpacity>
@@ -113,12 +115,12 @@ const Checkout2 = ({navigation, route}) => {
             <View style={styles.space3}>
               <View style={styles.space4}>
                 <Text style={styles.text5}>{address.nama_penerima}</Text>
-                {/* <Text style={styles.text6}>0851234567</Text> */}
+                <Text style={styles.text6}>{address.nomor_penerima}</Text>
               </View>
               <Text style={styles.text7}>{address.alamat_penerima}</Text>
               <Text style={styles.text7}>
                 {address.provinsi_id}, {address.kota_id}, {address.kecamatan_id}
-                , {address.desa_id}
+                , {address.desa_id}, {address.kode_pos}
               </Text>
             </View>
           </View>

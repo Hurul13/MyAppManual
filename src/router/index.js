@@ -19,6 +19,7 @@ import {
   Register3,
   EditProfile,
   EditProfile2,
+  EditProfile3,
   RiwayatTransaksi,
   Tentang,
   KebijakanPrivasi,
@@ -133,6 +134,11 @@ const Router = () => {
       <Stack.Screen
         name="EditProfile2"
         component={EditProfile2}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditProfile3"
+        component={EditProfile3}
         options={{headerShown: false}}
       />
       <Stack.Screen

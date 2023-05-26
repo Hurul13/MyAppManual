@@ -14,6 +14,7 @@ import Register2 from './Register2';
 import Register3 from './Register3';
 import EditProfile from './EditProfile';
 import EditProfile2 from './EditProfile2';
+import EditProfile3 from './EditProfile3';
 import RiwayatTransaksi from './RiwayatTransaksi';
 import Tentang from './Tentang';
 import KebijakanPrivasi from './KebijakanPrivasi';
@@ -57,6 +58,7 @@ export {
   Register3,
   EditProfile,
   EditProfile2,
+  EditProfile3,
   RiwayatTransaksi,
   Tentang,
   KebijakanPrivasi,

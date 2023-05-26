@@ -189,7 +189,9 @@ const Catalogue = ({navigation}) => {
         onPress={() => handleCardPress(item)}>
         <View style={styles.spaceImg}>
           <Image
-            source={require('../../assets/Images/batu.jpg')}
+            // source={require('../../assets/Images/batu.jpg')}
+            source={item.gambar}
+            // source={{uri: item.gambar}}
             style={styles.img}
           />
         </View>

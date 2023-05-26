@@ -1,0 +1,2 @@
+export const bearer =
+  'Bearer BASICAPPMTY4NTErY3pXNWROZHN3WUdQRlBvSk_IfeDa_FwS1BXcGViYTJpQkc2LXkrODA1Mjk=APP';

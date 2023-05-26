@@ -54,32 +54,76 @@ const Profile = ({navigation}) => {
   }, []);
 
   // logic logout
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const user_id = await AsyncStorage.getItem('user_id');
+
+      const response = await fetch(`${url}user/view-user?id=${user_id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data);
+
+        setUsername(data.data.username);
+        setName(data.data.name);
+        setPhone(data.data.phone);
+      } else {
+        ToastAndroid.show(
+          'Error, Failed to fetch user data',
+          ToastAndroid.SHORT,
+        );
+        // Alert.alert('Error', 'Failed to fetch user data.');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEditProfile = () => {
+    navigation.navigate('EditProfile3');
+  };
+
   const handleLogout = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(
-        `${url}auth/logout`,
-        // 'http://192.168.1.3/homeii/web/api/v1/auth/logout',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      if (response.ok) {
-        throw new Error('Logout failed');
-      }
-      await AsyncStorage.removeItem('token');
-      navigation.replace('Login3');
-      console.log('Logout success');
-      ToastAndroid.show('Logout Berhasil', ToastAndroid.SHORT);
-    } catch (error) {
-      // Alert.alert('Error', error.message);
-      ToastAndroid.show(error.message, ToastAndroid.SHORT);
 
-      console.log('Logout failed');
+      const response = await fetch(`${url}auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        // Hapus data token dan user_id dari AsyncStorage
+        await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('user_id');
+        console.log('Logout Successful');
+        ToastAndroid.show('Keluar sukses', ToastAndroid.SHORT);
+        // Alert.alert('Logout Successful', 'You have successfully logged out.');
+        navigation.navigate('Login3');
+      } else {
+        ToastAndroid.show('Gagal keluar', ToastAndroid.SHORT);
+        // Alert.alert('Error', 'Failed to logout.');
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -131,16 +175,14 @@ const Profile = ({navigation}) => {
           <View style={styles.box1}>
             <View style={styles.profil}>
               <ImagePiecker></ImagePiecker>
-              <Text style={styles.text1}>Lorem Ipsum</Text>
-              <Text style={styles.text2}>0851234567</Text>
+              <Text style={styles.text1}>{name}</Text>
+              <Text style={styles.text2}>{phone}</Text>
             </View>
           </View>
         </LinearGradient>
         <View>
           <Text style={styles.text3}>Profile</Text>
-          <TouchableOpacity
-            onPress={() => navigateTo('EditProfile')}
-            style={styles.space2}>
+          <TouchableOpacity onPress={handleEditProfile} style={styles.space2}>
             <View style={styles.space3}>
               <View style={styles.box3}>
                 <View style={styles.box4}>
@@ -157,7 +199,7 @@ const Profile = ({navigation}) => {
                 />
               </View>
             </View>
-            <Text style={styles.text4}>Edit Profile</Text>
+            <Text style={styles.text4}>Edit Profil</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.space2}
@@ -178,7 +220,7 @@ const Profile = ({navigation}) => {
                 />
               </View>
             </View>
-            <Text style={styles.text4}>Tambah Alamat</Text>
+            <Text style={styles.text4}>Alamat Saya</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.space2}
@@ -283,7 +325,7 @@ const Profile = ({navigation}) => {
                 />
               </View>
             </View>
-            <Text style={styles.text4}>Logout</Text>
+            <Text style={styles.text4}>Keluar</Text>
             {/* <Text style={{color: WARNA_RED}}>{message}</Text> */}
           </TouchableOpacity>
         </View>

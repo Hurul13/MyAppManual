@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     height: 105,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
-    // backgroundColor: WARNA_DISABLE,
+    backgroundColor: WARNA_DISABLE,
   },
   space1: {
     flexDirection: 'row',

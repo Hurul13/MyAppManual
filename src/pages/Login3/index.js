@@ -2,16 +2,15 @@ import React, {Component, useState} from 'react';
 import {
   Text,
   View,
-  TextInput,
   TouchableOpacity,
   ToastAndroid,
   Image,
-  // Alert,
+  Alert,
+  TextInput,
 } from 'react-native';
 import styles from './Styles';
 import {WARNA_DISABLE, WARNA_GRAYTUA} from '../../utils/constant';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useNavigation} from '@react-navigation/native';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {url} from '../../utils/url';
@@ -25,39 +24,53 @@ const Login3 = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const handleLogin = () => {
-    fetch(
-      `${url}auth/login`,
-      // 'http://192.168.1.3/homeii/web/api/v1/auth/login',
-      {
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch(`${url}auth/login`, {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: username,
-          password: password,
+          username,
+          password,
         }),
-      },
-    )
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          console.log(data);
-          // alert('Login berhasil');
-          ToastAndroid.show('Login Berhasil', ToastAndroid.SHORT);
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data);
+        if (data.success && data.data.token && data.data.user_id) {
+          // Simpan data token dan user_id ke AsyncStorage
+          await AsyncStorage.setItem('token', data.data.token);
+          await AsyncStorage.setItem('user_id', data.data.user_id.toString());
+
+          // Alert.alert('Login Successful', 'You have successfully logged in.');
+          ToastAndroid.show('Berhasil login', ToastAndroid.SHORT);
+
+          // Pindah ke halaman home setelah jeda 3 detik
           setTimeout(() => {
             navigation.navigate('MainApp');
-          }, 2000); // 3 detik jeda sebelum pindah ke halaman home
+          }, 2000);
         } else {
-          // alert('Data salah.');
-          ToastAndroid.show('Data Salah', ToastAndroid.SHORT);
-        }
-      })
-      .catch(error => console.error(error));
-  };
+          ToastAndroid.show('Gagal login', ToastAndroid.SHORT);
 
+          // Alert.alert(
+          //   'Login Failed',
+          //   data.message || 'Invalid response from the server.',
+          // );
+        }
+      } else {
+        ToastAndroid.show('Data login salah ', ToastAndroid.SHORT);
+
+        // Alert.alert('Login Failed', 'Invalid username or password.');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={styles.viewContainer}>
       <View style={styles.viewWrapper}>
@@ -79,7 +92,7 @@ const Login3 = ({navigation}) => {
               placeholderTextColor={WARNA_DISABLE}
               style={styles.textInput}
               value={username}
-              onChangeText={text => setUsername(text)}
+              onChangeText={setUsername}
             />
           </View>
         </View>
@@ -101,7 +114,7 @@ const Login3 = ({navigation}) => {
                 placeholder="••••••••••••"
                 placeholderTextColor={WARNA_DISABLE}
                 style={styles.textInput}
-                onChangeText={text => setPassword(text)}
+                onChangeText={setPassword}
                 secureTextEntry={!showPassword}
                 value={password}
               />
@@ -110,8 +123,6 @@ const Login3 = ({navigation}) => {
                 size={25}
                 style={{
                   color: WARNA_GRAYTUA,
-                  // marginHorizontal: responsiveHeight(-2),
-                  // marginRight: responsiveHeight(8),
                 }}
                 onPress={() => setShowPassword(!showPassword)}
               />

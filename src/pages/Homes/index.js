@@ -69,7 +69,9 @@ const Homes = ({navigation}) => {
         <View style={styles.card}>
           <View style={styles.spaceImg}>
             <Image
-              source={require('../../assets/Images/batu.jpg')}
+              // source={require('../../assets/Images/batu.jpg')}
+              source={item.gambar}
+              // source={{uri: item.gambar}}
               style={styles.img}
             />
           </View>
@@ -119,6 +121,7 @@ const Homes = ({navigation}) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Image
+            // source={item.stok}
             source={require('../../assets/Images/logoHOMEI.png')}
             style={styles.logo}
             size={25}></Image>
