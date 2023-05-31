@@ -13,6 +13,7 @@ import {
   WARNA_BORDER,
   WARNA_DEEPYELLOW,
   WARNA_GREEN,
+  WARNA_BLACK,
 } from '../../utils/constant';
 
 const styles = StyleSheet.create({
@@ -44,30 +45,59 @@ const styles = StyleSheet.create({
     height: responsiveHeight(91.6),
     paddingVertical: responsiveWidth(8),
   },
-
+  containerrr: {
+    paddingHorizontal: responsiveHeight(2),
+  },
+  containerStatus: {
+    height: responsiveHeight(7),
+  },
+  statusButton: {
+    backgroundColor: WARNA_BLACK,
+    height: responsiveHeight(4.5),
+    width: responsiveWidth(23),
+    marginRight: responsiveHeight(1),
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // marginVertical: responsiveWidth(2),
+  },
+  activeStatusButton: {
+    backgroundColor: WARNA_UTAMA,
+  },
+  statusText: {
+    color: WARNA_WHITE,
+    fontWeight: 'bold',
+  },
+  activeStatusText: {
+    color: WARNA_BLACK,
+    fontWeight: 'bold',
+  },
+  noPesananText: {
+    // marginTop: 16,
+    alignSelf: 'center',
+    fontSize: 16,
+    color: WARNA_BORDER,
+    // justifyContent: 'center',
+    marginTop: responsiveHeight(30),
+  },
+  continerCard: {
+    // flex: 1,
+    // marginTop: responsiveHeight(-13),
+    // backgroundColor: WARNA_DEEPYELLOW,
+  },
   card: {
     backgroundColor: WARNA_WHITE,
     borderRadius: 8,
     paddingVertical: responsiveWidth(1),
     paddingHorizontal: responsiveHeight(2),
-    // width: '100%',
+    width: '96%',
     marginVertical: responsiveWidth(2),
-    marginHorizontal: responsiveHeight(3),
+    marginHorizontal: responsiveHeight(1),
+    // marginTop: responsiveHeight(3),
   },
   elevation: {
     shadowColor: WARNA_SEKUNDER,
-    elevation: 7,
-  },
-  box1: {
-    paddingVertical: responsiveWidth(2),
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: WARNA_BORDER,
-  },
-  icon: {
-    color: WARNA_SEKUNDER,
-    paddingRight: responsiveHeight(1),
+    elevation: 5,
   },
   space: {
     paddingVertical: responsiveWidth(3),
@@ -84,6 +114,22 @@ const styles = StyleSheet.create({
   },
   space1: {
     paddingHorizontal: responsiveWidth(2),
+    justifyContent: 'space-around',
+  },
+  space3: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  space4: {
+    borderTopWidth: 1,
+    borderColor: WARNA_BORDER,
+    paddingVertical: responsiveWidth(2),
+  },
+  space5: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: responsiveHeight(0.5),
     justifyContent: 'space-between',
   },
   text1: {
@@ -92,45 +138,6 @@ const styles = StyleSheet.create({
   },
   text2: {
     color: WARNA_SEKUNDER,
-  },
-  space3: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  space5: {
-    borderTopWidth: 1,
-    borderColor: WARNA_BORDER,
-    paddingVertical: responsiveWidth(2),
-  },
-  space6: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingBottom: responsiveHeight(0.5),
-    justifyContent: 'space-between',
-  },
-  text5: {
-    color: WARNA_SEKUNDER,
-    fontSize: responsiveFontSize(1.8),
-    // fontWeight: '500',
-  },
-  text7: {
-    color: WARNA_GREEN,
-    fontSize: responsiveFontSize(1.8),
-    fontWeight: 'bold',
-  },
-  text6: {
-    fontSize: responsiveFontSize(1.3),
-    color: WARNA_WHITE,
-  },
-  space7: {
-    backgroundColor: WARNA_GREEN,
-    borderRadius: 50,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: responsiveHeight(1),
-    paddingVertical: responsiveWidth(1),
   },
 });
 

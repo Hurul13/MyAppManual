@@ -95,7 +95,7 @@ const Address = ({navigation}) => {
 
   // const handleUpdate = id => {
   //   navigation.navigate('UpdateAddress', {id});
-  // };
+  // }
 
   return (
     <View style={styles.container}>

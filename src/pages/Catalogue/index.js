@@ -202,9 +202,14 @@ const Catalogue = ({navigation}) => {
           {/* <Rating value={materials.rating} /> */}
         </View>
         <View style={styles.boxText}>
-          <Text style={styles.text2} isTruncated>
-            Rp. {item.harga_proyek}
-          </Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.text2} isTruncated>
+              Rp. {item.harga_proyek}
+            </Text>
+            <Text isTruncated style={styles.text22}>
+              Rp. {item.harga_ritel}
+            </Text>
+          </View>
           {/* <Text style={styles.text1}>Stok: {stok}</Text> */}
           <View>
             {item.stok > 0 ? (

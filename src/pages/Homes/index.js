@@ -81,9 +81,14 @@ const Homes = ({navigation}) => {
             </Text>
           </View>
           <View style={styles.boxText}>
-            <Text isTruncated style={styles.text2}>
-              Rp. {item.harga_proyek}
-            </Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text isTruncated style={styles.text2}>
+                Rp. {item.harga_proyek}
+              </Text>
+              <Text isTruncated style={styles.text22}>
+                Rp. {item.harga_ritel}
+              </Text>
+            </View>
             <View>
               {item.stok > 0 ? (
                 <Text

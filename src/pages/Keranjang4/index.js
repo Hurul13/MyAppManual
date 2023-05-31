@@ -116,8 +116,8 @@ const Keranjang4 = ({navigation}) => {
       <View style={styles.card}>
         <View style={styles.spaceImg}>
           <Image
-            // source={require('../../assets/Images/batu.jpg')}
-            source={item.gambar}
+            source={require('../../assets/Images/batu.jpg')}
+            // source={item.gambar}
             // source={{uri: item.gambar}}
             style={styles.img}
           />

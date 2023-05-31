@@ -177,9 +177,17 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(2),
   },
   text2: {
-    fontSize: responsiveFontSize(2),
+    fontSize: responsiveFontSize(2.1),
     color: WARNA_GRAYTUA,
     fontWeight: '500',
+    marginRight: responsiveHeight(0.6),
+  },
+  text22: {
+    fontSize: responsiveFontSize(1.5),
+    color: WARNA_DISABLE,
+    fontWeight: '500',
+    textDecorationLine: 'line-through',
+    // marginBottom: responsiveHeight(1),
   },
   text3: {
     fontSize: responsiveFontSize(1.9),

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Alert,
   ToastAndroid,
+  useWindowDimensions,
 } from 'react-native';
 import {
   Text,
@@ -48,6 +49,7 @@ import {
 import NumericInput from 'react-native-numeric-input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useRoute} from '@react-navigation/native';
+import RenderHtml from 'react-native-render-html';
 
 const DetailProduct3 = ({navigation}) => {
   const navigateTo = async page => {
@@ -128,6 +130,13 @@ const DetailProduct3 = ({navigation}) => {
       .catch(error => console.error(error));
   };
 
+  const baseStyle = {
+    color: WARNA_BLACK,
+    marginHorizontal: responsiveHeight(3),
+    marginVertical: responsiveWidth(2),
+    fontSize: responsiveFontSize(1.8), // Warna teks yang ingin Anda gunakan
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.spaceWrap}>
@@ -179,7 +188,15 @@ const DetailProduct3 = ({navigation}) => {
         justifyContent="space-between"
         alignItems="center"
         marginHorizontal={responsiveHeight(3)}>
-        <Text style={styles.text3}>Rp {item.harga_proyek}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={styles.text3}>Rp {item.harga_proyek}</Text>
+          <Text style={styles.text4}> Rp {item.harga_ritel}</Text>
+        </View>
         <HStack space={2} alignItems="center" my={5}>
           {item.stok > 0 ? (
             <NumericInput
@@ -210,14 +227,26 @@ const DetailProduct3 = ({navigation}) => {
           )}
         </HStack>
       </Box>
-      <Text
+      <RenderHtml
+        // style={{text: 'black'}}
+        // color={'black'}
+        // lineHeight={24}
+        // fontSize={responsiveFontSize(1.8)}
+        // marginHorizontal={responsiveHeight(3)}
+        // marginVertical={responsiveHeight(2)}
+        baseStyle={baseStyle}
+        source={{html: `${item.deskripsi}`}}
+      />
+      {/* <RenderHtml source={source} /> */}
+      {/* <RenderHtml contentWidth={width} source={{html: htmlContent}} /> */}
+      {/* <Text
         color={WARNA_BLACK}
         lineHeight={24}
         fontSize={responsiveFontSize(1.8)}
         marginHorizontal={responsiveHeight(3)}
         marginVertical={responsiveHeight(2)}>
         {item.deskripsi}
-      </Text>
+      </Text> */}
       <TouchableOpacity style={styles.bottomToCart}>
         <Buttone
           bg={WARNA_UTAMA}

@@ -9,3 +9,6 @@ export const url = 'http://192.168.43.203/homeii/web/api/v1/';
 
 // wifi tongkrongan
 // export const url = 'http://10.251.12.117/homeii/web/api/v1/';
+
+// wifi kos sby
+// export const url = 'http://192.168.100.78/homeii/web/api/v1/';

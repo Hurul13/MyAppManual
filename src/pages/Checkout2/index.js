@@ -131,40 +131,38 @@ const Checkout2 = ({navigation, route}) => {
             renderItem={renderItem}
             keyExtractor={item => item.id.toString()}
           />
-          <View style={{marginTop: responsiveHeight(2)}}>
+          {/* untuk pengiriman */}
+          {/* <View style={{marginTop: responsiveHeight(2)}}>
             <View style={styles.space2}>
               <Text style={styles.text3}>Pengiriman</Text>
             </View>
             <View style={styles.space5}>
               <Text style={styles.text9}>Pihak HOMEI</Text>
               <Text style={styles.text9}>Rp. {shippingPrice}</Text>
-              {/* <IconMaterial
-                        name="menu-down"
-                        size={26}
-                        style={styles.icon}
-                      /> */}
             </View>
-          </View>
+          </View> */}
 
           <View style={{marginTop: responsiveHeight(2)}}>
             <View style={styles.space2}>
-              <Text style={styles.text3}>Rincian Pembayaran</Text>
+              <Text style={styles.text3}>Total Pembayaran</Text>
             </View>
             <View style={styles.space7}>
               <View style={styles.space6}>
-                <Text style={styles.text10}>Sub-Total Untuk Produk</Text>
-                <Text style={styles.text10}>Rp. {totalPrice}</Text>
+                <Text style={styles.text10}>Total Pembayaran</Text>
+                <Text style={styles.text11}>Rp. {totalPrice}</Text>
               </View>
-              <View style={styles.space6}>
+              {/* total pengiriman */}
+              {/* <View style={styles.space6}>
                 <Text style={styles.text10}>Sub-Total Untuk Pengiriman</Text>
                 <Text style={styles.text10}>Rp. {shippingPrice}</Text>
-              </View>
-              <View style={styles.space6}>
+              </View> */}
+              {/* <View style={styles.space6}>
                 <Text style={styles.text11}>TOTAL PEMBAYARAN</Text>
                 <Text style={styles.text11}>
                   Rp. {totalPrice + shippingPrice}
                 </Text>
-              </View>
+                <Text style={styles.text11}>Rp. {totalPrice}</Text>
+              </View> */}
             </View>
             <TouchableOpacity style={styles.bottomPay}>
               <Buttone

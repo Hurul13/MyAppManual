@@ -158,6 +158,8 @@ const styles = StyleSheet.create({
     paddingVertical: responsiveWidth(2),
     borderRadius: 5,
     borderColor: WARNA_SILVER,
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   space6: {
     flexDirection: 'row',
@@ -167,12 +169,12 @@ const styles = StyleSheet.create({
   text10: {
     color: WARNA_SEKUNDER,
     fontSize: responsiveHeight(1.8),
-    paddingBottom: responsiveHeight(1),
+    // paddingBottom: responsiveHeight(1),
   },
   text11: {
     color: WARNA_SEKUNDER,
     fontSize: responsiveHeight(2),
-    paddingBottom: responsiveHeight(1),
+    // paddingBottom: responsiveHeight(1),
     fontWeight: '700',
   },
   boxBtn: {

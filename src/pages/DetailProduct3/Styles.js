@@ -12,6 +12,7 @@ import {
   WARNA_GRAYTUA,
   WARNA_BORDER,
   WARNA_BLACK,
+  WARNA_RED,
 } from '../../utils/constant';
 const {width: SCREENWIDTH} = Dimensions.get('screen');
 
@@ -19,6 +20,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: responsiveHeight(20),
+    // backgroundColor: WARNA_BLACK,
     backgroundColor: WARNA_WHITE,
   },
   spaceWrap: {
@@ -112,10 +114,19 @@ const styles = StyleSheet.create({
   },
 
   text3: {
-    color: WARNA_GRAYTUA,
+    color: WARNA_BLACK,
     fontSize: responsiveFontSize(3),
     paddingTop: responsiveHeight(1),
+    fontWeight: '800',
+  },
+  text4: {
+    color: WARNA_BORDER,
+    fontSize: responsiveFontSize(2),
+    paddingTop: responsiveHeight(1),
     fontWeight: '600',
+    textDecorationLine: 'line-through',
+    textAlign: 'center',
+    marginBottom: responsiveHeight(1),
   },
   bottomToCart: {
     marginBottom: responsiveHeight(3),
