@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
@@ -16,8 +17,25 @@ const Tentang = ({navigation}) => {
     navigation.navigate(page);
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    // Simulate data fetch or any asynchronous task
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000); // Adjust the timeout duration as needed
+
+    // You can also perform any other refresh logic here
+  };
+
   return (
-    <ScrollView style={styles.all}>
+    <ScrollView
+      style={styles.all}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View style={styles.container}>
         <View style={styles.header}>
           <IconMaterial

@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   ToastAndroid,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import styles from './Styles';
 import {
@@ -46,6 +47,7 @@ const Register3 = ({navigation}) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleRegister = () => {
     fetch(
@@ -91,8 +93,21 @@ const Register3 = ({navigation}) => {
       })
       .catch(error => console.error(error));
   };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    // Fetch data or any asynchronous task
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <SafeAreaView style={styles.viewContainer}>
         <View style={styles.viewWrapper}>
           <Image

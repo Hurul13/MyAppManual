@@ -5,6 +5,7 @@ import {
   // ScrollView,
   TouchableOpacity,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {Button, Center, Text, HStack} from 'native-base';
 
@@ -42,6 +43,7 @@ const Checkout2 = ({navigation, route}) => {
   const [shippingPrice, setShippingPrice] = useState(10);
   const [checkedItems, setCheckedItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     AsyncStorage.getItem('checkedItems')
@@ -59,6 +61,26 @@ const Checkout2 = ({navigation, route}) => {
       .catch(error => console.error(error));
   }, []);
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    // Perform the data fetching here
+    // For example, refetch the checked items and update the total price
+    AsyncStorage.getItem('checkedItems')
+      .then(data => {
+        if (data !== null) {
+          const checkedItems = JSON.parse(data);
+          setCheckedItems(checkedItems);
+          const price = checkedItems.reduce(
+            (acc, item) => acc + item.harga_proyek * item.quantity,
+            0,
+          );
+          setTotalPrice(price);
+        }
+      })
+      .catch(error => console.error(error))
+      .finally(() => setRefreshing(false));
+  };
+
   // useEffect(() => {
   //   const totalPrice = cart.reduce(
   //     (acc, item) => acc + item.harga_proyek * item.quantity,
@@ -69,11 +91,12 @@ const Checkout2 = ({navigation, route}) => {
 
   const renderItem = ({item}) => {
     return (
-      <View style={styles.card}>
+      <View style={[styles.card, styles.elevation]}>
         <View style={styles.spaceImg}>
           <Image
             // source={require('../../assets/Images/batu.jpg')}
-            source={item.gambar}
+            // source={item.gambar}
+            source={{uri: item.gambar}}
             // source={{uri: item.gambar}}
             style={styles.img}
           />
@@ -92,7 +115,11 @@ const Checkout2 = ({navigation, route}) => {
   };
 
   return (
-    <ScrollView style={styles.all}>
+    <ScrollView
+      style={styles.all}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View style={styles.container}>
         <View style={styles.header}>
           <IconMaterial

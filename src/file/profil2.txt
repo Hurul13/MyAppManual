@@ -6,22 +6,15 @@ import {
   TouchableOpacity,
   ToastAndroid,
   Alert,
-  ActivityIndicator,
-  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import {AutoRefreshAnimation, ImagePicker} from '../../components';
+import {ImagePicker} from '../../components';
 import {Box, Pressable} from 'native-base';
-import {
-  WARNA_GRAYTUA,
-  WARNA_WHITE,
-  WARNA_RED,
-  WARNA_UTAMA,
-} from '../../utils/constant';
+import {WARNA_GRAYTUA, WARNA_WHITE, WARNA_RED} from '../../utils/constant';
 import {
   responsiveHeight,
   responsiveFontSize,
@@ -37,8 +30,6 @@ const Profile = ({navigation}) => {
 
   const [cartCount, setCartCount] = useState(0);
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
-  const [refreshing, setRefreshing] = useState(false); // State untuk mengontrol refresh
 
   useEffect(() => {
     fetch(`${url}supplier-barang/index`)
@@ -52,31 +43,16 @@ const Profile = ({navigation}) => {
   };
 
   // untuk menampilkan banyaknya cart
-  const fetchDataCart = async () => {
-    try {
-      const data = await AsyncStorage.getItem('cart');
-      if (data !== null) {
-        const cart = JSON.parse(data);
-        setCartCount(cart.length);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    fetchDataCart();
+    AsyncStorage.getItem('cart')
+      .then(data => {
+        if (data !== null) {
+          const cart = JSON.parse(data);
+          setCartCount(cart.length);
+        }
+      })
+      .catch(error => console.error(error));
   }, []);
-  // useEffect(() => {
-  //   AsyncStorage.getItem('cart')
-  //     .then(data => {
-  //       if (data !== null) {
-  //         const cart = JSON.parse(data);
-  //         setCartCount(cart.length);
-  //       }
-  //     })
-  //     .catch(error => console.error(error));
-  // }, []);
 
   // logic logout
   const [username, setUsername] = useState('');
@@ -86,13 +62,10 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     fetchData();
-    // const interval = setInterval(fetchData, 60000); // Refresh every 60 seconds
-    // return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
   const fetchData = async () => {
     try {
-      setIsLoading(true); // Set loading state to true
       const token = await AsyncStorage.getItem('token');
       const user_id = await AsyncStorage.getItem('user_id');
 
@@ -121,8 +94,6 @@ const Profile = ({navigation}) => {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsLoading(false); // Set loading state to false
     }
   };
 
@@ -161,24 +132,9 @@ const Profile = ({navigation}) => {
 
   const [imageTimestamp, setImageTimestamp] = useState(Date.now());
 
-  const onRefresh = () => {
-    setRefreshing(true); // Set refreshing state menjadi true
-
-    fetchData().then(() => {
-      setRefreshing(false); // Set refreshing state menjadi false setelah selesai refreshing
-    });
-
-    fetchDataCart().then(() => {
-      setRefreshing(false); // Set refreshing state menjadi false setelah selesai refreshing
-    });
-  };
-
   return (
     <View style={styles.container}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> // Mengontrol refresh dengan state refreshing
-        }>
+      <ScrollView>
         <View style={styles.header}>
           <View style={styles.space1}>
             <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
@@ -223,11 +179,7 @@ const Profile = ({navigation}) => {
           style={styles.boxLinear}>
           <View style={styles.box1}>
             <View style={styles.profil}>
-              {isLoading ? ( // Show loading spinner while fetching data
-                <ActivityIndicator size="large" color={WARNA_UTAMA} />
-              ) : (
-                <ImagePicker />
-              )}
+              <ImagePicker />
               <Text style={styles.text1}>{name ? name : ''}</Text>
               <Text style={styles.text2}>{phone ? phone : ''}</Text>
             </View>
@@ -382,7 +334,6 @@ const Profile = ({navigation}) => {
             {/* <Text style={{color: WARNA_RED}}>{message}</Text> */}
           </TouchableOpacity>
         </View>
-        {/* <AutoRefreshAnimation /> */}
       </ScrollView>
     </View>
   );

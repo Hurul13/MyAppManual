@@ -1,4 +1,9 @@
-import {View, TouchableOpacity, ToastAndroid} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  ToastAndroid,
+  RefreshControl,
+} from 'react-native';
 import {
   Box,
   Pressable,
@@ -38,35 +43,32 @@ const Address = ({navigation}) => {
     navigation.navigate(page);
   };
 
+  const [refreshing, setRefreshing] = useState(false);
   const [addresses, setAddresses] = useState([]);
   console.log(addresses);
 
+  const fetchAddresses = async () => {
+    try {
+      const user_id = await AsyncStorage.getItem('user_id');
+      const token = await AsyncStorage.getItem('token');
+
+      fetch(`${url}user-address/view?user_id=${user_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          setAddresses(data.data);
+        })
+        .catch(error => console.error(error));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchAddresses = async () => {
-      try {
-        const user_id = await AsyncStorage.getItem('user_id');
-        const token = await AsyncStorage.getItem('token');
-
-        fetch(
-          // `${url}user-address/index`,
-          `${url}user-address/view?user_id=${user_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        )
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            setAddresses(data.data);
-          })
-          .catch(error => console.error(error));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchAddresses();
   }, []);
 
@@ -93,6 +95,12 @@ const Address = ({navigation}) => {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchAddresses();
+    setRefreshing(false);
+  };
+
   // const handleUpdate = id => {
   //   navigation.navigate('UpdateAddress', {id});
   // }
@@ -106,7 +114,11 @@ const Address = ({navigation}) => {
         <Text style={styles.judulBar}>Alamat Profil</Text>
       </View>
       <View style={styles.box}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <Box mx={responsiveHeight(3)} mt={responsiveHeight(4)}>
             {addresses.map(address => (
               <TouchableOpacity
@@ -225,7 +237,7 @@ const Address = ({navigation}) => {
             <TouchableOpacity
               style={{
                 backgroundColor: WARNA_UTAMA,
-                borderRadius: 8,
+                borderRadius: 50 / 2,
                 padding: responsiveHeight(1.4),
                 alignItems: 'center',
                 marginVertical: responsiveWidth(4),
@@ -237,6 +249,7 @@ const Address = ({navigation}) => {
                   color: WARNA_BLACK,
                   fontSize: responsiveFontSize(2),
                   fontWeight: 'bold',
+                  paddingVertical: responsiveWidth(0.7),
                 }}>
                 TAMBAH ALAMAT BARU
               </Text>

@@ -5,35 +5,58 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
-  ToastAndroid,
-  RefreshControl,
 } from 'react-native';
-import {ScrollView} from 'native-base';
+import {
+  Box,
+  Pressable,
+  // Input,
+  ScrollView,
+  Center,
+  HStack,
+  Button,
+  // Text,
+  VStack,
+  FormControl,
+} from 'native-base';
 import React, {useEffect, useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-import {url} from '../../utils/url';
+import {Buttone} from '../../components';
 import {
   responsiveHeight,
-  responsiveFontSize,
   responsiveWidth,
+  responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 import {
   WARNA_DISABLE,
-  WARNA_GRAYTUA,
-  WARNA_BLACK,
-  WARNA_BORDER,
   WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+  WARNA_BORDER,
+  WARNA_DEEPYELLOW,
+  WARNA_BLACK,
 } from '../../utils/constant';
-import styles from './Styles';
+// import editProfile from '../../utils/editProfile';
+import editProfile from '../../utils/editProfile';
+// import {useNavigation} from '@react-navigation/native';
+import {url} from '../../utils/url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfile = ({navigation}) => {
+  const navigateTo = async page => {
+    navigation.navigate(page);
+  };
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
+  const [password, setPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
+    // Mendapatkan user_id dan token dari AsyncStorage
     getUserData();
   }, []);
 
@@ -42,8 +65,10 @@ const EditProfile = ({navigation}) => {
       const user_id = await AsyncStorage.getItem('user_id');
       const token = await AsyncStorage.getItem('token');
 
+      // Menentukan URL API
       const apiUrl = `${url}user/view-user?id=${user_id}`;
 
+      // Mengambil data pengguna dari API
       fetch(apiUrl, {
         method: 'GET',
         headers: {
@@ -53,6 +78,7 @@ const EditProfile = ({navigation}) => {
         .then(response => response.json())
         .then(data => {
           console.log(data);
+
           setName(data.data.name);
           setPhone(data.data.phone);
           setEmail(data.data.email);
@@ -64,20 +90,24 @@ const EditProfile = ({navigation}) => {
   };
 
   const handleUpdateProfile = async () => {
-    // Add the refreshing state when updating the profile
-    setRefreshing(true);
     try {
       const user_id = await AsyncStorage.getItem('user_id');
       const token = await AsyncStorage.getItem('token');
 
+      // Menentukan URL API
       const apiUrl = `${url}user/update?id=${user_id}`;
 
+      // Menyiapkan data untuk dikirimkan ke API
       const data = {
         name: name,
         phone: phone,
         email: email,
+        password: password,
+        old_password: oldPassword,
+        new_password: newPassword,
       };
 
+      // Mengirim request update profil menggunakan fetch API
       fetch(apiUrl, {
         method: 'PUT',
         headers: {
@@ -90,58 +120,30 @@ const EditProfile = ({navigation}) => {
         .then(result => {
           if (result.success) {
             console.log('Profil berhasil diperbarui');
-
-            if (result.newToken) {
-              AsyncStorage.setItem('token', result.newToken); // Update the token in AsyncStorage
-            } else {
-              AsyncStorage.removeItem('token'); // Remove the token from AsyncStorage
-            }
-            ToastAndroid.show('Profil berhasil diperbarui', ToastAndroid.SHORT);
-            setTimeout(() => {
-              Alert.alert(
-                'Sukses',
-                'Profil berhasil diperbarui tapi butuh login ulang',
-              );
-            }, 2000);
-            // Pindah ke halaman home setelah jeda 3 detik
-            setTimeout(() => {
-              ToastAndroid.show('Login ulang', ToastAndroid.SHORT);
-              navigation.navigate('Login3');
-            }, 4000);
-            // navigation.navigate('Login3'); // Navigate to the login screen to reauthenticate
+            // Jika update sukses, kembali ke halaman profil
+            navigation.goBack();
+            Alert.alert('Sukses', 'Profil berhasil diperbarui');
           } else {
+            // Jika update gagal, tampilkan pesan error
             console.log('Gagal memperbarui profil:', result.message);
             Alert.alert('Error', result.message);
           }
-
-          // Reset the refreshing state after the update is complete
-          setRefreshing(false);
         })
         .catch(error => {
           console.error('Error:', error);
           Alert.alert('Error', 'Terjadi kesalahan saat menghubungi server');
-          // Reset the refreshing state after encountering an error
-          setRefreshing(false);
         });
     } catch (error) {
       console.error('Error:', error);
-      // Reset the refreshing state after encountering an error
-      setRefreshing(false);
     }
   };
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    getUserData();
-    setRefreshing(false);
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
-    <ScrollView
-      style={styles.all}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
+    <ScrollView style={styles.all}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={navigation.goBack}>
@@ -155,8 +157,7 @@ const EditProfile = ({navigation}) => {
             <TextInput
               style={styless.input}
               value={name}
-              onChangeText={text => setName(text)}
-            />
+              onChangeText={text => setName(text)}></TextInput>
 
             <Text style={styless.label}>Nomor Telepon:</Text>
             <TextInput
@@ -174,6 +175,28 @@ const EditProfile = ({navigation}) => {
               onChangeText={text => setEmail(text)}
             />
 
+            {/* <Text style={styless.label}>Password:</Text>
+            <View style={styless.passwordContainer}>
+              <TextInput
+                style={[styless.input, styless.passwordInput]}
+                value={password}
+                placeholderTextColor={WARNA_DISABLE}
+                placeholder="••••••••••••"
+                onChangeText={text => setPassword(text)}
+                secureTextEntry={!showPassword}
+              />
+              <IconMaterial
+                name={showPassword ? 'eye' : 'eye-off'}
+                size={25}
+                style={{
+                  color: WARNA_BORDER,
+                  paddingBottom: responsiveHeight(1.5),
+                  paddingHorizontal: responsiveHeight(1),
+                }}
+                onPress={() => setShowPassword(!showPassword)}
+              />
+            </View> */}
+
             {/* <Text style={styless.label}>Old Password:</Text>
             <TextInput
               style={styless.input}
@@ -185,7 +208,7 @@ const EditProfile = ({navigation}) => {
             />
 
             <Text style={styless.label}>New Password:</Text>
-            <View style={styless.passwordContainer}>
+            <View style={styless.passwordInputContainer}>
               <TextInput
                 style={[styless.input, styless.passwordInput]}
                 secureTextEntry={!showPassword}
@@ -221,6 +244,8 @@ const styless = StyleSheet.create({
   containerr: {
     flex: 1,
     margin: responsiveHeight(3),
+    // padding: 16,
+    // backgroundColor: '#FFF',
   },
   label: {
     fontSize: responsiveFontSize(2),
@@ -245,24 +270,27 @@ const styless = StyleSheet.create({
   passwordInput: {
     flex: 1,
   },
-  showPasswordButton: {
+  showHideButton: {
     padding: 8,
     marginLeft: 8,
     backgroundColor: '#ccc',
     borderRadius: 4,
   },
+  showHideButtonText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: 'white',
+  },
   button: {
     backgroundColor: WARNA_UTAMA,
-    borderRadius: 50 / 2,
+    borderRadius: 8,
     padding: responsiveHeight(1.4),
     alignItems: 'center',
-    marginVertical: responsiveWidth(2),
   },
   buttonText: {
     color: WARNA_BLACK,
     fontSize: responsiveFontSize(2),
     fontWeight: 'bold',
-    paddingVertical: responsiveWidth(0.7),
   },
 });
 export default EditProfile;

@@ -1,4 +1,11 @@
-import {Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,8 +15,25 @@ const KebijakanPrivasi = ({navigation}) => {
     navigation.navigate(page);
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    // Perform the refresh logic here
+    // You can call an API or update the data
+    // After the refresh is complete, set refreshing to false
+    setRefreshing(true);
+    // Add your refresh logic here
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000); // Simulating a 2-second refresh
+  };
+
   return (
-    <ScrollView style={styles.all}>
+    <ScrollView
+      style={styles.all}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={navigation.goBack}>

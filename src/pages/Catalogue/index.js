@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {Text} from 'native-base';
 import React, {useEffect, useState} from 'react';
@@ -119,6 +120,7 @@ const Catalogue = ({navigation}) => {
   ]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -184,13 +186,14 @@ const Catalogue = ({navigation}) => {
     // const {nama_barang, stok, harga_proyek, gambar, deskripsi} = item;
     return (
       <TouchableOpacity
-        style={styles.card}
+        style={[styles.card, styles.elevation]}
         // onPress={() => navigation.navigate('DetailProduct2', item)}
         onPress={() => handleCardPress(item)}>
         <View style={styles.spaceImg}>
           <Image
             // source={require('../../assets/Images/batu.jpg')}
-            source={item.gambar}
+            // source={item.gambar}
+            source={{uri: item.gambar}}
             // source={{uri: item.gambar}}
             style={styles.img}
           />
@@ -251,8 +254,18 @@ const Catalogue = ({navigation}) => {
     );
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+    setRefreshing(false);
+  };
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View style={styles.boxContainer}>
         <View style={styles.boxHeader1}>
           <TextInput

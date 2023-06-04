@@ -37,7 +37,11 @@ const Checkout = ({navigation}) => {
     return (
       <View style={styles.cartCard}>
         <View style={styles.space}>
-          <Image source={item.image} style={styles.img} />
+          <Image
+            source={{uri: item.gambar}}
+            // source={item.image}
+            style={styles.img}
+          />
           <View style={styles.box4}>
             <Text style={styles.text}>{item.name}</Text>
             <Text style={styles.text1}>{item.ingredients}</Text>

@@ -130,6 +130,10 @@ const styles = StyleSheet.create({
     // elevation: 13,
     backgroundColor: WARNA_WHITE,
   },
+  elevation: {
+    shadowColor: WARNA_SEKUNDER,
+    elevation: 5,
+  },
   addToCartBtn: {
     height: responsiveHeight(3.5),
     width: responsiveWidth(7.4),
@@ -146,13 +150,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   spaceImg: {
-    height: responsiveHeight(13),
+    height: responsiveHeight(13.1),
     width: responsiveWidth(40.5),
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    borderWidth: 1,
-    backgroundColor: WARNA_BORDER,
-    borderColor: WARNA_BORDER,
+    // borderWidth: 1,
+    // backgroundColor: WARNA_BORDER,
+    borderColor: WARNA_SILVER,
+    borderBottomWidth: 1,
   },
   boxText: {
     marginHorizontal: responsiveHeight(2),

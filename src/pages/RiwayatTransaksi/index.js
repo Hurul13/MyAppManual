@@ -7,6 +7,7 @@ import {
   FlatList,
   Alert,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
@@ -26,6 +27,7 @@ const RiwayatTransaksi = ({navigation}) => {
 
   const [activeStatus, setActiveStatus] = useState('All');
   const [filteredPesanan, setFilteredPesanan] = useState(riwayatTransaksi);
+  const [refreshing, setRefreshing] = useState(false);
 
   const renderStatusButton = status => {
     const isActive = status === activeStatus;
@@ -126,8 +128,26 @@ const RiwayatTransaksi = ({navigation}) => {
     );
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    // Simulating data fetch or any asynchronous task
+    setTimeout(() => {
+      setRefreshing(false);
+      // Reset the filtered data to the original data
+      setFilteredPesanan(riwayatTransaksi);
+    }, 2000); // Adjust the timeout duration as needed
+
+    // You can also fetch updated data from an API and update the filtered data accordingly
+    // Call the necessary API function here and update the filteredPesanan state after receiving the data
+  };
+
   return (
-    <ScrollView style={styles.all}>
+    <ScrollView
+      style={styles.all}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={navigation.goBack}>

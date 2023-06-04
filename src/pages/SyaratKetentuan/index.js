@@ -1,4 +1,11 @@
-import {Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  RefreshControl,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,8 +15,21 @@ const SyaratKetentuan = ({navigation}) => {
     navigation.navigate(page);
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    // Perform the refresh action here (e.g., fetch new data)
+    // Once the action is completed, setRefreshing(false) to stop the refresh animation
+    setTimeout(() => setRefreshing(false), 2000); // Simulating a delay of 2 seconds
+  };
+
   return (
-    <ScrollView style={styles.all}>
+    <ScrollView
+      style={styles.all}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={navigation.goBack}>

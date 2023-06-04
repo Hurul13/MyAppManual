@@ -5,6 +5,7 @@ import {
   // ScrollView,
   TouchableOpacity,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './Styles';
@@ -16,6 +17,19 @@ import {ScrollView} from 'react-native-virtualized-view';
 const RincianPesanan = ({navigation}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
+  };
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    // Perform the data fetching or any other action here
+    // This function will be called when the user pulls down the screen to refresh
+    // You can replace this with your own logic
+    console.log('Refreshing...');
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000); // Simulating a 2 second delay
   };
 
   const CartCard = ({item}) => {
@@ -37,7 +51,11 @@ const RincianPesanan = ({navigation}) => {
   };
 
   return (
-    <ScrollView style={styles.all}>
+    <ScrollView
+      style={styles.all}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View style={styles.container}>
         <View style={styles.header}>
           <IconMaterial

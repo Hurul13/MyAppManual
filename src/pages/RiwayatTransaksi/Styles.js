@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     marginVertical: responsiveWidth(2),
     marginHorizontal: responsiveHeight(1),
     // marginTop: responsiveHeight(3),
+    marginBottom: responsiveWidth(1.5),
   },
   elevation: {
     shadowColor: WARNA_SEKUNDER,

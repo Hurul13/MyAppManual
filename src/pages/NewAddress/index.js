@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {Box, Text, VStack} from 'native-base';
 import React, {useEffect, useState} from 'react';
@@ -41,6 +42,7 @@ const NewAddress = ({navigation}) => {
   const [desaId, setDesaId] = useState('');
   const [kodePos, setKodePos] = useState('');
   const [nomorPenerima, setNomorPenerima] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleAddAddress = async () => {
     try {
@@ -78,8 +80,17 @@ const NewAddress = ({navigation}) => {
     }
   };
 
+  // const onRefresh = async () => {
+  //   setRefreshing(true);
+  //   await handleAddAddress();
+  //   setRefreshing(false);
+  // };
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={navigation.goBack}>
@@ -165,7 +176,7 @@ const NewAddress = ({navigation}) => {
             <TouchableOpacity
               style={{
                 backgroundColor: WARNA_UTAMA,
-                borderRadius: 8,
+                borderRadius: 50 / 2,
                 padding: responsiveHeight(1.4),
                 alignItems: 'center',
                 marginVertical: responsiveWidth(4),
@@ -176,6 +187,7 @@ const NewAddress = ({navigation}) => {
                   color: WARNA_BLACK,
                   fontSize: responsiveFontSize(2),
                   fontWeight: 'bold',
+                  paddingVertical: responsiveWidth(0.7),
                 }}>
                 SIMPAN ALAMAT
               </Text>
@@ -185,6 +197,12 @@ const NewAddress = ({navigation}) => {
       </View>
     </ScrollView>
   );
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await handleAddAddress();
+    setRefreshing(false);
+  };
 };
 
 const styless = StyleSheet.create({
@@ -230,7 +248,7 @@ const styless = StyleSheet.create({
   },
   button: {
     backgroundColor: WARNA_UTAMA,
-    borderRadius: 8,
+    borderRadius: 50 / 2,
     padding: responsiveHeight(1.4),
     alignItems: 'center',
   },

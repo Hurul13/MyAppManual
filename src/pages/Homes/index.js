@@ -5,6 +5,7 @@ import {
   TouchableHighlight,
   TextInput,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {Text, Box, Pressable} from 'native-base';
 import React, {useEffect, useState} from 'react';
@@ -39,12 +40,27 @@ const Homes = ({navigation}) => {
   };
   const [cartCount, setCartCount] = useState(0);
   const [data, setData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false); // State untuk mengontrol refresh
+
+  // useEffect(() => {
+  //   fetch(`${url}supplier-barang/index`)
+  //     .then(response => response.json())
+  //     .then(json => setData(json.data))
+  //     .catch(error => console.error(error));
+  // }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      const json = await response.json();
+      setData(json.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    fetch(`${url}supplier-barang/index`)
-      .then(response => response.json())
-      .then(json => setData(json.data))
-      .catch(error => console.error(error));
+    fetchData();
   }, []);
 
   const handleCardClick = item => {
@@ -52,26 +68,44 @@ const Homes = ({navigation}) => {
   };
 
   // untukk menampilkan banyaknya cart
+  const fetchDataCart = async () => {
+    try {
+      const data = await AsyncStorage.getItem('cart');
+      if (data !== null) {
+        const cart = JSON.parse(data);
+        setCartCount(cart.length);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    AsyncStorage.getItem('cart')
-      .then(data => {
-        if (data !== null) {
-          const cart = JSON.parse(data);
-          setCartCount(cart.length);
-        }
-      })
-      .catch(error => console.error(error));
+    fetchDataCart();
   }, []);
+  // useEffect(() => {
+  //   AsyncStorage.getItem('cart')
+  //     .then(data => {
+  //       if (data !== null) {
+  //         const cart = JSON.parse(data);
+  //         setCartCount(cart.length);
+  //       }
+  //     })
+  //     .catch(error => console.error(error));
+  // }, []);
 
   const renderCard = ({item}) => {
     return (
       <TouchableOpacity onPress={() => handleCardClick(item)}>
-        <View style={styles.card}>
+        <View style={[styles.card, styles.elevation]}>
           <View style={styles.spaceImg}>
             <Image
               // source={require('../../assets/Images/batu.jpg')}
-              source={item.gambar}
+              // source={item.gambar}
+              // source={{uri: item.gambar.url}}
+              source={{uri: item.gambar}}
               // source={{uri: item.gambar}}
+              // source={{uri: item.gambar.url}}
               style={styles.img}
             />
           </View>
@@ -83,10 +117,10 @@ const Homes = ({navigation}) => {
           <View style={styles.boxText}>
             <View style={{flexDirection: 'row'}}>
               <Text isTruncated style={styles.text2}>
-                Rp. {item.harga_proyek}
+                Rp {item.harga_proyek}
               </Text>
               <Text isTruncated style={styles.text22}>
-                Rp. {item.harga_ritel}
+                Rp {item.harga_ritel}
               </Text>
             </View>
             <View>
@@ -121,8 +155,23 @@ const Homes = ({navigation}) => {
     );
   };
 
+  const onRefresh = () => {
+    setRefreshing(true); // Set refreshing state menjadi true
+
+    fetchData().then(() => {
+      setRefreshing(false); // Set refreshing state menjadi false setelah selesai refreshing
+    });
+
+    fetchDataCart().then(() => {
+      setRefreshing(false); // Set refreshing state menjadi false setelah selesai refreshing
+    });
+  };
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> // Mengontrol refresh dengan state refreshing
+      }>
       <View style={styles.container}>
         <View style={styles.header}>
           <Image
@@ -175,7 +224,7 @@ const Homes = ({navigation}) => {
               Bahan material untuk anda
             </Text>
             <TouchableOpacity
-              onPress={() => navigateTo('Catalogue')}
+              onPress={() => navigateTo('CheckoutShipping')}
               style={styles.space1}>
               <IconMaterial
                 name="chevron-right"

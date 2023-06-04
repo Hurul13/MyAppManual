@@ -9,7 +9,7 @@ import BottomUtamaHome from './BottomUtamaHome';
 import BannerMaterialHome from './BannerMaterialHome';
 import BannerMaterialHome2 from './BannerMaterialHome2';
 import CartMaterial from './CartMaterial';
-import ImagePiecker from './ImagePiecker';
+import ImagePicker from './ImagePicker';
 import Card from './Card';
 import Category from './Category';
 import DecsDetailProduct from './DecsDetailProduct';
@@ -29,6 +29,7 @@ import AddressProfileTab from './AddressProfileTab';
 import FilterByCategory from './FilterMaterial/FilterByCategory';
 import FilterBySeacrh from './FilterMaterial/FilterBySeacrh';
 import FilterBySeacrhCategory from './FilterMaterial/FilterBySeacrhCategory';
+import AutoRefreshAnimation from './AutoRefreshAnimation';
 
 export {
   Animations,
@@ -48,7 +49,7 @@ export {
   CheckBox,
   DecsDetailProduct,
   FontAwesome,
-  ImagePiecker,
+  ImagePicker,
   MinPlus,
   Navigation,
   Rating,
@@ -62,4 +63,5 @@ export {
   FilterByCategory,
   FilterBySeacrh,
   FilterBySeacrhCategory,
+  AutoRefreshAnimation,
 };

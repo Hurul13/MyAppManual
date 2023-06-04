@@ -59,6 +59,10 @@ const styles = StyleSheet.create({
     borderColor: WARNA_SILVER,
     borderWidth: 1,
   },
+  elevation: {
+    shadowColor: WARNA_SEKUNDER,
+    // elevation: 5,
+  },
   spaceImg: {
     width: '30%',
     backgroundColor: 'white',
@@ -67,6 +71,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     backgroundColor: WARNA_DISABLE,
+    borderRightWidth: 1,
+    borderColor: WARNA_SILVER,
   },
   img: {
     width: '100%',
@@ -76,6 +82,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     backgroundColor: WARNA_DISABLE,
+    // borderRightWidth: 2,
+    // borderColor: WARNA_SILVER,
   },
   space1: {
     flexDirection: 'row',

@@ -25,11 +25,12 @@ const styles = StyleSheet.create({
   },
   spaceWrap: {
     width: responsiveWidth(100),
-    height: responsiveHeight(39),
+    height: responsiveHeight(39.1),
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    backgroundColor: WARNA_BORDER,
+    // backgroundColor: WARNA_BORDER,
     borderColor: WARNA_BORDER,
+    borderBottomWidth: 1,
   },
   spaceWrapImg: {
     width: responsiveWidth(100),

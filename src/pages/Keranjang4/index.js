@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import {Button, Center, Text, HStack} from 'native-base';
 import styles from './Styles';
@@ -32,8 +33,6 @@ import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Buttone} from '../../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
-
-const URL = `${url}supplier-barang/index`;
 
 const Keranjang4 = ({navigation}) => {
   const navigateTo = async page => {
@@ -74,25 +73,55 @@ const Keranjang4 = ({navigation}) => {
   //   }
   // };
 
-  const [cart, setCart] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    // Perform your refresh action here
+    fetchData(); // Example: Call your fetchData function to fetch the latest data
+  };
+
+  // useEffect(() => {
+  //   AsyncStorage.getItem('cart')
+  //     .then(data => {
+  //       if (data !== null) {
+  //         const cart = JSON.parse(data);
+  //         setCart(cart);
+  //       }
+  //     })
+  //     .catch(error => console.error(error));
+  // }, []);
 
   useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    setRefreshing(true);
     AsyncStorage.getItem('cart')
       .then(data => {
         if (data !== null) {
           const cart = JSON.parse(data);
           setCart(cart);
-          const price = cart.reduce(
-            (acc, item) => acc + item.harga_proyek * item.quantity,
-            0,
-          );
-          setTotalPrice(price);
         }
+        setRefreshing(false);
       })
-      .catch(error => console.error(error));
-  }, []);
+      .catch(error => {
+        console.error(error);
+        setRefreshing(false);
+      });
+  };
+
+  useEffect(() => {
+    const price = cart.reduce(
+      (acc, item) =>
+        item.checked ? acc + item.harga_proyek * item.quantity : acc,
+      0,
+    );
+    setTotalPrice(price);
+  }, [cart]);
 
   const handleDelete = id => {
     const newCart = cart.filter(item => item.id !== id);
@@ -101,11 +130,15 @@ const Keranjang4 = ({navigation}) => {
     ToastAndroid.show('Berhasil hapus', ToastAndroid.SHORT);
   };
 
-  const handleCheckout = () => {
-    const checkedItems = cart.filter(item => item.checked);
-    AsyncStorage.setItem('checkedItems', JSON.stringify(checkedItems));
-    ToastAndroid.show('Order', ToastAndroid.SHORT);
-    navigation.navigate('TambahAlamat');
+  const handleToggleChecked = id => {
+    const newCart = cart.map(item => {
+      if (item.id === id) {
+        item.checked = !item.checked;
+      }
+      return item;
+    });
+    setCart(newCart);
+    AsyncStorage.setItem('cart', JSON.stringify(newCart));
   };
 
   const renderItem = ({item}) => {
@@ -113,10 +146,11 @@ const Keranjang4 = ({navigation}) => {
     // const isSelected = selectedItems.includes(id);
 
     return (
-      <View style={styles.card}>
+      <View style={[styles.card, styles.elevation]}>
         <View style={styles.spaceImg}>
           <Image
-            source={require('../../assets/Images/batu.jpg')}
+            // source={require('../../assets/Images/batu.jpg')}
+            source={{uri: item.gambar}}
             // source={item.gambar}
             // source={{uri: item.gambar}}
             style={styles.img}
@@ -140,11 +174,6 @@ const Keranjang4 = ({navigation}) => {
                   });
                   setCart(newCart);
                   AsyncStorage.setItem('cart', JSON.stringify(newCart));
-                  const price = newCart.reduce(
-                    (acc, item) => acc + item.harga_proyek * item.quantity,
-                    0,
-                  );
-                  setTotalPrice(price);
                 }}
                 minValue={1}
                 maxValue={item.stok}
@@ -152,8 +181,8 @@ const Keranjang4 = ({navigation}) => {
                 totalHeight={30}
                 iconSize={25}
                 step={1}
-                borderColor={WARNA_DEEPYELLOW}
                 rounded
+                borderColor={WARNA_DEEPYELLOW}
                 valueType="real"
                 textColor={WARNA_SEKUNDER}
                 iconStyle={{color: WARNA_SEKUNDER}}
@@ -164,16 +193,7 @@ const Keranjang4 = ({navigation}) => {
                 <View style={styles.checkbox}>
                   <TouchableOpacity
                     // style={styles.checklist}
-                    onPress={() => {
-                      const newCart = cart.map(cartItem => {
-                        if (cartItem.id === item.id) {
-                          cartItem.checked = !cartItem.checked;
-                        }
-                        return cartItem;
-                      });
-                      setCart(newCart);
-                      AsyncStorage.setItem('cart', JSON.stringify(newCart));
-                    }}>
+                    onPress={() => handleToggleChecked(item.id)}>
                     {item.checked ? (
                       <Icon name="check-square-o" size={20} color="green" />
                     ) : (
@@ -194,6 +214,13 @@ const Keranjang4 = ({navigation}) => {
     );
   };
 
+  const handleCheckout = () => {
+    const checkedItems = cart.filter(item => item.checked);
+    AsyncStorage.setItem('checkedItems', JSON.stringify(checkedItems));
+    ToastAndroid.show('Order', ToastAndroid.SHORT);
+    navigation.navigate('TambahAlamat');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -207,6 +234,9 @@ const Keranjang4 = ({navigation}) => {
           data={cart}
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
         <View style={styles.bottom}>
           <View style={styles.bottomTotal}>
