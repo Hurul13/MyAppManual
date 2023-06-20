@@ -1,0 +1,109 @@
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { url } from '../../utils/url';
+
+const HistoryOrderDetailBelumBayar = ({ route }) => {
+  const { invoice_id } = route.params;
+  const [orderData, setOrderData] = useState(null);
+
+  useEffect(() => {
+    fetchOrderData();
+  }, []);
+
+  const fetchOrderData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(`${url}order-product/view-order-by-invoice?invoice_id=${invoice_id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      setOrderData(data.data);
+      console.log('data get invoice_id: ', data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const renderItem = (item) => {
+    const {
+      user_address_id,
+      jumlah,
+      harga_satuan,
+      nama_barang,
+      gambar,
+      subtotal,
+    } = item;
+
+    const {
+      nama_penerima,
+      nomor_penerima,
+      alamat_penerima,
+      provinsi_id,
+      kota_id,
+      kecamatan_id,
+      desa_id,
+      kode_pos,
+    } = user_address_id;
+
+    return (
+      <View style={styles.itemContainer}>
+        <Text style={styles.title}>{nama_barang}</Text>
+        <Image source={{ uri: gambar }} style={styles.image} />
+        <Text>Jumlah: {jumlah}</Text>
+        <Text>Harga Satuan: {harga_satuan}</Text>
+        <Text>Subtotal: {subtotal}</Text>
+        <Text style={styles.addressTitle}>Alamat Pengiriman:</Text>
+        <Text>{nama_penerima}</Text>
+        <Text>{nomor_penerima}</Text>
+        <Text>{alamat_penerima}</Text>
+        <Text>{provinsi_id}</Text>
+        <Text>{kota_id}</Text>
+        <Text>{kecamatan_id}</Text>
+        <Text>{desa_id}</Text>
+        <Text>{kode_pos}</Text>
+        <TouchableOpacity style={styles.button} onPress={() => handleBayar(item)}>
+          <Text style={styles.buttonText}>Bayar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => handleCancel(item)}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const handleBayar = (item) => {
+    // Implement your logic to handle the "Bayar" button press
+    console.log('Bayar pressed for item:', item);
+  };
+
+  const handleCancel = (item) => {
+    // Implement your logic to handle the "Cancel" button press
+    console.log('Cancel pressed for item:', item);
+  };
+
+  return (
+    <View style={styles.container}>
+      {orderData && (
+        <View>
+          {orderData.map((item, index) => (
+            <View key={index}>{renderItem(item)}</View>
+          ))}
+        </View>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+})
+
+export default HistoryOrderDetailBelumBayar;

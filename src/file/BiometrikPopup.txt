@@ -1,0 +1,57 @@
+import React, { useEffect } from 'react';
+import { View, Text, ToastAndroid, RefreshControl, ScrollView } from 'react-native';
+import ReactNativeBiometrics from 'react-native-biometrics'
+// import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import { WARNA_BLACK, WARNA_UTAMA } from '../../utils/constant';
+import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
+
+const BiometrikPopup = () => {
+
+    const [refreshing, setRefreshing] = React.useState(false);
+    const onRefresh = () => {
+        setRefreshing(true);
+
+        // Simulate an async action
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    };
+
+    const rnBiometrics = new ReactNativeBiometrics({ allowDeviceCredentials: true })
+
+    rnBiometrics.simplePrompt({ promptMessage: 'Confirm fingerprint' })
+        .then((resultObject) => {
+            const { success } = resultObject
+
+            if (success) {
+                console.log('successful biometrics provided')
+            } else {
+                console.log('user cancelled biometric prompt')
+            }
+        })
+        .catch((e) => {
+            console.log('biometrics failed: ' + e)
+        })
+
+
+    // return (
+    //     <View style={{ flex: 1 }}>
+    //         <ScrollView
+    //             contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+    //             refreshControl={
+    //                 <RefreshControl
+    //                     refreshing={refreshing}
+    //                     onRefresh={onRefresh}
+    //                 />
+    //             }
+    //         >
+    //             <Text style={{ color: WARNA_BLACK, backgroundColor: WARNA_UTAMA, padding: responsiveHeight(2), fontWeight: '800', fontSize: responsiveFontSize(2), borderRadius: 10 }}>React Native Biometrics Example</Text>
+    //             {/* Your other components */}
+    //         </ScrollView>
+    //     </View>
+    // );
+
+};
+
+
+export default BiometrikPopup;

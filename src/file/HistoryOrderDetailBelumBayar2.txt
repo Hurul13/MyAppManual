@@ -1,0 +1,104 @@
+import React, { useEffect, useState } from 'react';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { url } from '../../utils/url';
+import { WARNA_BLACK } from '../../utils/constant';
+
+const HistoryOrderDetailBelumBayar = ({ route }) => {
+  const { invoice_id } = route.params;
+  const [orderData, setOrderData] = useState(null);
+
+  useEffect(() => {
+    fetchOrderData();
+  }, []);
+
+  const fetchOrderData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(`${url}order-product/view-order-by-invoice?invoice_id=${invoice_id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      setOrderData(data.data);
+      console.log('data get invoice_id: ', data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePayment = () => {
+    // Implement the logic for handling payment button press
+    console.log('Payment button pressed');
+  };
+
+  const handleCancel = () => {
+    // Implement the logic for handling cancel button press
+    console.log('Cancel button pressed');
+  };
+
+  if (!orderData) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  const {
+    user_address_id,
+    order,
+  } = orderData;
+
+  const renderAddress = () => {
+    if (user_address_id === 0) {
+      // Render the address details
+      return (
+        <View>
+          {/* Display the address details */}
+          <Text>Nama Penerima: {order.nama_penerima}</Text>
+          <Text>Nomor Penerima: {order.nomor_penerima}</Text>
+          <Text>Alamat Penerima: {order.alamat_penerima}</Text>
+          <Text>Provinsi ID: {order.provinsi_id}</Text>
+          <Text>Kota ID: {order.kota_id}</Text>
+          <Text>Kecamatan ID: {order.kecamatan_id}</Text>
+          <Text>Desa ID: {order.desa_id}</Text>
+          <Text>Kode Pos: {order.kode_pos}</Text>
+        </View>
+      );
+    } else {
+      return null; // Render nothing if user_address_id is not 0
+    }
+  };
+
+  return (
+    <View style={{ backgroundColor: WARNA_BLACK }}>
+      {/* Render the address details */}
+      {renderAddress()}
+
+      {/* Render the order details */}
+      {order.map((item, index) => (
+        <View key={index}>
+          <Image source={{ uri: item.gambar }} style={{ width: 50, height: 50 }} />
+          <Text>Nama Barang: {item.nama_barang}</Text>
+          <Text>Jumlah: {item.jumlah}</Text>
+          <Text>Harga Satuan: {item.harga_satuan}</Text>
+          <Text>Subtotal: {item.subtotal}</Text>
+        </View>
+      ))}
+
+      {/* Render the payment and cancel buttons */}
+      <TouchableOpacity onPress={handlePayment}>
+        <Text>Bayar</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleCancel}>
+        <Text>Cancel</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default HistoryOrderDetailBelumBayar;

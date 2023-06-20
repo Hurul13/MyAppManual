@@ -1,60 +1,51 @@
+import React, { useEffect, useState } from 'react';
 import {
-  Text,
   View,
   Image,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
-  FlatList,
+  Alert,
+  ToastAndroid,
+  RefreshControl,
+  useWindowDimensions,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import styles from './Styles';
+import { Text, Box } from 'native-base';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  DecsDetailProduct,
-  MinPlus,
-  Accordion,
-  AccordionRating,
-} from '../../components';
-import accordionDecs from '../../utils/accordionDecs';
-import accordionRating from '../../utils/accordionRating';
 import Share from 'react-native-share';
+import NumericInput from 'react-native-numeric-input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRoute } from '@react-navigation/native';
+import RenderHtml from 'react-native-render-html';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_WHITE,
+  WARNA_GREEN,
+  WARNA_RED,
+  WARNA_BLACK,
+  WARNA_BORDER,
+} from '../../utils/constant';
+import { url } from '../../utils/url';
+import styles from './Styles';
+import Buttone from '../../components/Buttone';
 
-const images = [
-  'https://cdn.pixabay.com/photo/2017/06/01/02/18/black-2362261_960_720.jpg',
-  'https://cdn.pixabay.com/photo/2018/07/13/04/51/marble-3534940_960_720.jpg',
-];
-
-const DetailProduct = ({navigation, onValueChange}) => {
-  const navigateTo = async page => {
+const DetailProduct4 = ({ navigation }) => {
+  const navigateTo = async (page) => {
     navigation.navigate(page);
   };
 
-  const [imgActive, setImgActive] = useState(0);
-
-  onChange = nativeEvent => {
-    if (nativeEvent) {
-      const slide = Math.ceil(
-        nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width,
-      );
-      if (slide != imgActive) {
-        setImgActive(slide);
-      }
-    }
-  };
-
-  const [minPlus, setMinPlus] = useState(1);
-
-  const onCounterChange = value => {
-    setMinPlus(value);
-  };
+  const windowWidth = useWindowDimensions().width;
 
   const share = async () => {
     const options = {
       message: 'this is a test message',
-      // url: 'https://github.com/Hurul13',
       email: 'hurulaini218@gmail.com',
-      subject: 'succes',
+      subject: 'success',
       recipient: '08765432234',
     };
     try {
@@ -63,39 +54,117 @@ const DetailProduct = ({navigation, onValueChange}) => {
     } catch (err) {
       console.log('Error => ', err);
     }
-
-    // Share.open(options)
-    //   .then(res => console.log(res))
-    //   .catch(err => console.log(err));
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+  const [token, setToken] = useState('');
+  const [cartCount, setCartCount] = useState(0);
+  const route = useRoute();
+  const { item } = route.params;
+
+  const fetchData = async () => {
+    try {
+      const data = await AsyncStorage.getItem('cart');
+      if (data !== null) {
+        const cart = JSON.parse(data);
+        setCartCount(cart.length);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    try {
+      const value = await AsyncStorage.getItem('token');
+      setToken(value);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleAddToCart = () => {
+    const apiUrl = `${url}supplier-barang/tambah-keranjang?id=${item.id}`;
+    fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        ToastAndroid.show('Berhasil tambah keranjang', ToastAndroid.SHORT);
+        navigation.navigate('Keranjang5');
+
+        // Save data to AsyncStorage
+        const itemData = {
+          supplier_barang_id: item.id,
+          nama_barang: item.nama_barang,
+          harga_proyek: item.harga_proyek,
+          harga_ritel: item.harga_ritel,
+          deskripsi: item.deskripsi,
+          stok: item.stok,
+          gambar: item.gambar,
+        };
+
+        AsyncStorage.getItem('cart')
+          .then((data) => {
+            let cart = [];
+            if (data) {
+              cart = JSON.parse(data);
+            }
+            cart.push(itemData);
+            return AsyncStorage.setItem('cart', JSON.stringify(cart));
+          })
+          .then(() => {
+            console.log('Data saved to AsyncStorage.');
+          })
+          .catch((error) => {
+            console.error('Error saving data to AsyncStorage:', error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+
+  const baseStyle = {
+    color: WARNA_BLACK,
+    marginHorizontal: responsiveHeight(3),
+    marginVertical: responsiveWidth(2),
+    fontSize: responsiveFontSize(1.8),
+    borderRadius: 10,
+    borderColor: WARNA_BORDER,
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: responsiveHeight(1.5),
+    paddingVertical: responsiveHeight(0.8),
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData()
+      .then(() => {
+        setRefreshing(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setRefreshing(false);
+      });
+  };
+
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <View style={styles.wrap}>
-        <ScrollView
-          onScroll={({nativeEvent}) => onChange(nativeEvent)}
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          horizontal
-          style={styles.wrap}>
-          {images.map((val, index) => (
-            <Image
-              key={val}
-              resizeMode="stretch"
-              style={styles.wrap}
-              source={{uri: val}}
-            />
-          ))}
-        </ScrollView>
-        <View style={styles.wrapDot}>
-          {images.map((val, index) => (
-            <Text
-              key={val}
-              style={imgActive == index ? styles.dotActive : styles.dot}>
-              ●
-            </Text>
-          ))}
-        </View>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={styles.container}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
+      <View style={styles.spaceWrap}>
+        <Image source={{ uri: item.gambar }} style={styles.spaceWrapImg} />
       </View>
       <View style={styles.header}>
         <TouchableOpacity style={styles.bulat}>
@@ -111,59 +180,42 @@ const DetailProduct = ({navigation, onValueChange}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.space}>
-        <Text style={styles.text}>Keramik Motif Marmer</Text>
-        {/* <IconMaterial name="heart" size={26} style={styles.iconLike} /> */}
+        <Text style={styles.text}>{item.nama_barang}</Text>
       </View>
-      <Text style={styles.text1}>Keramik Marmer</Text>
-      <View style={styles.space1}>
-        <Text style={styles.text3}>$8.10</Text>
-        <MinPlus onValueChange={onCounterChange} />
+      <View style={styles.text1}>
+        <Text style={{ fontSize: responsiveFontSize(1.4), color: item.stok > 0 ? WARNA_GREEN : WARNA_RED }}>
+          Sisa stok: {item.stok}
+        </Text>
       </View>
-      <View style={styles.line}>
-        <View style={styles.box1}>
-          <View style={styles.bgShop}>
-            <Image
-              source={require('../../assets/Images/shop.png')}
-              style={styles.imgShop}
-            />
-          </View>
-          <View style={styles.box2}>
-            <Text style={styles.text4}>Tiga Saudara Bangunan</Text>
-            <View style={styles.kota}>
-              <IconMaterial
-                name="map-marker"
-                size={17}
-                style={styles.iconMap}
-              />
-              <Text style={styles.textKota}>Kota Surabaya</Text>
-            </View>
-          </View>
+      <Box marginVertical={responsiveWidth(3)} marginHorizontal={responsiveHeight(3)}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.text3}>Rp {item.harga_proyek}</Text>
+          <Text style={styles.text4}>Harga Proyek</Text>
         </View>
-      </View>
-
-      <FlatList
-        data={accordionDecs}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => (
-          <Accordion title={item.title} bodyText={item.body} />
-        )}
-      />
-      <FlatList
-        data={accordionRating.slice(
-          0,
-          accordionRating.length > 1 ? 1 : accordionRating.length,
-        )}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => <AccordionRating title={'Review'} />}
-      />
-      <TouchableOpacity onPress={() => navigateTo('Keranjang')}>
-        <View style={styles.boxBtn}>
-          <IconMaterial name="cart-outline" size={24} style={styles.iconCard} />
-          <Text style={styles.text5}> TAMBAH KERANJANG</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.text5}>Rp {item.harga_ritel}</Text>
+          <Text style={styles.text6}>Harga Ritel</Text>
         </View>
+      </Box>
+      <RenderHtml
+        baseStyle={baseStyle}
+        source={{ html: `${item.deskripsi}` }}
+        contentWidth={windowWidth}
+        key={item.id}
+      />
+      <TouchableOpacity style={styles.bottomToCart}>
+        <Buttone
+          bg={item.stok > 0 ? WARNA_UTAMA : WARNA_DISABLE}
+          onPress={item.stok > 0 ? handleAddToCart : null}
+          color={item.stok > 0 ? WARNA_BLACK : WARNA_WHITE}
+          mt={5}
+          mx={responsiveHeight(3)}
+        >
+          {item.stok > 0 ? 'TAMBAH KERANJANG' : 'STOK KOSONG'}
+        </Buttone>
       </TouchableOpacity>
     </ScrollView>
   );
 };
 
-export default DetailProduct;
+export default DetailProduct4;

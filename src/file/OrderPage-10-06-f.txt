@@ -1,0 +1,189 @@
+import { ScrollView } from 'react-native-virtualized-view';
+import { url } from '../../utils/url';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Image,
+  // ScrollView,
+  TouchableOpacity,
+  FlatList,
+  RefreshControl,
+  // CheckBox,
+} from 'react-native';
+import { Text } from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_BLACK,
+  WARNA_DISABLE,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+  WARNA_BORDER,
+  WARNA_DEEPYELLOW,
+  WARNA_RED,
+} from '../../utils/constant';
+import styles from './Styles';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Buttone } from '../../components';
+import { responsiveHeight } from 'react-native-responsive-dimensions';
+
+const OrderPage = ({ navigation, route }) => {
+  const navigateTo = async (page) => {
+    navigation.navigate(page);
+  };
+  const [checkedItems, setCheckedItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const { address } = route.params;
+
+  useEffect(() => {
+    AsyncStorage.getItem('checkedItems')
+      .then((data) => {
+        if (data !== null) {
+          const checkedItems = JSON.parse(data);
+          setCheckedItems(checkedItems);
+          const price = checkedItems.reduce(
+            (acc, item) => acc + item.harga_satuan * item.quantity,
+            0
+          );
+          setTotalPrice(price);
+        }
+        console.log(data, address);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  const handlePostOrder = async (checkedItems) => {
+    try {
+      const user_id = await AsyncStorage.getItem('user_id');
+      const token = await AsyncStorage.getItem('token');
+
+      const orderData = {
+        user_address_id: address,
+        supplier_barang_id: checkedItems.supplier_barang_id,
+        items: checkedItems.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+          harga_satuan: item.harga_satuan,
+          subtotal: item.harga_satuan * item.quantity,
+        })),
+      };
+
+      fetch(`${url}order-product/create-order?user_id=${user_id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Order created:', data);
+          console.log('supplier_barang_id: ', data.supplier_barang_id);
+          console.log('user_address_id: ', data.user_address_id);
+          console.log('items cart: ', data.items);
+          // navigation.navigate('HistoryOrder');
+        })
+        .catch((error) => console.error(error));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderItem = ({ item }) => {
+    return (
+      <View style={[styles.card, styles.elevation]}>
+        <View style={styles.spaceImg}>
+          <Image source={{ uri: item.gambar }} style={styles.img} />
+        </View>
+        <View style={styles.space1}>
+          <View style={styles.textContainer}>
+            <Text isTruncated style={styles.nama}>
+              {item.nama_barang}
+            </Text>
+            <Text style={styles.harga}>Rp {item.harga_satuan}</Text>
+            <Text style={styles.quantity}>Quantity: {item.quantity}</Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <ScrollView
+      style={styles.all}
+    // refreshControl={
+    //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    // }
+    >
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <IconMaterial
+            name="arrow-left"
+            size={26}
+            style={styles.iconBack}
+            onPress={navigation.goBack}
+          />
+          <Text style={styles.judulBar}>Checkout</Text>
+        </View>
+        <View style={styles.box}>
+          <View style={{ paddingTop: responsiveHeight(2) }}>
+            <View style={styles.space2}>
+              <Text style={styles.text3}>Alamat Pengiriman</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('TambahAlamat')}
+              >
+                <Text style={styles.text4}>Ubah</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.space3}>
+              <View style={styles.space4}>
+                <Text style={styles.text5}>{address.nama_penerima}</Text>
+                <Text style={styles.text6}>{address.nomor_penerima}</Text>
+              </View>
+              <Text style={styles.text7}>{address.alamat_penerima}</Text>
+              <Text style={styles.text7}>
+                {address.provinsi_id}, {address.kota_id}, {address.kecamatan_id}, {address.desa_id}, {address.kode_pos}
+              </Text>
+            </View>
+          </View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            style={{ marginTop: responsiveHeight(3) }}
+            data={checkedItems}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+          />
+
+          <View style={{ marginTop: responsiveHeight(2) }}>
+            <View style={styles.space2}>
+              <Text style={styles.text3}>Total Pembayaran</Text>
+            </View>
+            <View style={styles.space7}>
+              <View style={styles.space6}>
+                <Text style={styles.text10}>Total Pembayaran</Text>
+                <Text style={styles.text11}>Rp. {totalPrice}</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.bottomPay} >
+              <Buttone
+                bg={WARNA_UTAMA}
+                color={WARNA_SEKUNDER}
+                onPress={() => handlePostOrder(checkedItems)}
+                // onPress={() => navigateTo('CheckoutBerhasil')}
+                mt={5}
+                mx={responsiveHeight(3)}
+              >
+                SIMPAN
+              </Buttone>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+export default OrderPage;

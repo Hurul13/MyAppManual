@@ -33,41 +33,95 @@ const UpdateAddress = ({navigation, route}) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };
-  const {id} = route.params;
-  const [address, setAddress] = useState({});
   const [refreshing, setRefreshing] = useState(false);
+  const {id} = route.params;
+  const [namaPenerima, setNamaPenerima] = useState('');
+  const [nomorPenerima, setNomorPenerima] = useState('');
+  const [alamatPenerima, setAlamatPenerima] = useState('');
+  const [provinsiId, setProvinsiId] = useState('');
+  const [kotaId, setKotaId] = useState('');
+  const [kecamatanId, setKecamatanId] = useState('');
+  const [desaId, setDesaId] = useState('');
+  const [kodePos, setKodePos] = useState('');
+
+  const getUserAddressData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      fetch(`${url}user-address/view-address-id?id=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            const addressData = data.data;
+            setNamaPenerima(addressData.nama_penerima);
+            setNomorPenerima(addressData.nomor_penerima);
+            setAlamatPenerima(addressData.alamat_penerima);
+            setProvinsiId(addressData.provinsi_id);
+            setKotaId(addressData.kota_id);
+            setKecamatanId(addressData.kecamatan_id);
+            setDesaId(addressData.desa_id);
+            setKodePos(addressData.kode_pos);
+          } else {
+            ToastAndroid.show('Failed to fetch address data', ToastAndroid.SHORT);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          ToastAndroid.show('An error occurred', ToastAndroid.SHORT);
+        });
+    } catch (error) {
+      console.error(error);
+      ToastAndroid.show('An error occurred', ToastAndroid.SHORT);
+    }
+  };
 
   useEffect(() => {
-    fetch(`${url}user-address/index?id=${id}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setAddress(data.data);
-      })
-      .catch(error => console.error(error));
+    getUserAddressData();
   }, []);
 
   const handleUpdate = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
 
+      const formData = new FormData();
+      formData.append('nama_penerima', namaPenerima);
+      formData.append('nomor_penerima', nomorPenerima);
+      formData.append('alamat_penerima', alamatPenerima);
+      formData.append('provinsi_id', provinsiId);
+      formData.append('kota_id', kotaId);
+      formData.append('kecamatan_id', kecamatanId);
+      formData.append('desa_id', desaId);
+      formData.append('kode_pos', kodePos);
+
       fetch(`${url}user-address/update-user-address?id=${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
-        body: JSON.stringify(address),
+        body: formData,
       })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          ToastAndroid.show('Berhasil edit alamat', ToastAndroid.SHORT);
-          navigation.goBack();
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            ToastAndroid.show('Address updated successfully', ToastAndroid.SHORT);
+            console.log('Address updated:', data);
+            navigation.goBack();
+          } else {
+            ToastAndroid.show('Failed to update address', ToastAndroid.SHORT);
+          }
         })
-        .catch(error => console.error(error));
+        .catch((error) => {
+          console.error(error);
+          ToastAndroid.show('An error occurred', ToastAndroid.SHORT);
+        });
     } catch (error) {
       console.error(error);
+      ToastAndroid.show('An error occurred', ToastAndroid.SHORT);
     }
   };
 
@@ -94,20 +148,18 @@ const UpdateAddress = ({navigation, route}) => {
             <Text style={styless.label}>Nama Penerima:</Text>
             <TextInput
               style={styless.input}
-              value={address.nama_penerima}
-              onChangeText={text =>
-                setAddress({...address, nama_penerima: text})
-              }
+              value={namaPenerima}
+        onChangeText={setNamaPenerima}
               placeholder="Ubah nama penerima"
-              placeholderTextColor={WARNA_GRAYTUA}></TextInput>
+              placeholderTextColor={WARNA_GRAYTUA}>
+                
+              </TextInput>
 
             <Text style={styless.label}>Nomor Telepon Penerima:</Text>
             <TextInput
               style={styless.input}
-              value={address.nomor_penerima}
-              onChangeText={text =>
-                setAddress({...address, nomor_penerima: text})
-              }
+              value={nomorPenerima}
+        onChangeText={setNomorPenerima}
               keyboardType="phone-pad"
               placeholder="Ubah nomor telepon penerima"
               placeholderTextColor={WARNA_GRAYTUA}
@@ -116,10 +168,8 @@ const UpdateAddress = ({navigation, route}) => {
             <Text style={styless.label}> Alamat Penerima:</Text>
             <TextInput
               style={styless.input}
-              value={address.alamat_penerima}
-              onChangeText={text =>
-                setAddress({...address, alamat_penerima: text})
-              }
+              value={alamatPenerima}
+        onChangeText={setAlamatPenerima}
               placeholder="Ubah alamat penerima"
               placeholderTextColor={WARNA_GRAYTUA}
             />
@@ -127,8 +177,8 @@ const UpdateAddress = ({navigation, route}) => {
             <Text style={styless.label}>Provinsi:</Text>
             <TextInput
               style={styless.input}
-              value={address.provinsi_id}
-              onChangeText={text => setAddress({...address, provinsi_id: text})}
+              value={provinsiId}
+        onChangeText={setProvinsiId}
               placeholder="Ubah provinsi"
               placeholderTextColor={WARNA_GRAYTUA}
             />
@@ -136,8 +186,8 @@ const UpdateAddress = ({navigation, route}) => {
             <Text style={styless.label}>Kota:</Text>
             <TextInput
               style={styless.input}
-              value={address.kota_id}
-              onChangeText={text => setAddress({...address, kota_id: text})}
+              value={kotaId}
+        onChangeText={setKotaId}
               placeholder="Ubah kota"
               placeholderTextColor={WARNA_GRAYTUA}
             />
@@ -145,10 +195,8 @@ const UpdateAddress = ({navigation, route}) => {
             <Text style={styless.label}>Kecamatan:</Text>
             <TextInput
               style={styless.input}
-              value={address.kecamatan_id}
-              onChangeText={text =>
-                setAddress({...address, kecamatan_id: text})
-              }
+              value={kecamatanId}
+        onChangeText={setKecamatanId}
               placeholder="Ubah kecamatan"
               placeholderTextColor={WARNA_GRAYTUA}
             />
@@ -156,8 +204,8 @@ const UpdateAddress = ({navigation, route}) => {
             <Text style={styless.label}>Desa:</Text>
             <TextInput
               style={styless.input}
-              value={address.desa_id}
-              onChangeText={text => setAddress({...address, desa_id: text})}
+               value={desaId}
+        onChangeText={setDesaId}
               placeholder="Ubah desa"
               placeholderTextColor={WARNA_GRAYTUA}
             />
@@ -165,8 +213,8 @@ const UpdateAddress = ({navigation, route}) => {
             <Text style={styless.label}>Kode Pos:</Text>
             <TextInput
               style={styless.input}
-              value={address.kode_pos}
-              onChangeText={text => setAddress({...address, kode_pos: text})}
+                value={kodePos}
+        onChangeText={setKodePos}
               keyboardType="phone-pad"
               placeholder="Ubah kode pos"
               placeholderTextColor={WARNA_GRAYTUA}
@@ -180,7 +228,7 @@ const UpdateAddress = ({navigation, route}) => {
                 alignItems: 'center',
                 marginVertical: responsiveWidth(4),
               }}
-              onPress={() => handleUpdate()}>
+              onPress={handleUpdate}>
               <Text
                 style={{
                   color: WARNA_BLACK,

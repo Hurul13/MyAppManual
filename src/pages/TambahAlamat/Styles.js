@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   responsiveHeight,
   responsiveWidth,
@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     backgroundColor: WARNA_UTAMA,
     flex: 1,
     resizeMode: 'cover',
+
   },
   header: {
     flexDirection: 'row',

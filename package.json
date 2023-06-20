@@ -32,6 +32,7 @@
     "react": "18.2.0",
     "react-devtools": "^4.27.4",
     "react-native": "0.71.2",
+    "react-native-biometrics": "^3.0.1",
     "react-native-check-box": "^2.1.7",
     "react-native-checkbox-reanimated": "^0.1.1",
     "react-native-fontawesome": "^7.0.0",
@@ -57,8 +58,10 @@
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^3.5.1",
     "react-native-textinput-effects": "^0.6.3",
+    "react-native-touch-id": "^4.4.1",
     "react-native-vector-icons": "^9.2.0",
     "react-native-virtualized-view": "^1.0.0",
+    "react-native-webview": "^13.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "watchman": "^1.0.0"
   },

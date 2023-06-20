@@ -1,0 +1,359 @@
+import {url} from '../../utils/url';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Image,
+  // ScrollView,
+  TouchableOpacity,
+  FlatList,
+  RefreshControl,
+  // CheckBox,
+} from 'react-native';
+import {ScrollView} from 'react-native-virtualized-view';
+import {Text} from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_BLACK,
+  WARNA_DISABLE,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+  WARNA_BORDER,
+  WARNA_DEEPYELLOW,
+  WARNA_RED,
+} from '../../utils/constant';
+import styles from './Styles';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Buttone} from '../../components';
+import {responsiveHeight} from 'react-native-responsive-dimensions';
+import {CheckBox} from 'react-native-elements';
+
+const OrderPage = ({navigation, route}) => {
+  const navigateTo = async page => {
+    navigation.navigate(page);
+  };
+  const [userAddressId, setUserAddressId] = useState('');
+  const [supplierBarangId, setSupplierBarangId] = useState('');
+  const [checkedItems, setCheckedItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const [shippingPrice, setShippingPrice] = useState(10);
+  const {address} = route.params;
+  // console.log(address);
+  // const [selectedSupplierIds, setSelectedSupplierIds] = useState([]);
+
+  //  const onRefresh = () => {
+  //    setRefreshing(true);
+  //    // Perform the data fetching here
+  //    // For example, refetch the checked items and update the total price
+  //    AsyncStorage.getItem('checkedItems')
+  //      .then(data => {
+  //        if (data !== null) {
+  //          const checkedItems = JSON.parse(data);
+  //          setCheckedItems(checkedItems);
+  //          const price = checkedItems.reduce(
+  //            (acc, item) => acc + item.harga_satuan * item.quantity,
+  //            0,
+  //          );
+  //          setTotalPrice(price);
+  //        }
+  //      })
+  //      .catch(error => console.error(error))
+  //      .finally(() => setRefreshing(false));
+  //  };
+
+  useEffect(() => {
+    // Mengambil data checkedItems dari AsyncStorage
+    AsyncStorage.getItem('checkedItems')
+      .then(data => {
+        if (data !== null) {
+          const checkedItems = JSON.parse(data);
+          setCheckedItems(checkedItems);
+          const price = checkedItems.reduce(
+            (acc, item) => acc + item.harga_satuan * item.quantity,
+            0,
+          );
+          setTotalPrice(price);
+        }
+        console.log(data, address);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  // const createOrder = async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     if (token !== null) {
+  //       const orderData = {
+  //         // user_address_id: userAddressId, // Fix the property name to 'user_address_id'
+  //         address: address,
+  //         checkedItems: checkedItems,
+  //       };
+
+  //       const id = await AsyncStorage.getItem('user_id');
+
+  //       fetch(`${url}order-product/create-order?user_id=${id}`, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         body: JSON.stringify(orderData),
+  //       })
+  //         .then(response => response.json())
+  //         .then(data => {
+  //           console.log('Order created:', data);
+  //         })
+  //         .catch(error => console.error(error));
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // const createOrder = async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     const user_id = await AsyncStorage.getItem('id');
+  //     const user_address_id = id.value || '';
+  //     const data = [];
+  //     for (const selectedItem of selectedItems) {
+  //       const {supplier_barang_id, jumlah, harga_satuan, subtotal} =
+  //         selectedItem;
+
+  //       data.push({
+  //         user_id,
+  //         user_address_id,
+  //         supplier_barang_id: supplier_barang_id || '',
+  //         jumlah: jumlah || 0,
+  //         harga_satuan: harga_satuan || 0,
+  //         // subtotal: subtotal || 0,
+  //       });
+  //     }
+  //     console.log('Posting data:', data); // Check the values before making the request
+
+  //     const response = await fetch(
+  //       `${url}order-product/create-order?user_id=${user_id}`,
+  //       {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         body: JSON.stringify(data),
+  //       },
+  //     );
+
+  //     const responseData = await response.json();
+
+  //     console.log('Data posted successfully:', responseData.data);
+  //     navigation.navigate('RiwayatTransaksi');
+  //   } catch (error) {
+  //     console.error('Error posting data:', error);
+  //   }
+  // };
+
+  const createOrder = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token !== null) {
+        const orderData = {
+          address: address,
+          checkedItems: checkedItems.map(checkedItem => ({
+            ...checkedItem,
+            supplier_barang_id: checkedItem.supplier_barang_id, // Add the supplier_barang_id to each checked item
+          })),
+        };
+
+        const id = await AsyncStorage.getItem('user_id');
+
+        fetch(`${url}order-product/create-order?user_id=${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(orderData),
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Order created:', data);
+            // navigation.navigate('RiwayatTransaksi');
+          })
+          .catch(error => console.error(error));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // const createOrder = async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     if (token !== null) {
+  //       const orderData = {
+  //         address: address,
+  //         checkedItems: checkedItems,
+  //         // selectedSupplierIds: selectedSupplierIds, // Add the selectedSupplierIds to the orderData
+  //       };
+
+  //       const id = await AsyncStorage.getItem('user_id');
+
+  //       fetch(`${url}order-product/create-order?user_id=${id}`, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         body: JSON.stringify(orderData),
+  //       })
+  //         .then(response => response.json())
+  //         .then(data => {
+  //           console.log('Order created:', data);
+  //         })
+  //         .catch(error => console.error(error));
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const renderItem = ({item}) => {
+    const handleCheckbox = () => {
+      const isChecked = checkedItems.find(
+        checkedItem => checkedItem.id === item.id,
+      );
+      if (isChecked) {
+        const updatedCheckedItems = checkedItems.filter(
+          checkedItem => checkedItem.id !== item.id,
+        );
+        setCheckedItems(updatedCheckedItems);
+      } else {
+        const updatedCheckedItems = [...checkedItems, item];
+        setCheckedItems(updatedCheckedItems);
+      }
+    };
+
+    return (
+      <View style={[styles.card, styles.elevation]}>
+        <View style={styles.spaceImg}>
+          <Image source={{uri: item.gambar}} style={styles.img} />
+        </View>
+        <View style={styles.space1}>
+          <View style={styles.textContainer}>
+            <Text isTruncated style={styles.nama}>
+              {item.nama_barang}
+            </Text>
+            <Text style={styles.harga}>Rp {item.harga_satuan}</Text>
+            <Text style={styles.quantity}>Quantity: {item.quantity}</Text>
+          </View>
+          <CheckBox
+            checked={checkedItems.some(
+              checkedItem => checkedItem.id === item.id,
+            )}
+            onPress={handleCheckbox}
+          />
+        </View>
+      </View>
+    );
+  };
+
+  // const renderItem = ({item}) => {
+  //   return (
+  //     <View style={[styles.card, styles.elevation]}>
+  //       <View style={styles.spaceImg}>
+  //         <Image
+  //           // source={require('../../assets/Images/batu.jpg')}
+  //           source={{uri: item.gambar}}
+  //           style={styles.img}
+  //         />
+  //       </View>
+  //       <View style={styles.space1}>
+  //         <View style={styles.textContainer}>
+  //           <Text isTruncated style={styles.nama}>
+  //             {item.nama_barang}
+  //           </Text>
+  //           <Text style={styles.harga}>Rp {item.harga_satuan}</Text>
+  //           <Text style={styles.quantity}>Quantity: {item.quantity}</Text>
+  //         </View>
+  //       </View>
+  //     </View>
+  //   );
+  // };
+
+  return (
+    <ScrollView
+      style={styles.all}
+      // refreshControl={
+      //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      // }
+    >
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <IconMaterial
+            name="arrow-left"
+            size={26}
+            style={styles.iconBack}
+            onPress={navigation.goBack}
+          />
+          <Text style={styles.judulBar}>Checkout</Text>
+        </View>
+        <View style={styles.box}>
+          <View style={{paddingTop: responsiveHeight(2)}}>
+            <View style={styles.space2}>
+              <Text style={styles.text3}>Alamat Pengiriman</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('TambahAlamat')}>
+                <Text style={styles.text4}>Ubah</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.space3}>
+              <View style={styles.space4}>
+                <Text style={styles.text5}>{address.nama_penerima}</Text>
+                <Text style={styles.text6}>{address.nomor_penerima}</Text>
+              </View>
+              <Text style={styles.text7}>{address.alamat_penerima}</Text>
+              <Text style={styles.text7}>
+                {address.provinsi_id}, {address.kota_id}, {address.kecamatan_id}
+                , {address.desa_id}, {address.kode_pos}
+              </Text>
+            </View>
+          </View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            style={{marginTop: responsiveHeight(3)}}
+            data={checkedItems}
+            renderItem={renderItem}
+            keyExtractor={item => item.id.toString()}
+          />
+
+          <View style={{marginTop: responsiveHeight(2)}}>
+            <View style={styles.space2}>
+              <Text style={styles.text3}>Total Pembayaran</Text>
+            </View>
+            <View style={styles.space7}>
+              <View style={styles.space6}>
+                <Text style={styles.text10}>Total Pembayaran</Text>
+                <Text style={styles.text11}>Rp. {totalPrice}</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.bottomPay}>
+              <Buttone
+                bg={WARNA_UTAMA}
+                color={WARNA_SEKUNDER}
+                // onPress={() => navigateTo('CheckoutBerhasil')}
+                onPress={createOrder}
+                mt={5}
+                mx={responsiveHeight(3)}>
+                SIMPAN
+              </Buttone>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+export default OrderPage;

@@ -9,13 +9,13 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Styles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import {AutoRefreshAnimation, ImagePicker} from '../../components';
-import {Box, Pressable} from 'native-base';
+import { AutoRefreshAnimation, ImagePicker } from '../../components';
+import { Box, Pressable } from 'native-base';
 import {
   WARNA_GRAYTUA,
   WARNA_WHITE,
@@ -27,10 +27,10 @@ import {
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {url} from '../../utils/url';
-import {useIsFocused} from '@react-navigation/native';
+import { url } from '../../utils/url';
+import { useIsFocused } from '@react-navigation/native';
 
-const Profile = ({navigation}) => {
+const Profile = ({ navigation }) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };
@@ -48,7 +48,7 @@ const Profile = ({navigation}) => {
   }, []);
 
   const handleCardClick = item => {
-    navigation.navigate('DetailProduct3', {item});
+    navigation.navigate('DetailProduct3', { item });
   };
 
   // untuk menampilkan banyaknya cart
@@ -195,7 +195,7 @@ const Profile = ({navigation}) => {
               // ml={responsiveHeight(2)}
               // top={-3}
               // onPress={handleCardClick}
-              onPress={() => navigateTo('Keranjang4')}>
+              onPress={() => navigateTo('Keranjang5')}>
               <IconMaterial
                 name="shopping"
                 size={30}
@@ -277,7 +277,7 @@ const Profile = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.space2}
-            onPress={() => navigateTo('RiwayatTransaksi')}>
+            onPress={() => navigateTo('HistoryOrder')}>
             <View style={styles.space3}>
               <View style={styles.box3}>
                 <View style={styles.box4}>

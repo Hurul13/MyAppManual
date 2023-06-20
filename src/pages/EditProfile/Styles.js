@@ -23,8 +23,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: responsiveHeight(3),
     marginVertical: responsiveWidth(5.4),
-    // justifyContent: 'center',
-    alignItems: 'center',
   },
   iconBack: {
     color: WARNA_SEKUNDER,

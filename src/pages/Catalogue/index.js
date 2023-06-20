@@ -148,7 +148,7 @@ const Catalogue = ({navigation}) => {
   };
 
   const handleCardPress = item => {
-    navigation.navigate('DetailProduct3', {item});
+    navigation.navigate('DetailProduct4', {item});
   };
 
   const filterData = category => {
@@ -192,9 +192,7 @@ const Catalogue = ({navigation}) => {
         <View style={styles.spaceImg}>
           <Image
             // source={require('../../assets/Images/batu.jpg')}
-            // source={item.gambar}
             source={{uri: item.gambar}}
-            // source={{uri: item.gambar}}
             style={styles.img}
           />
         </View>
@@ -206,11 +204,8 @@ const Catalogue = ({navigation}) => {
         </View>
         <View style={styles.boxText}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.text2} isTruncated>
-              Rp. {item.harga_proyek}
-            </Text>
-            <Text isTruncated style={styles.text22}>
-              Rp. {item.harga_ritel}
+            <Text isTruncated style={styles.text2}>
+              Rp {item.harga_proyek} s/d Rp {item.harga_ritel}
             </Text>
           </View>
           {/* <Text style={styles.text1}>Stok: {stok}</Text> */}

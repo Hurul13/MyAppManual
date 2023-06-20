@@ -1,8 +1,8 @@
-import {ImageBackground, Image, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect} from 'react';
+import { ImageBackground, Image, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
 import styles from './Styles';
 
-const Splash = ({navigation}) => {
+const Splash = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
       navigation.replace('Login3');

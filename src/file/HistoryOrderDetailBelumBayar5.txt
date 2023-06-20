@@ -1,0 +1,306 @@
+import React, { useEffect, useState } from 'react';
+import { Text, View, Image, TouchableOpacity, ToastAndroid, RefreshControl } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { url } from '../../utils/url';
+import { WARNA_BLACK, WARNA_BLUE, WARNA_GREEN, WARNA_RED, WARNA_UTAMA, WARNA_WHITE } from '../../utils/constant';
+import { responsiveHeight } from 'react-native-responsive-dimensions';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ScrollView } from 'react-native-virtualized-view';
+
+const HistoryOrderDetailBelumBayar = ({ navigation, route }) => {
+  const navigateTo = async page => {
+    navigation.navigate(page);
+  };
+  const { invoice_id } = route.params;
+  const [orderData, setOrderData] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    fetchOrderData();
+  }, []);
+
+  // get data 
+  const fetchOrderData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(`${url}order-product/view-order-by-invoice?invoice_id=${invoice_id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      setOrderData(data.data);
+      console.log('data get invoice_id: ', data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // post payment
+  const handlePayment = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token'); // Get the token from AsyncStorage
+
+      const response = await fetch(
+        `${url}pembayaran/pembayaran?invoice_id=${invoice_id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+      console.log(data.data)
+
+      // Store the tokenPay and redirect_url in AsyncStorage
+      await AsyncStorage.setItem('tokenPay', token);
+      await AsyncStorage.setItem('redirect_url', data.data.redirect_url);
+      console.log(data);
+      ToastAndroid.show('Berhasil Bayar', ToastAndroid.SHORT);
+      // navigation.navigate('TambahAlamat');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // cancel order
+  const handleCancel = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token'); // Get the token from AsyncStorage
+
+      const response = await fetch(
+        `${url}order-product/cancel-order?invoice_id=${invoice_id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+      console.log(data);
+      ToastAndroid.show('Berhasil batalkan', ToastAndroid.SHORT);
+      navigation.navigate('HistoryOrder');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (!orderData) {
+    return (
+      <View>
+        <Text style={{ color: WARNA_BLACK }}>Loading...</Text>
+      </View>
+    );
+  }
+
+  const {
+    order,
+  } = orderData;
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await handleAddAddress();
+    setRefreshing(false);
+  };
+
+  // const renderAddressCard = () => {
+  //   return (
+  //     <View style={styles.card}>
+  //       <IconMaterial name="map-marker" size={20} style={styles.icon} />
+  //       <View style={styles.addressInfo}>
+  //         <Text style={styles.addressTitle}>{orderData.user_address_id}</Text>
+  //         {/* Render other address information */}
+  //       </View>
+  //     </View>
+  //   );
+  // };
+
+
+
+  return (
+    <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={navigation.goBack}>
+          <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Detail History</Text>
+      </View>
+      <View style={styles.content}>
+        <View style={{ marginBottom: responsiveHeight(1.5) }}>
+          <Text style={styles.subtitle}>Alamat Pengiriman</Text>
+          {/* {renderAddressCard()} */}
+          <View style={styles.card}>
+            <Text style={styles.addressTitle}>Alamat: {order.user_addres_id}</Text>
+          </View>
+        </View>
+        <View style={{ marginBottom: responsiveHeight(1.5) }}>
+
+          <Text style={styles.subtitle}>Produk yang Dibeli</Text>
+          {order.map((item, index) => (
+            <View key={index} style={styles.card}>
+              <Image source={{ uri: item.gambar }} style={styles.productImage} />
+              <View style={styles.productInfo}>
+                <Text style={styles.productName}>{item.nama_barang}</Text>
+                <Text style={styles.productPrice}>Harga Satuan: Rp {item.harga_satuan}</Text>
+                <Text style={styles.productQuantity}>Jumlah: {item.jumlah}</Text>
+                <Text style={styles.productSubtotal}>Subtotal: Rp {item.subtotal * item.jumlah}</Text>
+              </View>
+            </View>
+          ))}
+
+        </View>
+        <Text style={styles.subtitle}>Total Pembayaran</Text>
+        <View style={styles.card}>
+          <Text style={styles.totalLabel}>Total Pembayaran:</Text>
+          <Text style={styles.totalPrice}>Rp
+            {/* {totalPrice} */}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+          <TouchableOpacity onPress={handleCancel} style={styles.checkoutButtonCancel}>
+            <Text style={styles.checkoutButtonText}>BATALKAN</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={handlePayment} style={styles.checkoutButtonBayar}>
+            <Text style={styles.checkoutButtonText}>BAYAR</Text>
+          </TouchableOpacity>
+
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+export default HistoryOrderDetailBelumBayar;
+
+const styles = {
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: WARNA_UTAMA,
+  },
+  iconBack: {
+    color: WARNA_BLACK,
+    marginRight: 10,
+  },
+  title: {
+    fontSize: 20,
+    color: WARNA_BLACK,
+    fontWeight: 'bold',
+  },
+  content: {
+    padding: 20,
+  },
+  subtitle: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+    marginBottom: 10,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  // addressInfo: {
+  //   flex: 1,
+  // },
+  addressTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: WARNA_BLACK
+  },
+  addressText: {
+    fontSize: 14,
+    color: '#555',
+  },
+  productImage: {
+    width: 80,
+    height: 80,
+    marginRight: 10,
+  },
+  productInfo: {
+    flex: 1,
+  },
+  productName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#555',
+    marginBottom: 5,
+  },
+  productPrice: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 5,
+  },
+  productQuantity: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 5,
+  },
+  productSubtotal: {
+    fontSize: 14,
+    color: '#555',
+    fontWeight: 'bold',
+  },
+  totalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    color: '#555',
+    marginTop: 20,
+  },
+  totalLabel: {
+    flex: 1,
+    fontSize: 18,
+    color: '#555',
+    fontWeight: 'bold',
+  },
+  totalPrice: {
+    fontSize: 18,
+    color: '#555',
+    fontWeight: 'bold',
+  },
+  checkoutButtonCancel: {
+    backgroundColor: WARNA_RED,
+    paddingVertical: responsiveHeight(1.6),
+    paddingHorizontal: 20,
+    borderRadius: 50 / 2,
+    marginTop: 20,
+    alignItems: 'center',
+    width: '48%'
+
+  },
+  checkoutButtonBayar: {
+    backgroundColor: WARNA_GREEN,
+    paddingVertical: responsiveHeight(1.6),
+    paddingHorizontal: 20,
+    borderRadius: 50 / 2,
+    marginTop: 20,
+    alignItems: 'center',
+    width: '48%'
+  },
+  checkoutButtonText: {
+    color: WARNA_WHITE,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+};

@@ -1,0 +1,113 @@
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { url } from '../../utils/url';
+import { WARNA_BLACK } from '../../utils/constant';
+
+const HistoryOrderDetailBelumBayar = ({ route }) => {
+  const { invoice_id } = route.params;
+  const [orderData, setOrderData] = useState(null);
+
+  useEffect(() => {
+    fetchOrderData();
+  }, []);
+
+  const fetchOrderData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(
+        `${url}order-product/view-order-by-invoice?invoice_id=${invoice_id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setOrderData(data.data.data);
+      console.log('data get invoice_id: ', data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (!orderData || !orderData.user_address_id) {
+    return null;
+    console.log('error')
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.addressContainer}>
+        <Text style={styles.title}>Alamat Pengiriman:</Text>
+        <Text>Nama Penerima: {orderData.user_address_id.nama_penerima}</Text>
+        <Text>Nomor Penerima: {orderData.user_address_id.nomor_penerima}</Text>
+        <Text>Alamat Penerima: {orderData.user_address_id.alamat_penerima}</Text>
+        <Text>Provinsi: {orderData.user_address_id.provinsi_id}</Text>
+        <Text>Kota: {orderData.user_address_id.kota_id}</Text>
+        <Text>Kecamatan: {orderData.user_address_id.kecamatan_id}</Text>
+        <Text>Desa: {orderData.user_address_id.desa_id}</Text>
+        <Text>Kode Pos: {orderData.user_address_id.kode_pos}</Text>
+      </View>
+      <View style={styles.orderContainer}>
+        <Text style={styles.title}>Detail Pesanan:</Text>
+        {orderData.items.map((item, index) => (
+          <View key={index} style={styles.itemContainer}>
+            <Text>Nama Barang: {item.nama_barang}</Text>
+            <Text>Jumlah: {item.jumlah}</Text>
+            <Text>Harga Satuan: {item.harga_satuan}</Text>
+            <Text>Subtotal: {item.jumlah * item.harga_satuan}</Text>
+            <Text>Gambar: {item.gambar}</Text>
+          </View>
+        ))}
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={() => handleBayar()}>
+          <Text style={styles.buttonText}>Bayar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => handleCancel()}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: WARNA_BLACK
+  },
+  addressContainer: {
+    marginBottom: 16,
+  },
+  orderContainer: {
+    marginBottom: 16,
+  },
+  itemContainer: {
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    backgroundColor: 'blue',
+    padding: 8,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
+
+export default HistoryOrderDetailBelumBayar;

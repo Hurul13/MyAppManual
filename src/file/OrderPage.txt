@@ -1,0 +1,133 @@
+import {url} from '../../utils/url';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  // Text,
+  Button,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
+import {Text} from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  WARNA_BLACK,
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+  WARNA_GRAYTUA,
+  WARNA_BORDER,
+  WARNA_DEEPYELLOW,
+  WARNA_RED,
+} from '../../utils/constant';
+import styles from './Styles';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Buttone} from '../../components';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+
+const OrderPage = ({navigation, route}) => {
+  const navigateTo = async page => {
+    navigation.navigate(page);
+  };
+  const [userAddressId, setUserAddressId] = useState('');
+  const [supplierBarangId, setSupplierBarangId] = useState('');
+  const [checkedItems, setCheckedItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user_id = await AsyncStorage.getItem('user_id');
+        const token = await AsyncStorage.getItem('token');
+        if (user_id !== null) {
+          // Mengambil data user_address_id dari API berdasarkan user_id
+          fetch(`${url}user-address/view?user_id=${user_id}`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.user_address_id) {
+                setUserAddressId(data.user_address_id);
+              }
+            })
+            .catch(error => console.error(error));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // Mengambil data checkedItems dari AsyncStorage
+    AsyncStorage.getItem('checkedItems')
+      .then(data => {
+        if (data !== null) {
+          const checkedItems = JSON.parse(data);
+          setCheckedItems(checkedItems);
+          const price = checkedItems.reduce(
+            (acc, item) => acc + item.harga_satuan * item.quantity,
+            0,
+          );
+          setTotalPrice(price);
+        }
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  const createOrder = async () => {
+    try {
+      // Mengambil data token dari AsyncStorage
+      const user_id = await AsyncStorage.getItem('user_id');
+      const token = await AsyncStorage.getItem('token');
+      if (token !== null) {
+        const orderData = {
+          user_id: userAddressId,
+          supplier_barang_id: supplierBarangId,
+          checkedItems: checkedItems,
+        };
+
+        fetch(`${url}order-product/create-order?user_id=${user_id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(orderData),
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Proses data setelah berhasil membuat order
+            console.log('Order created:', data);
+          })
+          .catch(error => console.error(error));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <View style={{backgroundColor: WARNA_BORDER}}>
+      <Text>User Address ID: {userAddressId}</Text>
+      <Text>Supplier Barang ID: {supplierBarangId}</Text>
+      <Text>Total Price: {totalPrice}</Text>
+      <Button title="Create Order" onPress={createOrder} />
+    </View>
+  );
+};
+
+export default OrderPage;

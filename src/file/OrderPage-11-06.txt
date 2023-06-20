@@ -1,0 +1,158 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { url } from '../../utils/url';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+
+const Checkout3 = ({ navigation }) => {
+  const [userAddress, setUserAddress] = useState({});
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    // Mengambil data user_address_id dari AsyncStorage
+    AsyncStorage.getItem('addresses')
+      .then((addresses) => {
+        if (addresses) {
+          const parsedAddresses = JSON.parse(addresses);
+          const selectedAddress = parsedAddresses.find((address) => address.checked);
+
+          if (selectedAddress) {
+            setUserAddress(selectedAddress);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Error retrieving addresses:', error);
+      });
+
+    // Mengambil data cartItems dan totalPrice dari AsyncStorage
+    AsyncStorage.multiGet(['cartItems', 'totalPrice'])
+      .then((data) => {
+        const cart = JSON.parse(data[0][1]);
+        const price = JSON.parse(data[1][1]);
+        setCartItems(cart);
+        setTotalPrice(price);
+      })
+      .catch((error) => {
+        console.error('Error retrieving cartItems and totalPrice:', error);
+      });
+
+    // Mengambil token dari AsyncStorage
+    AsyncStorage.getItem('token')
+      .then((value) => {
+        setToken(value);
+      })
+      .catch((error) => {
+        console.error('Error retrieving token:', error);
+      });
+  }, []);
+
+  const handleCreateOrder = () => {
+    // Mengambil user_id dari AsyncStorage
+    AsyncStorage.getItem('user_id')
+      .then((userId) => {
+        const orderData = {
+          user_id: userId,
+          user_address_id: userAddress.id,
+          orders: cartItems.map((item) => ({
+            supplier_barang_id: item.supplier_barang_id,
+            jumlah: item.jumlah,
+            harga_satuan: item.harga_satuan,
+            subtotal: item.subtotal,
+          })),
+        };
+
+        // Mengirim permintaan POST untuk membuat pesanan (create order)
+        fetch(`${url}order-product/create-order?user_id=${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(orderData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Redirect ke halaman historyOrder jika sukses
+            // navigation.navigate('HistoryOrder');
+            console.log(data)
+            console.log('userAddress: ', userAddress)
+            console.log('cartItems: ', cartItems)
+          })
+          .catch((error) => {
+            console.error('Error creating order:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error retrieving user_id:', error);
+      });
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Tampilkan data user_address_id */}
+      <View style={styles.card}>
+        <Text style={styles.title}>Alamat Pengiriman</Text>
+        <Text>{userAddress.alamat}</Text>
+        <Text>{userAddress.kota}</Text>
+        <Text>{userAddress.provinsi}</Text>
+        {/* Tampilkan data tambahan sesuai kebutuhan */}
+      </View>
+
+      {/* Tampilkan data cartItems */}
+      {cartItems.map((item) => (
+        <View key={item.id} style={styles.card}>
+          <Text style={styles.title}>{item.nama_barang}</Text>
+          <Text>Jumlah: {item.jumlah}</Text>
+          <Text>Harga Satuan: {item.harga_satuan}</Text>
+          {/* Tampilkan data tambahan sesuai kebutuhan */}
+        </View>
+      ))}
+
+      {/* Tampilkan total harga */}
+      <View style={styles.card}>
+        <Text style={styles.title}>Total Pembayaran</Text>
+        <Text>Total Harga: {totalPrice}</Text>
+        {/* Tampilkan data tambahan sesuai kebutuhan */}
+      </View>
+
+      {/* Tombol untuk membuat pesanan */}
+      <TouchableOpacity style={styles.button} onPress={handleCreateOrder}>
+        <Text style={styles.buttonText}>Buat Pesanan</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  button: {
+    backgroundColor: '#4287f5',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+});
+
+export default Checkout3;

@@ -13,3 +13,4 @@ export const WARNA_BLUE = '#2391d9';
 export const WARNA_GREEN = '#38ac3d';
 export const WARNA_UNGUPINK = '#B0228C';
 export const WARNA_UNGUBLUE = '#6a5acd';
+export const WARNA_RED_PUDAR = '#FD8A8A'

@@ -1,36 +1,44 @@
-import {Dimensions, StyleSheet} from 'react-native';
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import {StyleSheet} from 'react-native';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+import {
+  WARNA_DISABLE,
+  WARNA_UTAMA,
+  WARNA_SEKUNDER,
+  WARNA_WHITE,
+} from '../../utils/constant';
 
 const styles = StyleSheet.create({
-  container: {
+  viewContainer: {
     flex: 1,
-    resizeMode: 'cover',
-    backgroundColor: '#FDCD29',
-    alignItems: 'center',
+    backgroundColor: WARNA_UTAMA,
     justifyContent: 'center',
+    resizeMode: 'cover',
   },
-  judul: {
-    textAlign: 'center',
-    marginTop: 80,
-    fontSize: 24,
+  viewWrapper: {
+    alignItems: 'center',
+  },
+  imageRegister: {
+    width: 200,
+    height: 200,
+    marginTop: responsiveHeight(4),
+  },
+  textTitle: {
+    fontSize: responsiveFontSize(2.2),
     fontWeight: 'bold',
-    color: '#34495E',
+    color: WARNA_SEKUNDER,
+    marginTop: responsiveHeight(1.1),
+    marginBottom: responsiveHeight(13),
   },
-  desc: {
-    marginTop: 30,
-    marginLeft: 30,
-    marginRight: 25,
-    color: '#34495E',
-  },
-  box: {
-    backgroundColor: '#ffff',
-    marginTop: 30,
+  viewBox: {
+    backgroundColor: WARNA_WHITE,
+    marginTop: responsiveHeight(-10),
     borderTopLeftRadius: 18,
     borderTopRightRadius: 18,
-    height: 850,
-    width: 360,
+    height: responsiveHeight(100),
     shadowColor: 'black',
     shadowOffset: {
       width: 0,
@@ -38,223 +46,101 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
-    //elevation: 7,
+    elevation: 7,
+    // flexDirection: 'row',
+  },
+  textUser: {
+    marginLeft: responsiveWidth(5),
+    marginTop: responsiveHeight(5),
+    fontWeight: 'bold',
+    fontSize: responsiveFontSize(2.0),
+    color: WARNA_SEKUNDER,
+  },
+  textPass: {
+    marginLeft: responsiveWidth(5),
+    fontWeight: 'bold',
+    fontSize: responsiveFontSize(2.0),
+    color: WARNA_SEKUNDER,
+  },
+  boxInput: {
+    width: responsiveWidth(90),
+    height: responsiveHeight(7),
+    borderWidth: 1,
+    borderColor: WARNA_UTAMA,
+
+    color: WARNA_SEKUNDER,
+    borderRadius: 10,
+    alignSelf: 'center',
+    marginVertical: responsiveHeight(2.33),
+    fontSize: responsiveFontSize(2),
     flexDirection: 'row',
+    // justifyContent: 'space-between',
+    alignItems: 'center',
   },
-
-  //   inputan nama
-  textNama: {
-    color: '#34495E',
-    marginTop: 30,
-    marginLeft: 30,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  boxNama: {
+  boxIcon: {
+    width: responsiveWidth(15),
+    height: responsiveHeight(7),
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    // borderWidth: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
-    width: 295,
-    height: 49,
-    borderWidth: 2,
-    borderColor: '#FDCD29',
-    borderRadius: 10,
-    marginTop: 63,
-    marginLeft: -45,
+    backgroundColor: WARNA_UTAMA,
   },
-  textIsiNama: {
-    color: '#A0A0A0',
-    marginLeft: 20,
-    fontSize: 16,
+  icon: {
+    color: WARNA_WHITE,
   },
-
-  //   inputan email
-  textEmail: {
-    color: '#34495E',
-    marginTop: 130,
-    marginLeft: -295,
-    fontSize: 16,
-    fontWeight: 'bold',
+  textInput: {
+    width: responsiveWidth(65),
+    height: responsiveHeight(7),
+    // borderWidth: 1,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+    borderColor: WARNA_SEKUNDER,
+    color: WARNA_SEKUNDER,
+    alignSelf: 'center',
+    fontSize: responsiveFontSize(2),
   },
-  boxEmail: {
+  space1: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: responsiveHeight(4),
+    marginBottom: responsiveHeight(5),
+    marginVertical: responsiveHeight(1),
+  },
+  textFP: {
+    fontSize: responsiveFontSize(1.8),
+    color: WARNA_SEKUNDER,
+  },
+  viewButton: {
+    width: responsiveWidth(90),
+    height: responsiveHeight(7),
+    alignItems: 'center',
+    backgroundColor: WARNA_UTAMA,
     justifyContent: 'center',
-    backgroundColor: 'transparent',
-    width: 295,
-    height: 49,
-    borderWidth: 2,
-    borderColor: '#FDCD29',
-    borderRadius: 10,
-    marginTop: 163,
-    marginLeft: -45,
-  },
-  textIsiEmail: {
-    color: '#A0A0A0',
-    marginLeft: 20,
-    fontSize: 16,
-  },
-
-  //   inputan no telpon
-  textHP: {
-    color: '#34495E',
-    marginTop: 230,
-    marginLeft: -295,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  boxHP: {
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    width: 295,
-    height: 49,
-    borderWidth: 2,
-    borderColor: '#FDCD29',
-    borderRadius: 10,
-    marginTop: 263,
-    marginLeft: -79,
-  },
-  textIsiHP: {
-    color: '#A0A0A0',
-    marginLeft: 20,
-    fontSize: 16,
-  },
-
-  //   inputan username
-  textUsername: {
-    color: '#34495E',
-    marginTop: 330,
-    marginLeft: -295,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  boxUsername: {
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    width: 295,
-    height: 49,
-    borderWidth: 2,
-    borderColor: '#FDCD29',
-    borderRadius: 10,
-    marginTop: 363,
-    marginLeft: -73,
-  },
-  textIsiUsername: {
-    color: '#A0A0A0',
-    marginLeft: 20,
-    fontSize: 16,
-  },
-
-  //   inputan password
-  textPassword: {
-    color: '#34495E',
-    marginTop: 430,
-    marginLeft: -295,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  boxPassword: {
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    width: 295,
-    height: 49,
-    borderWidth: 2,
-    borderColor: '#FDCD29',
-    borderRadius: 10,
-    marginTop: 463,
-    marginLeft: -73,
-  },
-  textIsiPassword: {
-    color: '#A0A0A0',
-    marginLeft: 20,
-    fontSize: 16,
-  },
-
-  //   inputan konfirmasi password
-  textKP: {
-    color: '#34495E',
-    marginTop: 530,
-    marginLeft: -295,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  boxKP: {
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    width: 295,
-    height: 49,
-    borderWidth: 2,
-    borderColor: '#FDCD29',
-    borderRadius: 10,
-    marginTop: 563,
-    marginLeft: -143,
-  },
-  textIsiKP: {
-    color: '#A0A0A0',
-    marginLeft: 20,
-    fontSize: 16,
-  },
-
-  //   tombol register
-  bottomRegister: {
-    justifyContent: 'center',
-    backgroundColor: '#FDCD29',
-    width: 295,
-    height: 49,
-    borderWidth: 2,
-    borderColor: '#FDCD29',
+    alignSelf: 'center',
     borderRadius: 35,
-    marginTop: 700,
-    marginLeft: -295,
+    marginTop: responsiveHeight(1),
   },
-  textBottom: {
-    color: '#34495E',
-    // marginLeft: 20,
-    fontSize: 16,
+  textRegister: {
     fontWeight: 'bold',
-    textAlign: 'center',
+    color: WARNA_SEKUNDER,
+    fontSize: responsiveFontSize(2.2),
   },
-  textRHA: {
-    color: '#34495E',
-    fontSize: 15,
-    marginTop: 760,
-    marginLeft: -240,
+  space: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: responsiveHeight(13.4),
+    marginVertical: responsiveHeight(1),
+  },
+  textAHA: {
+    fontSize: responsiveFontSize(1.8),
+    color: WARNA_SEKUNDER,
   },
   textLogin: {
-    color: '#34495E',
-    marginTop: 760,
-    marginLeft: 5,
+    fontSize: responsiveFontSize(1.8),
     fontWeight: 'bold',
-    fontSize: 15,
-  },
-
-  // checkBox
-  options: {
-    alignSelf: 'flex-start',
-    marginLeft: -230,
-    marginTop: 640,
-  },
-  // checked: {
-  //   flexDirection: 'row',
-  //   marginVertical: 7,
-  // },
-  checkBox: {
-    width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderColor: '#34495E',
-    marginRight: 5,
-  },
-  checkedName: {
-    textTransform: 'capitalize',
-    fontSize: 14,
-    color: 'black',
-    marginTop: -27,
-    marginLeft: 30,
-    marginRight: 270,
-  },
-  check: {
-    alignSelf: 'center',
-    color: '#34495E',
-    fontSize: 16,
-    marginTop: -3,
+    color: WARNA_SEKUNDER,
   },
 });
 

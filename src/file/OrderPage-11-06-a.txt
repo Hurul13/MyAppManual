@@ -1,0 +1,149 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, ToastAndroid } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { url } from '../../utils/url';
+import { WARNA_BLACK } from '../../utils/constant';
+
+const Checkout3 = ({ route }) => {
+  const [userAddress, setUserAddress] = useState(null);
+  const [orderData, setOrderData] = useState(null);
+  const [invoiceData, setInvoiceData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const user_id = await AsyncStorage.getItem('user_id');
+      const token = await AsyncStorage.getItem('token');
+
+      try {
+        // Get user address from AsyncStorage
+        const addresses = await AsyncStorage.getItem('addresses');
+        const parsedAddresses = JSON.parse(addresses);
+        const userAddressId = route.params.address.user_address_id;
+        const selectedAddress = parsedAddresses.find(
+          (address) => address.id === userAddressId
+        );
+        setUserAddress(selectedAddress);
+
+        // Get order data from AsyncStorage
+        const checkedItems = await AsyncStorage.getItem('checkedItems');
+        const parsedCheckedItems = JSON.parse(checkedItems);
+        const supplier_barang_id = parsedCheckedItems[0].supplier_barang_id;
+        const jumlah = parsedCheckedItems[0].jumlah;
+        const harga_satuan = parsedCheckedItems[0].harga_satuan;
+        const subtotal = parsedCheckedItems[0].subtotal;
+
+        const orderData = {
+          user_address_id: userAddressId,
+          supplier_barang_id,
+          jumlah,
+          harga_satuan,
+          subtotal,
+          status: null,
+        };
+        setOrderData(orderData);
+
+        // Create order request
+        const response = await fetch(
+          `${url}order-product/create-order?user_id=${user_id}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify([orderData]),
+          }
+        );
+        const data = await response.json();
+
+        if (response.ok) {
+          const { order_product, supplier_barang, invoice } = data;
+          setOrderData(order_product);
+          setInvoiceData(invoice);
+        } else {
+          console.log('Error creating order:', data);
+        }
+      } catch (error) {
+        console.error('Error creating order:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleCreateOrder = async () => {
+    const user_id = await AsyncStorage.getItem('user_id');
+    const token = await AsyncStorage.getItem('token');
+
+    try {
+      const response = await fetch(
+        `${url}order-product/create-order?user_id=${user_id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify([orderData]),
+        }
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        ToastAndroid.show('Order created successfully', ToastAndroid.SHORT);
+        // Process the created order data as needed
+        console.log(data);
+      } else {
+        console.log('Error creating order:', data);
+      }
+    } catch (error) {
+      console.error('Error creating order:', error);
+    }
+  };
+
+  if (!userAddress || !orderData || !invoiceData) {
+    return null;
+  }
+
+  return (
+    <View style={{ flex: 1, padding: 16 }}>
+      {/* User Address Card */}
+      <View style={{ marginBottom: 16 }}>
+        <Text>User Address:</Text>
+        <Text>{userAddress.nama_penerima}</Text>
+        <Text>{userAddress.alamat_penerima}</Text>
+        {/* Display other user address details */}
+      </View>
+
+      {/* Order Card */}
+      <View style={{ marginBottom: 16 }}>
+        <Text>Order:</Text>
+        <Text>{orderData.jumlah} x {orderData.supplier_barang_id}</Text>
+        <Text>{orderData.subtotal}</Text>
+        {/* Display other order details */}
+      </View>
+
+      {/* Total Price */}
+      <View style={{ marginBottom: 16 }}>
+        <Text>Total Pembayaran:</Text>
+        <Text>{invoiceData.total_pembayaran}</Text>
+      </View>
+
+      {/* Create Order Button */}
+      <TouchableOpacity
+        style={{
+          backgroundColor: WARNA_BLACK,
+          paddingVertical: 12,
+          paddingHorizontal: 24,
+          borderRadius: 8,
+          alignItems: 'center',
+        }}
+        onPress={handleCreateOrder}
+      >
+        <Text style={{ color: 'white' }}>Place Order</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default Checkout3;

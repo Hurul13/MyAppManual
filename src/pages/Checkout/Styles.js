@@ -11,20 +11,27 @@ import {
   WARNA_WHITE,
   WARNA_BORDER,
   WARNA_GRAYTUA,
+  WARNA_SILVER,
+  WARNA_BLACK,
+  WARNA_GREEN,
 } from '../../utils/constant';
 
 const styles = StyleSheet.create({
   all: {
-    backgroundColor: WARNA_UTAMA,
+    backgroundColor: WARNA_WHITE,
   },
   container: {
     flex: 1,
     resizeMode: 'cover',
+    backgroundColor: WARNA_UTAMA,
   },
   header: {
     flexDirection: 'row',
     marginHorizontal: responsiveHeight(3),
     marginVertical: responsiveWidth(5.4),
+    backgroundColor: WARNA_UTAMA,
+    // justifyContent: 'center',
+    alignItems: 'center',
   },
   iconBack: {
     color: WARNA_SEKUNDER,
@@ -34,25 +41,11 @@ const styles = StyleSheet.create({
     color: WARNA_SEKUNDER,
     fontSize: responsiveFontSize(2.4),
     fontWeight: 'bold',
-  },
-  cartCard: {
-    // elevation: 1,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: WARNA_DISABLE,
-    marginBottom: responsiveHeight(0.5),
-    marginHorizontal: responsiveHeight(3),
-    paddingHorizontal: responsiveHeight(2),
-    paddingVertical: responsiveWidth(3),
+    justifyContent: 'center',
+    textAlign: 'center',
   },
   space: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
-  img: {
-    height: responsiveHeight(10),
-    width: responsiveWidth(23),
-    borderRadius: 5,
     alignItems: 'center',
   },
   box4: {
@@ -67,12 +60,12 @@ const styles = StyleSheet.create({
     fontSize: responsiveFontSize(1.7),
     color: WARNA_GRAYTUA,
   },
-  space1: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: responsiveWidth(2),
-    alignItems: 'center',
-  },
+  // space1: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   marginVertical: responsiveWidth(2),
+  //   alignItems: 'center',
+  // },
   text2: {
     fontWeight: 'bold',
     fontSize: responsiveFontSize(2.2),
@@ -85,9 +78,10 @@ const styles = StyleSheet.create({
   },
   box: {
     backgroundColor: WARNA_WHITE,
+    // borderWidth: 1,
     // borderTopLeftRadius: 35,
     // borderTopRightRadius: 35,
-    height: responsiveHeight(100),
+    // height: responsiveHeight(100),
   },
   space2: {
     elevation: 2,
@@ -114,8 +108,8 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveHeight(3),
     paddingHorizontal: responsiveHeight(2),
     paddingVertical: responsiveWidth(2),
-    borderRadius: 8,
-    borderColor: WARNA_DISABLE,
+    borderRadius: 5,
+    borderColor: WARNA_SILVER,
   },
   space4: {
     flexDirection: 'row',
@@ -144,8 +138,8 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveHeight(3),
     paddingHorizontal: responsiveHeight(2),
     paddingVertical: responsiveWidth(2),
-    borderRadius: 8,
-    borderColor: WARNA_DISABLE,
+    borderRadius: 5,
+    borderColor: WARNA_SILVER,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -162,8 +156,10 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveHeight(3),
     paddingHorizontal: responsiveHeight(2),
     paddingVertical: responsiveWidth(2),
-    borderRadius: 8,
-    borderColor: WARNA_DISABLE,
+    borderRadius: 5,
+    borderColor: WARNA_SILVER,
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   space6: {
     flexDirection: 'row',
@@ -173,12 +169,12 @@ const styles = StyleSheet.create({
   text10: {
     color: WARNA_SEKUNDER,
     fontSize: responsiveHeight(1.8),
-    paddingBottom: responsiveHeight(1),
+    // paddingBottom: responsiveHeight(1),
   },
   text11: {
     color: WARNA_SEKUNDER,
     fontSize: responsiveHeight(2),
-    paddingBottom: responsiveHeight(1),
+    // paddingBottom: responsiveHeight(1),
     fontWeight: '700',
   },
   boxBtn: {
@@ -201,6 +197,71 @@ const styles = StyleSheet.create({
   iconCard: {
     color: WARNA_WHITE,
     paddingHorizontal: responsiveHeight(0.8),
+  },
+  card: {
+    backgroundColor: 'white',
+    marginVertical: responsiveWidth(1),
+    marginHorizontal: responsiveHeight(3),
+    borderRadius: 5,
+    flexDirection: 'row',
+    borderColor: WARNA_SILVER,
+    borderWidth: 1,
+  },
+  elevation: {
+    shadowColor: WARNA_SEKUNDER,
+    // elevation: 5,
+  },
+  spaceImg: {
+    width: '30%',
+    backgroundColor: 'white',
+    // borderWidth: 1,
+    height: 105,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    backgroundColor: WARNA_DISABLE,
+    borderRightWidth: 1,
+    borderColor: WARNA_SILVER,
+  },
+  img: {
+    width: '99.4%',
+    backgroundColor: 'white',
+    // borderWidth: 1,
+    height: 105,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    backgroundColor: WARNA_DISABLE,
+    // borderRightWidth: 2,
+    // borderColor: WARNA_SILVER,
+  },
+  space1: {
+    flexDirection: 'row',
+    paddingVertical: responsiveWidth(2),
+    // alignItems: 'center'
+  },
+  textContainer: {
+    paddingHorizontal: responsiveHeight(1),
+    // borderWidth: 1,
+    width: '80%',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  nama: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: 'bold',
+    color: WARNA_BLACK,
+  },
+  harga: {
+    fontSize: responsiveFontSize(2.2),
+    fontWeight: 'bold',
+    color: WARNA_GRAYTUA,
+    paddingVertical: responsiveWidth(4),
+  },
+  quantity: {
+    fontSize: responsiveFontSize(1.6),
+    color: WARNA_GREEN,
+  },
+  bottomPay: {
+    marginBottom: responsiveHeight(2),
   },
 });
 

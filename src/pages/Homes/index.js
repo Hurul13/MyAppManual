@@ -7,8 +7,8 @@ import {
   FlatList,
   RefreshControl,
 } from 'react-native';
-import {Text, Box, Pressable} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import { Text, Box, Pressable } from 'native-base';
+import React, { useEffect, useState } from 'react';
 import styles from './Styles';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -22,19 +22,20 @@ import {
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 import banner from '../../utils/banner';
-import {ScrollView} from 'react-native-virtualized-view';
+import { ScrollView } from 'react-native-virtualized-view';
 import {
   BannerMaterialHome,
   BannerMaterialHome2,
+  BiometrikPopup,
   Rating,
 } from '../../components';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-import {url} from '../../utils/url';
+import { url } from '../../utils/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const API_URL = `${url}supplier-barang/index`;
 
-const Homes = ({navigation}) => {
+const Homes = ({ navigation }) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };
@@ -64,7 +65,7 @@ const Homes = ({navigation}) => {
   }, []);
 
   const handleCardClick = item => {
-    navigation.navigate('DetailProduct3', {item});
+    navigation.navigate('DetailProduct4', { item });
   };
 
   // untukk menampilkan banyaknya cart
@@ -94,18 +95,14 @@ const Homes = ({navigation}) => {
   //     .catch(error => console.error(error));
   // }, []);
 
-  const renderCard = ({item}) => {
+  const renderCard = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => handleCardClick(item)}>
         <View style={[styles.card, styles.elevation]}>
           <View style={styles.spaceImg}>
             <Image
               // source={require('../../assets/Images/batu.jpg')}
-              // source={item.gambar}
-              // source={{uri: item.gambar.url}}
-              source={{uri: item.gambar}}
-              // source={{uri: item.gambar}}
-              // source={{uri: item.gambar.url}}
+              source={{ uri: item.gambar }}
               style={styles.img}
             />
           </View>
@@ -115,12 +112,13 @@ const Homes = ({navigation}) => {
             </Text>
           </View>
           <View style={styles.boxText}>
-            <View style={{flexDirection: 'row'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                // paddingHorizontal: responsiveHeight(0.5),
+              }}>
               <Text isTruncated style={styles.text2}>
-                Rp {item.harga_proyek}
-              </Text>
-              <Text isTruncated style={styles.text22}>
-                Rp {item.harga_ritel}
+                Rp {item.harga_proyek} s/d Rp {item.harga_ritel}
               </Text>
             </View>
             <View>
@@ -180,7 +178,8 @@ const Homes = ({navigation}) => {
             style={styles.logo}
             size={25}></Image>
           <View style={styles.space}>
-            <Pressable top={-8} onPress={() => navigateTo('Keranjang4')}>
+            {/* <BiometrikPopup></BiometrikPopup> */}
+            <Pressable top={-8} onPress={() => navigateTo('Keranjang5')}>
               <IconMaterial
                 name="shopping"
                 size={30}
@@ -215,7 +214,6 @@ const Homes = ({navigation}) => {
               style={styles.textInput}
             />
           </View>
-          {/* <BannerMaterialHome /> */}
           <BannerMaterialHome2 />
         </LinearGradient>
         <View>

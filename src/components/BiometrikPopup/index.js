@@ -1,126 +1,69 @@
-// import React, {Component} from 'react';
-// import PropTypes from 'prop-types';
-// import {
-//   Alert,
-//   Image,
-//   Text,
-//   TouchableOpacity,
-//   View,
-//   ViewPropTypes,
-//   Platform,
-// } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ToastAndroid, RefreshControl, ScrollView, ActivityIndicator } from 'react-native';
+import ReactNativeBiometrics from 'react-native-biometrics'
+// import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import { WARNA_BLACK, WARNA_UTAMA } from '../../utils/constant';
+import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
+import { WebView } from 'react-native-webview';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// import FingerprintScanner from 'react-native-fingerprint-scanner';
-// import styles from './FingerprintPopup.component.styles';
-// import ShakingText from './ShakingText.component';
 
-// // - this example component supports both the
-// //   legacy device-specific (Android < v23) and
-// //   current (Android >= 23) biometric APIs
-// // - your lib and implementation may not need both
-// class BiometricPopup extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       errorMessageLegacy: undefined,
-//       biometricLegacy: undefined,
-//     };
+const BiometrikPopup = ({ navigation, route }) => {
 
-//     this.description = null;
-//   }
+    // const { redirectUrl } = route.params;
 
-//   componentDidMount() {
-//     if (this.requiresLegacyAuthentication()) {
-//       this.authLegacy();
-//     } else {
-//       this.authCurrent();
-//     }
-//   }
+    // untuk refresh
+    const [refreshing, setRefreshing] = React.useState(false);
+    const onRefresh = () => {
+        setRefreshing(true);
 
-//   componentWillUnmount = () => {
-//     FingerprintScanner.release();
-//   };
+        // Simulate an async action
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 1000);
+    };
 
-//   requiresLegacyAuthentication() {
-//     return Platform.Version < 23;
-//   }
 
-//   authCurrent() {
-//     FingerprintScanner.authenticate({title: 'Log in with Biometrics'}).then(
-//       () => {
-//         this.props.onAuthenticate();
-//       },
-//     );
-//   }
+    // untuk biometrik
+    const rnBiometrics = new ReactNativeBiometrics({ allowDeviceCredentials: true })
 
-//   authLegacy() {
-//     FingerprintScanner.authenticate({
-//       onAttempt: this.handleAuthenticationAttemptedLegacy,
-//     })
-//       .then(() => {
-//         this.props.handlePopupDismissedLegacy();
-//         Alert.alert('Fingerprint Authentication', 'Authenticated successfully');
-//       })
-//       .catch(error => {
-//         this.setState({
-//           errorMessageLegacy: error.message,
-//           biometricLegacy: error.biometric,
-//         });
-//         this.description.shake();
-//       });
-//   }
+    rnBiometrics.simplePrompt({ promptMessage: 'Confirm fingerprint' })
+        .then((resultObject) => {
+            const { success } = resultObject
 
-//   handleAuthenticationAttemptedLegacy = error => {
-//     this.setState({errorMessageLegacy: error.message});
-//     this.description.shake();
-//   };
+            if (success) {
+                console.log('successful biometrics provided')
+            } else {
+                console.log('user cancelled biometric prompt')
+            }
+        })
+        .catch((e) => {
+            console.log('biometrics failed: ' + e)
+        })
 
-//   renderLegacy() {
-//     const {errorMessageLegacy, biometricLegacy} = this.state;
-//     const {style, handlePopupDismissedLegacy} = this.props;
 
-//     return (
-//       <View style={styles.container}>
-//         <View style={[styles.contentContainer, style]}>
-//           <Image
-//             style={styles.logo}
-//             source={require('./assets/finger_print.png')}
-//           />
+    // url midtrans
+    const [redirectUrl, setRedirectUrl] = useState('');
 
-//           <Text style={styles.heading}>Biometric{'\n'}Authentication</Text>
-//           <ShakingText
-//             ref={instance => {
-//               this.description = instance;
-//             }}
-//             style={styles.description(!!errorMessageLegacy)}>
-//             {errorMessageLegacy ||
-//               `Scan your ${biometricLegacy} on the\ndevice scanner to continue`}
-//           </ShakingText>
+    useEffect(() => {
+        getRedirectUrl();
+    }, []);
 
-//           <TouchableOpacity
-//             style={styles.buttonContainer}
-//             onPress={handlePopupDismissedLegacy}>
-//             <Text style={styles.buttonText}>BACK TO MAIN</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </View>
-//     );
-//   }
+    const getRedirectUrl = async () => {
+        try {
+            const redirectUrlValue = await AsyncStorage.getItem('redirect_url');
+            setRedirectUrl(redirectUrlValue);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-//   render = () => {
-//     if (this.requiresLegacyAuthentication()) {
-//       return this.renderLegacy();
-//     }
+    if (redirectUrl) {
+        return <WebView source={{ uri: redirectUrl }} />;
+    }
 
-//     // current API UI provided by native BiometricPrompt
-//     return null;
-//   };
-// }
+    // return <View style={{ flex: 1 }} />;
 
-// BiometricPopup.propTypes = {
-//   onAuthenticate: PropTypes.func.isRequired,
-//   handlePopupDismissedLegacy: PropTypes.func,
-//   style: ViewPropTypes.style,
-// };
+}
 
-// export default BiometricPopup;
+export default BiometrikPopup;

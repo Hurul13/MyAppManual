@@ -1,0 +1,130 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, ToastAndroid } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { WARNA_BLACK, WARNA_DEEPYELLOW } from '../../utils/constant';
+
+const Checkout3 = ({ route }) => {
+  const [userId, setUserId] = useState('');
+  const [token, setToken] = useState('');
+  const [userAddress, setUserAddress] = useState(null);
+  const [cartData, setCartData] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    // Fetch user_id and token from AsyncStorage
+    const fetchUserData = async () => {
+      try {
+        const user_id = await AsyncStorage.getItem('user_id');
+        const token = await AsyncStorage.getItem('token');
+        setUserId(user_id);
+        setToken(token);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    // Fetch user address from the "TambahAlamat" page
+    const fetchUserAddress = async () => {
+      try {
+        const addressData = await AsyncStorage.getItem('user_address');
+        const parsedAddressData = JSON.parse(addressData);
+        setUserAddress(parsedAddressData);
+      } catch (error) {
+        console.error('Error fetching user address:', error);
+      }
+    };
+
+    fetchUserAddress();
+  }, []);
+
+  useEffect(() => {
+    // Fetch cart data from the "Checkout5" page
+    const { cartData } = route.params;
+    setCartData(cartData);
+    calculateTotalPrice(cartData);
+  }, []);
+
+  const calculateTotalPrice = (cartData) => {
+    if (cartData && cartData.length > 0) {
+      const total = cartData.reduce((acc, item) => {
+        return acc + item.subtotal;
+      }, 0);
+      setTotalPrice(total);
+    }
+  };
+
+  const createOrder = async () => {
+    try {
+      if (userAddress && userAddress.id) {
+        const response = await fetch(`http://localhost:8000/homeii/web/api/v1/order-product/create-order?user_id=${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            user_address_id: userAddress.id,
+            supplier_barang_id: cartData.map(item => item.supplier_barang_id),
+            jumlah: cartData.map(item => item.jumlah),
+            harga_satuan: cartData.map(item => item.harga_satuan),
+            subtotal: cartData.map(item => item.subtotal),
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Order created:', data);
+          ToastAndroid.show('Order created successfully', ToastAndroid.SHORT);
+        } else {
+          console.log('Error creating order:', response);
+          ToastAndroid.show('Failed to create order', ToastAndroid.SHORT);
+        }
+      } else {
+        console.log('User address is null or missing ID');
+        ToastAndroid.show('User address is invalid', ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      console.error('Error creating order:', error);
+      ToastAndroid.show('An error occurred', ToastAndroid.SHORT);
+    }
+  };
+
+  return (
+    <View style={{ backgroundColor: WARNA_BLACK }}>
+      <Text>User Address:</Text>
+      {userAddress && (
+        <>
+          <Text>{userAddress.nama_penerima}</Text>
+          <Text>{userAddress.nomor_penerima}</Text>
+          <Text>{userAddress.alamat_penerima}</Text>
+        </>
+      )}
+
+      <Text>Cart Data:</Text>
+      {cartData && cartData.length > 0 ? (
+        cartData.map(item => (
+          <View key={item.id}>
+            <Text>Supplier Barang ID: {item.supplier_barang_id}</Text>
+            <Text>Jumlah: {item.jumlah}</Text>
+            <Text>Harga Satuan: {item.harga_satuan}</Text>
+            <Text>Subtotal: {item.subtotal}</Text>
+          </View>
+        ))
+      ) : (
+        <Text>No items in the cart</Text>
+      )}
+
+      <Text>Total Pembayaran: {totalPrice}</Text>
+
+      <TouchableOpacity onPress={createOrder}>
+        <Text>Create Order</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default Checkout3;

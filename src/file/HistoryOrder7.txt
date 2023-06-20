@@ -1,0 +1,119 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { url } from '../../utils/url';
+import { WARNA_BLACK } from '../../utils/constant';
+
+const HistoryOrder = ({ navigation }) => {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    getOrdersByUser();
+  }, []);
+
+  const getOrdersByUser = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const user_id = await AsyncStorage.getItem('user_id');
+      const response = await fetch(
+        `${url}order-product/view-order-by-user-id?user_id=${user_id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setOrders(data.data);
+      console.log('data:', JSON.stringify(data, null, 2));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const renderCard = (order) => {
+    let statusColor = WARNA_BLACK;
+
+    if (order.payment_id === 1) {
+      statusColor = 'yellow';
+    } else if (order.status === 'dikemas' || order.status === 'dikirim') {
+      statusColor = 'green';
+    } else if (order.status === 'cancel') {
+      statusColor = 'red';
+    }
+
+    return (
+      <TouchableOpacity
+        style={[styles.cardContainer, { borderColor: statusColor }]}
+        onPress={() => navigateToHistoryOrderDetail(order.invoice_id)}
+      >
+        <View style={styles.cardContent}>
+          <Text style={styles.invoiceCode}>{order.invoice_code}</Text>
+          <Text style={[styles.status, { color: statusColor }]}>
+            {order.status}
+          </Text>
+          <Text style={styles.paymentId}>{order.payment_id}</Text>
+          <Text style={styles.subtotal}>{order.subtotal}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const navigateToHistoryOrderDetail = (invoiceId) => {
+    navigation.navigate('HistoryOrderDetail', { invoiceId });
+  };
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigateTo('UnpaidOrders')}>
+        <Text style={styles.orderType}>Unpaid Orders</Text>
+      </TouchableOpacity>
+      {Array.isArray(orders) && orders.length > 0 ? (
+        orders.map((order) => renderCard(order))
+      ) : (
+        <Text>No orders found.</Text>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: WARNA_BLACK
+  },
+  orderType: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  cardContainer: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  invoiceCode: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  status: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  paymentId: {
+    fontSize: 14,
+  },
+  subtotal: {
+    fontSize: 14,
+  },
+});
+
+export default HistoryOrder;

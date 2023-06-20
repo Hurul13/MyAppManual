@@ -13,10 +13,10 @@ import {
   VStack,
   FormControl,
 } from 'native-base';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Styles';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Buttone} from '../../components';
+import { Buttone } from '../../components';
 import {
   responsiveHeight,
   responsiveWidth,
@@ -34,81 +34,126 @@ import {
   WARNA_RED,
   WARNA_BLUE,
 } from '../../utils/constant';
-import {url} from '../../utils/url';
-import {useNavigation} from '@react-navigation/native';
+import { url } from '../../utils/url';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Address = ({navigation}) => {
+const TambahAlamat = ({ navigation }) => {
   const navigateTo = async page => {
     navigation.navigate(page);
   };
 
   const [refreshing, setRefreshing] = useState(false);
+  // const [addresses, setAddresses] = useState([]);
   const [addresses, setAddresses] = useState([]);
-  console.log(addresses);
+
+  // console.log('addresses:', addresses);
 
   const fetchAddresses = async () => {
     try {
       const user_id = await AsyncStorage.getItem('user_id');
       const token = await AsyncStorage.getItem('token');
 
-      fetch(`${url}user-address/view?user_id=${user_id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          setAddresses(data.data);
-        })
-        .catch(error => console.error(error));
+      const response = await fetch(
+        `${url}user-address/view-all?user_id=${user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setAddresses(data.data);
+        await AsyncStorage.setItem('addresses', JSON.stringify(data.data));
+        console.log('sukses', data);
+      } else {
+        console.log('Error fetching addresses:', data);
+      }
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching addresses:', error);
     }
   };
 
+
   useEffect(() => {
+    const getSavedAddresses = async () => {
+      const savedAddresses = await AsyncStorage.getItem('addresses');
+      if (savedAddresses) {
+        setAddresses(JSON.parse(savedAddresses));
+        console.log('sukses simpan alamat: ', savedAddresses)
+      }
+    };
+
     fetchAddresses();
+    getSavedAddresses();
   }, []);
 
-  const handleDelete = async id => {
+
+  const handleDelete = async (id) => {
     try {
       const token = await AsyncStorage.getItem('token');
 
-      fetch(`${url}user-address/delete?id=${id}`, {
+      const response = await fetch(`${url}user-address/delete?id=${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          ToastAndroid.show('Berhasil hapus alamat', ToastAndroid.SHORT);
-          // Remove deleted address from state
-          setAddresses(addresses.filter(address => address.id !== id));
-        })
-        .catch(error => console.error(error));
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        ToastAndroid.show('Berhasil hapus alamat', ToastAndroid.SHORT);
+        setAddresses(addresses.filter((address) => address.id !== id));
+
+        // Remove the deleted address from AsyncStorage
+        const savedAddresses = await AsyncStorage.getItem('addresses');
+        if (savedAddresses) {
+          const parsedAddresses = JSON.parse(savedAddresses);
+          const updatedAddresses = parsedAddresses.filter(
+            (address) => address.id !== id
+          );
+          await AsyncStorage.setItem(
+            'addresses',
+            JSON.stringify(updatedAddresses)
+          );
+        }
+      } else {
+        console.log('Error deleting address:', data);
+      }
     } catch (error) {
-      console.error(error);
+      console.error('Error deleting address:', error);
     }
   };
+
 
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchAddresses();
     setRefreshing(false);
+
+    const savedAddresses = await AsyncStorage.getItem('addresses');
+    if (savedAddresses) {
+      setAddresses(JSON.parse(savedAddresses));
+    }
   };
 
-  // const handleUpdate = id => {
-  //   navigation.navigate('UpdateAddress', {id});
-  // }
+
+
+  const handleKlik = (address) => {
+    navigation.navigate('Checkout3', { id: address.id, address });
+    console.log('barhasil kah? ', address.id)
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={navigation.goBack}>
+        <TouchableOpacity
+          onPress={navigation.goBack}
+        // onPress={() => navigateTo('Profile')}
+
+        >
           <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
         </TouchableOpacity>
         <Text style={styles.judulBar}>Alamat Profil</Text>
@@ -122,8 +167,19 @@ const Address = ({navigation}) => {
           <Box mx={responsiveHeight(3)} mt={responsiveHeight(4)}>
             {addresses.map(address => (
               <TouchableOpacity
-                key={address.id}
-                onPress={() => navigation.navigate('Checkout2', {address})}>
+                key={address.id} // Add this line to set the key
+                // onPress={() => navigation.navigate('Checkout3')}
+                // onPress={() => navigation.navigate('Checkout3', { address })}
+                // onPress={() => navigation.navigate('Checkout3', { id: address.id, address })}
+                onPress={() => handleKlik(address)}
+
+              // onPress={() =>
+              //   navigation.navigate('Checkout3', {
+              //     id: address.id,
+              //   })
+              // }
+              // onPress={() => navigation.navigate('Checkout3', { address: userAddress })}
+              >
                 <Box
                   borderWidth={0.6}
                   borderRadius={8}
@@ -131,26 +187,16 @@ const Address = ({navigation}) => {
                   shadow={0.9}
                   mb={3}
                   px={responsiveHeight(2)}
-                  py={responsiveWidth(3)}
-                  // w={responsiveWidth(88)}
-                  // h={responsiveHeight(11)}
-                >
-                  <Box
-                    flexDirection={'row'}
-                    pb={1}
-                    // borderWidth={1}
-                  >
+                  py={responsiveWidth(3)}>
+                  <Box flexDirection={'row'} pb={1}>
                     <View
                       width={'75%'}
-                      // borderWidth={1}
                       flexDirection={'row'}
-                      // justifyContent={'center'}
                       alignItems={'center'}>
                       <Text
                         isTruncated
                         fontSize={responsiveFontSize(2.1)}
                         color={WARNA_SEKUNDER}
-                        // borderWidth={1}
                         mr={2}
                         fontWeight={700}>
                         {address.nama_penerima}
@@ -168,14 +214,11 @@ const Address = ({navigation}) => {
                     <View
                       style={{
                         flexDirection: 'row',
-                        // borderWidth: 1
                       }}>
                       <IconMaterial
                         name="delete"
                         size={24}
-                        // color= 'WARNA_RED'
                         style={{
-                          // backgroundColor: WARNA_GRAYTUA,
                           padding: 8,
                           color: WARNA_RED,
                         }}
@@ -184,9 +227,7 @@ const Address = ({navigation}) => {
                       <IconMaterial
                         name="pencil"
                         size={24}
-                        // color= 'warna'
                         style={{
-                          // backgroundColor: WARNA_DISABLE,
                           padding: 8,
                           color: WARNA_BLUE,
                         }}
@@ -207,33 +248,6 @@ const Address = ({navigation}) => {
                 </Box>
               </TouchableOpacity>
             ))}
-            {/* <TouchableOpacity onPress={() => navigation.navigate('NewAddress')}>
-              <Box
-                mt={3}
-                borderRadius={7}
-                shadow={0.9}
-                // px={responsiveHeight(1)}
-                // py={responsiveWidth(3)}
-                // w={responsiveWidth(88)}
-                // h={responsiveHeight(5)}
-                py={responsiveWidth(2)}
-                borderWidth={0.6}
-                flexDirection={'row'}
-                borderColor={WARNA_UTAMA}
-                bg={WARNA_DEEPYELLOW}
-                justifyContent={'center'}
-                alignItems={'center'}>
-                <IconMaterial
-                  name={'plus-circle-outline'}
-                  size={17}
-                  style={{color: WARNA_RED}}
-                />
-                <Text color={WARNA_RED} px={responsiveHeight(1)}>
-                  Add New Address
-                </Text>
-              </Box>
-            </TouchableOpacity> */}
-
             <TouchableOpacity
               style={{
                 backgroundColor: WARNA_UTAMA,
@@ -242,7 +256,6 @@ const Address = ({navigation}) => {
                 alignItems: 'center',
                 marginVertical: responsiveWidth(4),
               }}
-              // onPress={handleUpdateProfile}
               onPress={() => navigation.navigate('NewAddress')}>
               <Text
                 style={{
@@ -261,4 +274,4 @@ const Address = ({navigation}) => {
   );
 };
 
-export default Address;
+export default TambahAlamat;

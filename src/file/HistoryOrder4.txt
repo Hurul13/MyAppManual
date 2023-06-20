@@ -1,0 +1,192 @@
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+  FlatList,
+  Alert,
+  ScrollView,
+  RefreshControl, StyleSheet
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import styles from './Styles';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  WARNA_BLACK,
+  WARNA_BLUE,
+  WARNA_BORDER,
+  WARNA_GRAYTUA,
+  WARNA_GREEN,
+  WARNA_RED, WARNA_UTAMA, WARNA_WHITE
+} from '../../utils/constant';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { url } from '../../utils/url';
+import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
+
+const HistoryOrder = ({ navigation }) => {
+  const navigateTo = async page => {
+    navigation.navigate(page);
+  };
+
+  const [orders, setOrders] = useState([]);
+  const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    getOrdersByInvoice();
+  }, []);
+
+  const getOrdersByInvoice = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const user_id = await AsyncStorage.getItem('user_id');
+      const response = await fetch(
+        `${url}invoice/view-order-by-user-id?user_id=${user_id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setOrders(data.data.orders);
+      console.log('data:', data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleFilter = (filterValue) => {
+    setFilter(filterValue);
+  };
+
+  const filteredOrders = orders.filter((order) => {
+    if (filter === 'unpaid') {
+      return order.invoice.payment_id === 1 && order.order_product.status_pesanan === 0;
+    } else if (filter === 'paid') {
+      return order.invoice.payment_id === 2 && order.order_product.status_pesanan === 0;
+    } else if (filter === 'cancel') {
+      return order.order_product.status_pesanan === 1;
+    }
+    return true;
+  });
+
+  const getOrderStatusColor = (order) => {
+    if (order.invoice.payment_id === 1 && order.order_product.status_pesanan === 0) {
+      return WARNA_UTAMA;
+    } else if (order.invoice.payment_id === 2 && order.order_product.status_pesanan === 0) {
+      return WARNA_GREEN;
+    } else if (order.order_product.status_pesanan === 1) {
+      return WARNA_RED;
+    }
+    return 'black';
+  };
+
+  const handleOrderPress = (order) => {
+    navigation.navigate('HistoryOrderDetail', { invoice_id: order.invoice.invoice_id });
+  };
+
+  return (
+    <ScrollView
+      style={styles.all}
+    // refreshControl={
+    //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    // }
+    >
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={navigation.goBack}>
+            <IconMaterial name="arrow-left" size={26} style={styles.iconBack} />
+          </TouchableOpacity>
+          <Text style={styles.judulBar}>Riwayat Transaksi</Text>
+        </View>
+        <View style={styles.box}>
+          <View style={styles.filterContainer}>
+            <TouchableOpacity
+              style={[styles.filterButton, filter === 'all' && styles.activeFilterButton]}
+              onPress={() => handleFilter('all')}
+            >
+              <Text style={styles.filterButtonText}>All Order</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.filterButton, filter === 'unpaid' && styles.activeFilterButton]}
+              onPress={() => handleFilter('unpaid')}
+            >
+              <Text style={styles.filterButtonText}>Belum Bayar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.filterButton, filter === 'paid' && styles.activeFilterButton]}
+              onPress={() => handleFilter('paid')}
+            >
+              <Text style={styles.filterButtonText}>Sudah Bayar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.filterButton, filter === 'cancel' && styles.activeFilterButton]}
+              onPress={() => handleFilter('cancel')}
+            >
+              <Text style={styles.filterButtonText}>Batalkan</Text>
+            </TouchableOpacity>
+          </View>
+          {filteredOrders.map((order, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.orderContainer}
+              onPress={() => handleOrderPress(order)}
+            >
+              <Image
+                source={{ uri: order.supplier_barang.gambar }}
+                style={styles.img}
+              />
+              <View style={{
+                borderColor: WARNA_BLACK,
+                width: '73%',
+                justifyContent: 'space-between'
+              }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <Text style={{ color: WARNA_BLACK, fontSize: responsiveFontSize(2), fontWeight: '800' }}>{order.invoice.invoice_code}</Text>
+                  <IconMaterial
+                    name="eye"
+                    size={24}
+                    color={WARNA_GRAYTUA}
+                    onPress={() => handleOrderPress(order)}
+                  />
+                </View>
+                <Text style={{ color: WARNA_GRAYTUA, paddingVertical: responsiveHeight(1), fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>
+                  Total: {order.order_product.subtotal * order.order_product.jumlah}
+                </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  {order.order_product.status_pesanan === 0 && order.invoice.payment_id === 1 && (
+                    <Text style={{ color: WARNA_GRAYTUA, fontSize: responsiveFontSize(1.9) }}>Unpaid</Text>
+                  )}
+                  {order.order_product.status_pesanan === 0 && order.invoice.payment_id === 2 && (
+                    <Text style={{ color: WARNA_GRAYTUA, fontSize: responsiveFontSize(1.9) }}>Paid</Text>
+                  )}
+                  {order.order_product.status_pesanan === 1 && (
+                    <Text style={{ color: WARNA_GRAYTUA, fontSize: responsiveFontSize(1.9) }}>Cancel</Text>
+                  )}
+                  <View style={{
+                    backgroundColor: getOrderStatusColor(order),
+                    borderColor: getOrderStatusColor(order),
+                    padding: responsiveHeight(0.5),
+                    alignItems: 'center',
+                    borderRadius: 50 / 2,
+                    width: '40%',
+
+                  }}>
+                    <Text style={{ color: WARNA_WHITE }}>{order.invoice.status}</Text>
+                  </View>
+
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+
+export default HistoryOrder;

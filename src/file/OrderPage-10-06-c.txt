@@ -1,0 +1,141 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {url} from '../../utils/url';
+import { WARNA_BLACK } from '../../utils/constant';
+
+const Checkout3 = () => {
+  const [userAddress, setUserAddress] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user_id = await AsyncStorage.getItem('user_id');
+        const token = await AsyncStorage.getItem('token');
+
+        // Fetch user address
+        const responseAddress = await fetch(
+          `${url}user-address/view-all?user_id=${user_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const dataAddress = await responseAddress.json();
+        if (responseAddress.ok) {
+          setUserAddress(dataAddress.data);
+        } else {
+          console.log('Error fetching user address:', dataAddress);
+        }
+
+        // Fetch cart items
+        const responseCart = await fetch(
+          `${url}supplier-barang/list-keranjang`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const dataCart = await responseCart.json();
+        if (responseCart.ok) {
+          setCartItems(dataCart.data);
+          calculateTotalPrice(dataCart.data);
+        } else {
+          console.log('Error fetching cart items:', dataCart);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const calculateTotalPrice = (cartItems) => {
+    let totalPrice = 0;
+    cartItems.forEach((item) => {
+      const { jumlah, harga_satuan } = item;
+      totalPrice += jumlah * harga_satuan;
+    });
+    setTotalPrice(totalPrice);
+  };
+
+  const createOrder = async () => {
+    try {
+      const user_id = await AsyncStorage.getItem('user_id');
+      const token = await AsyncStorage.getItem('token');
+
+      const response = await fetch(
+        `${url}order-product/create-order?user_id=${user_id}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_address_id: userAddress.id,
+            items: cartItems.map((item) => ({
+              supplier_barang_id: item.supplier_barang_id,
+              jumlah: item.jumlah,
+              harga_satuan: item.harga_satuan,
+              subtotal: item.jumlah * item.harga_satuan,
+            })),
+          }),
+        }
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('Order created successfully:', data);
+        // Clear the cart items after successful order creation
+        setCartItems([]);
+        setTotalPrice(0);
+      } else {
+        console.log('Error creating order:', data);
+      }
+    } catch (error) {
+      console.error('Error creating order:', error);
+    }
+  };
+
+  return (
+    <View style={{ backgroundColor: WARNA_BLACK }}>
+      <Text>User Address:</Text>
+      {userAddress && (
+        <View>
+          <Text>{userAddress.nama_penerima}</Text>
+          <Text>{userAddress.nomor_penerima}</Text>
+          <Text>{userAddress.alamat_penerima}</Text>
+          <Text>{userAddress.provinsi_id}</Text>
+          <Text>{userAddress.kota_id}</Text>
+          <Text>{userAddress.kecamatan_id}</Text>
+          <Text>{userAddress.desa_id}</Text>
+          <Text>{userAddress.kode_pos}</Text>
+        </View>
+      )}
+
+      <Text>Cart Items:</Text>
+      {cartItems.map((item) => (
+        <View key={item.id}>
+          <Text>supplier_barang_id: {item.supplier_barang_id}</Text>
+          <Text>jumlah: {item.jumlah}</Text>
+          <Text>harga_satuan: {item.harga_satuan}</Text>
+          <Text>Total: {item.jumlah * item.harga_satuan}</Text>
+        </View>
+      ))}
+
+      <Text>Total Price: {totalPrice}</Text>
+
+      <TouchableOpacity onPress={createOrder}>
+        <Text>Create Order</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default Checkout3;
